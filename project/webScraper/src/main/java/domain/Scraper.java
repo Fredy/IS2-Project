@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 public interface Scraper {
 
   @Autowired
@@ -15,5 +14,4 @@ public interface Scraper {
   public void saveData();
 
   public Collection<Product> getData();
-
 }
