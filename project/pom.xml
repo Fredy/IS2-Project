@@ -58,6 +58,12 @@
             <artifactId>jsoup</artifactId>
             <version>1.10.3</version>
         </dependency>
+
+        <dependency>
+            <groupId>is2</groupId>
+            <artifactId>webScraper</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
