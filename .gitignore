@@ -22,3 +22,6 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+ ### Secrets: passwords and usernames ###
+/project/src/main/resources/aplication-secrets.properties
