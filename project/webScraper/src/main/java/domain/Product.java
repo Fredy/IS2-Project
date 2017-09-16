@@ -6,8 +6,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -20,7 +18,7 @@ public class Product {
   private Double normalPrice;
   private Double webPrice;
   private Double offerPrice;
-  private Long sku;
+  private String sku;
   private String model;
 
   private Shop shop;
@@ -80,11 +78,11 @@ public class Product {
     this.offerPrice = offerPrice;
   }
 
-  public Long getSku() {
+  public String getSku() {
     return sku;
   }
 
-  public void setSku(Long sku) {
+  public void setSku(String sku) {
     this.sku = sku;
   }
 
