@@ -8,7 +8,7 @@ public class htmlParser {
     Document document;
     try 
     {
-  	  document = Jsoup.connect("http://tutorialspointexamples.com/").get();
+  	  document = Jsoup.connect("http://google.com.pe/").get();
   	  String title = document.title();
 	    System.out.println("Title: " + title);
     }
