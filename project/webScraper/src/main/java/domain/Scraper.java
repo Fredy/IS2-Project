@@ -1,14 +1,20 @@
 package domain;
 
 import domain.Product;
-import java.util.Collection;
+import java.util.List;
 
 public interface Scraper {
 
-  public Collection<Product> parseData();
+  public List<Product> parseProduct();
 
-  public void saveData(Collection<Product> product);
+  public void saveProduct(List<Product> product);
 
-  public Collection<Product> getData();
+  public List<Product> getProduct();
+
+  public List<Shop> parseShop();
+
+  public void saveShop(List<Shop> shop);
+
+  public List<Shop> getShop();
 
 }
