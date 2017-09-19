@@ -12,10 +12,10 @@ public interface Scraper {
 
   public List<Product> getProduct();
 
-  public List<Shop> parseShop();
+  public Shop parseShop();
 
-  public void saveShop(List<Shop> shop);
+  public void saveShop(Shop shop);
 
-  public List<Shop> getShop();
+  public Shop getShop();
 
 }
