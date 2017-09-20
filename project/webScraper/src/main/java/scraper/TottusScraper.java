@@ -10,14 +10,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import org.jsoup.nodes.DataNode;
 import org.json.*;
 
 public class TottusScraper implements Scraper {
 
-  public String urlToJsonArray(String url){
-    String result ="";
+  public String urlToJsonArray(String url) {
+    String result = "";
     try {
       Document doc;
       doc = Jsoup.connect(url)
@@ -41,12 +39,9 @@ public class TottusScraper implements Scraper {
 
         jsonData = jsonData.substring(jsonData.indexOf("[") + 1, jsonData.length());
 
-        if (jsonData != ""){
-          result+=jsonData;}
-        /*for (DataNode node : element.dataNodes()) {
-          System.out.println(node.getWholeData());
-        }*/
-
+        if (jsonData != "") {
+          result += jsonData;
+        }
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -54,20 +49,22 @@ public class TottusScraper implements Scraper {
     return result;
   }
 
-  public Vector<String> oneToVector(String inputJson){
-    Vector<String> outputVector= new Vector<String>();
-    while(inputJson.indexOf("},{") > 0){
-      outputVector.add(inputJson.substring(inputJson.indexOf("{") , inputJson.indexOf("},{")+1));
-      inputJson = inputJson.substring(inputJson.indexOf("},{")+2,inputJson.length());
+  public Vector<String> oneToVector(String inputJson) {
+    Vector<String> outputVector = new Vector<String>();
+    while (inputJson.indexOf("},{") > 0) {
+      outputVector.add(inputJson.substring(inputJson.indexOf("{"), inputJson.indexOf("},{") + 1));
+      inputJson = inputJson.substring(inputJson.indexOf("},{") + 2, inputJson.length());
     }
-    outputVector.add(inputJson.substring(inputJson.indexOf("{") , inputJson.length())); //last register
+    outputVector
+        .add(inputJson.substring(inputJson.indexOf("{"), inputJson.length())); //last register
     return outputVector;
   }
 
-  public Vector<Product> vectorStringsToProducts(Vector<String> vectorStringIn) throws JSONException {
-    Vector<Product> res ();
+  public Vector<Product> vectorStringsToProducts(Vector<String> vectorStringIn)
+      throws JSONException {
+    Vector<Product> res = new Vector<Product>();
 
-    for(int i = 0 ; i< vectorStringIn.size();i++) {
+    for (int i = 0; i < vectorStringIn.size(); i++) {
       JSONObject jsonObject = new JSONObject(vectorStringIn.elementAt(i));
       String name = jsonObject.getString("name");
       double webPrice = jsonObject.getDouble("price");
@@ -75,7 +72,7 @@ public class TottusScraper implements Scraper {
       String sku = jsonObject.getString("id");
       String model = "";// Not found
       String brand = jsonObject.getString("brand");
-      System.out.print(name);
+      /*System.out.print(name);
       System.out.print(" + ");
       System.out.print(webPrice);
       System.out.print(" + ");
@@ -86,7 +83,7 @@ public class TottusScraper implements Scraper {
       System.out.print(model);
       System.out.print(" + ");
       System.out.print(brand);
-      System.out.println();
+      System.out.println();*/
       Product tmp = new Product();
       tmp.setName(name);
       tmp.setNormalPrice(webPrice);
@@ -96,7 +93,6 @@ public class TottusScraper implements Scraper {
     }
     return res;
   }
-
 
 
   @Override
