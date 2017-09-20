@@ -20,7 +20,7 @@ public class Product {
   private Double offerPrice;
   private String sku;
   private String model;
-
+  private String brand;
   private Shop shop;
 
   public Product() {
@@ -93,5 +93,15 @@ public class Product {
   public void setModel(String model) {
     this.model = model;
   }
+
+
+  public String getBrand() {
+    return brand;
+  }
+
+  public void setBrand(String brand) {
+    this.brand = brand;
+  }
+
 
 }
