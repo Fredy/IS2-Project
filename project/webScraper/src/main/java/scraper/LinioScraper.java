@@ -1,5 +1,6 @@
 package scraper;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
 import domain.Product;
 import domain.Shop;
 import java.io.IOException;
@@ -13,6 +14,8 @@ import org.jsoup.select.Elements;
 
 public class LinioScraper implements Scraper {
 
+  private String baseURL = "https://www.linio.com.pe/c/computacion/portatiles";
+
   private String extractJsonData(String productUrl) {
     /* Receives a product url.
      * Return a String containing a JSON object with the product data.
@@ -23,21 +26,23 @@ public class LinioScraper implements Scraper {
           .userAgent("Mozilla")
           .get();
 
-      Element content = pageDoc.body()
-          .getElementsByTag("script")
-          .first();
+      Elements content = pageDoc.body()
+          .getElementsByTag("script");
 
-      // The content data have 2 parts, the product data and a function
-      // We split them using "];"
-      String jsonData = content.data()
-          .split("];")[0];
+      String jsonData = "";
+      for (Element element : content) {
+        if (element.data().contains("dataLayer")) {
+          jsonData = element.data()
+              .split("];")[0];
+          // The content data have 2 parts, the product data and a function
+          // We split them using "];"
 
-      if (!jsonData.contains("dataLayer")) {
-        return ""; // TODO: if datLayer is not found, then this page doesn't have contents.
+          jsonData = jsonData.substring(jsonData.indexOf("[") + 1, jsonData.length());
+          // We just need the JSON part of this script:
+          break;
+        }
       }
 
-      // We just need the JSON part of this script:
-      jsonData = jsonData.substring(jsonData.indexOf("[") + 1, jsonData.length());
       return jsonData;
     } catch (IOException e) {
       e.printStackTrace();
@@ -97,53 +102,79 @@ public class LinioScraper implements Scraper {
     return lastPageNum;
   }
 
-  private void jsonToObject(String jsonData) {
+  private Product jsonToObject(String jsonData) {
     // TODO: make this function convert jsonData into a Product object.
     if (jsonData == null || jsonData.isEmpty()) {
-      return;
+      return null;
     }
     JSONObject jsonObject = new JSONObject(jsonData);
     String name = jsonObject.getString("product_name");
     double webPrice = jsonObject.getDouble("price");
     double offerPrice = jsonObject.getDouble("special_price");
     String sku = jsonObject.getString("sku_config");
-    String model = "";
     String brand = jsonObject.getString("brand");
-    System.out.print(name);
-    System.out.print(" - ");
-    System.out.print(webPrice);
-    System.out.print(" - ");
-    System.out.print(offerPrice);
-    System.out.print(" - ");
-    System.out.print(sku);
-    System.out.print(" - ");
-    System.out.print(model);
-    System.out.print(" - ");
-    System.out.print(brand);
-    System.out.println();
+
+    Product product = new Product();
+    product.setName(name);
+    product.setWebPrice(webPrice);
+    product.setOfferPrice(offerPrice);
+    product.setSku(sku);
+    product.setBrand(brand);
+
+    return product;
   }
 
-  private void getProducts(String url) {
+  private String getModel(String productUrl) {
+    String res = "";
+    try {
+      Document pageDoc = Jsoup.connect(productUrl)
+          .userAgent("Mozilla")
+          .get();
+
+      Elements model = pageDoc.body()
+          .getElementsByClass("product-description-container")
+          .first().getElementsByClass("features-box-section")
+          .first().getElementsByTag("tr")
+          .get(1).getElementsByTag("td");
+
+      if (model.first().text().equals("Modelo")) {
+        res = model.last().text();
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return res;
+  }
+
+  private Vector<Product> getProducts(String url) {
     /* This function gets a category url, using the above methods it scrape
      * and parse the page and returns all the products in that category. */
 
-    // TODO: make it return a vector<Product>
+    Vector<Product> productsVec = new Vector<Product>();
     int lastPageNum = this.getMaxPages(url);
+
     for (int i = 1; i <= lastPageNum; i++) {
       String pageUrl = url + "?page=" + Integer.toString(i);
       Vector<String> productsUrls = this.getProductsURLs(pageUrl);
       for (String prodUrl : productsUrls) {
         String jsonData = this.extractJsonData(prodUrl);
-        this.jsonToObject(jsonData);
+        Product product = this.jsonToObject(jsonData);
+        if (product == null) {
+          continue;
+        }
+        String model = this.getModel(prodUrl);
+        product.setModel(model);
+        productsVec.add(product);
       }
     }
+    return productsVec;
   }
 
   // TODO: product model missing.
 
   @Override
   public List<Product> parseProduct() {
-    return null;
+    return this.getProducts(this.baseURL);
   }
 
   @Override
