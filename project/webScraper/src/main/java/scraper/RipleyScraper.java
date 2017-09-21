@@ -12,7 +12,29 @@ import org.jsoup.select.Elements;
 
 public class RipleyScraper implements Scraper {
 
-  public ArrayList<ArrayList<String>> processPage() throws IOException {
+  public ArrayList<Product> getProductFromPage() throws IOException {
+    ArrayList<ArrayList<String> >  dataRaw = processPage();
+    Product newProduct = new Product();
+    ArrayList<Product> products = new ArrayList<>();
+    for (ArrayList<String> raw: dataRaw) {
+      products.add(getProductU(raw));
+    }
+    return products;
+  }
+
+  private Product getProductU(ArrayList<String> raw){
+    Product product = new Product();
+    product.setName(raw.get(0));
+    product.setNormalPrice(Double.parseDouble(raw.get(1)));
+    product.setWebPrice(Double.parseDouble(raw.get(2)));
+    product.setOfferPrice(Double.parseDouble(raw.get(3)));
+    product.setSku(raw.get(4));
+    product.setBrand(raw.get(5));
+    product.setBrand(raw.get(6));
+    return product;
+  }
+
+  private ArrayList<ArrayList<String>> processPage() throws IOException {
     String URL = "http://simple.ripley.com.pe/computo/laptops/todas-las-laptops";
     String URLTitle = "http://simple.ripley.com.pe";
     ArrayList<String> links = getAllRealLinks(URL, URLTitle);
@@ -32,7 +54,7 @@ public class RipleyScraper implements Scraper {
   private ArrayList<String> getInformationOfOneProduct(String URL) throws IOException {
     System.out.println("Parsing : " + URL);
     Document page = getHtmlFromURL(URL);
-    ArrayList<String> dataCollected = new ArrayList<>(); // Structure is name, price normal, price web, SKU, Brand, Model;
+    ArrayList<String> dataCollected = new ArrayList<>(); // Structure is name, price normal, price web, offerprice, SKU, Brand, Model;
     Elements names = page.select("[itemprop=name]");
     Elements normalPrice = page.select("[itemprop=price]");
     Elements internetPrice = page.select("[itemprop=lowPrice]");
