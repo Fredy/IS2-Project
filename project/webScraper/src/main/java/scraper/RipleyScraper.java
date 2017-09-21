@@ -136,6 +136,15 @@ public class RipleyScraper implements Scraper {
     return ans;
   }
 
+  public Shop getShopObject() throws IOException {
+    Shop shop = new Shop();
+    shop.setName("Ripley Peru");
+    shop.setUrl("http://simple.ripley.com.pe/computo/laptops/todas-las-laptops");
+    shop.setProducts(getProductFromPage());
+    shop.setAddress("Av. Porongoche 500, Arequipa 04001");
+    return shop;
+  }
+
   @Override
   public List<Product> parseProduct() {
     return null;
