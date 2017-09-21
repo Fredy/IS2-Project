@@ -13,16 +13,15 @@ import org.jsoup.select.Elements;
 public class RipleyScraper implements Scraper {
 
   public ArrayList<Product> getProductFromPage() throws IOException {
-    ArrayList<ArrayList<String> >  dataRaw = processPage();
-    Product newProduct = new Product();
+    ArrayList<ArrayList<String>> dataRaw = processPage();
     ArrayList<Product> products = new ArrayList<>();
-    for (ArrayList<String> raw: dataRaw) {
+    for (ArrayList<String> raw : dataRaw) {
       products.add(getProductU(raw));
     }
     return products;
   }
 
-  private Product getProductU(ArrayList<String> raw){
+  private Product getProductU(ArrayList<String> raw) {
     Product product = new Product();
     product.setName(raw.get(0));
     product.setNormalPrice(Double.parseDouble(raw.get(1)));
@@ -116,7 +115,7 @@ public class RipleyScraper implements Scraper {
 
   private ArrayList<String> getAllRealLinks(String URL, String URLTitle) throws IOException {
     Document page;
-    ArrayList<String> links = new ArrayList<String>();
+    ArrayList<String> links = new ArrayList<>();
     for (int i = 1; i < 6; i++) {
       page = getHtmlFromURL(URL + "?page=" + String.valueOf(i));
       links.addAll(getAllLinks(page, URLTitle));
@@ -125,7 +124,7 @@ public class RipleyScraper implements Scraper {
   }
 
   private ArrayList<String> getAllLinks(Document page, String URL) {
-    ArrayList<String> ans = new ArrayList<String>();
+    ArrayList<String> ans = new ArrayList<>();
     Elements links = page.select("a[href]");
     String strlink;
     for (Element link : links) {
