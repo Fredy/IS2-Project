@@ -95,7 +95,14 @@ public class TottusScraper implements Scraper {
     }
     return res;
   }
-
+  
+  private Shop getShopData() {
+    Shop shop = new Shop();
+    shop.setName("Tottus Perú");
+    shop.setUrl("http://www.tottus.com.pe/tottus/");
+    shop.setAddress("Av. Parra 220 Arequipa, Arequipa, PE ");
+    return shop;
+  }
 
   @Override
   public List<Product> parseProduct() {
@@ -128,5 +135,5 @@ public class TottusScraper implements Scraper {
   public Shop getShop() {
     return null;
   }
-
+  
 }
