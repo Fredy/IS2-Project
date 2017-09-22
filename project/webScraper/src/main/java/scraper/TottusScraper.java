@@ -99,7 +99,9 @@ public class TottusScraper implements Scraper {
 
   @Override
   public List<Product> parseProduct() {
-    return null;
+    String res1 = this.urlToJsonArray(this.baseURL);
+    Vector<String> res2 = this.oneToVector(res1);
+    return this.vectorStringsToProducts(res2);
   }
 
   @Override
