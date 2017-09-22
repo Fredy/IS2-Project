@@ -14,14 +14,17 @@ import org.json.*;
 
 public class TottusScraper implements Scraper {
 
-  public String urlToJsonArray(String url) {
+  private String baseURL = "http://www.tottus.com.pe/tottus/browse/Electrohogar-Tecnolog%C3%ADa-Laptops/_/N-82nnyu";
+  
+  private Document getHtmlFromURL(String PageURL) throws IOException {
+    return Jsoup.connect(PageURL).userAgent("Mozilla").get();
+  }
+
+  public String urlToJsonArray(String baseURL) {
     String result = "";
     try {
-      Document doc;
-      doc = Jsoup.connect(url)
-          .userAgent("Mozilla")
-          .get();
-
+      Document doc = this.getHtmlFromURL(baseURL);  
+      
       Elements scriptElements = doc.getElementsByTag("script");
 
       for (Element element : scriptElements) {
@@ -55,14 +58,13 @@ public class TottusScraper implements Scraper {
       outputVector.add(inputJson.substring(inputJson.indexOf("{"), inputJson.indexOf("},{") + 1));
       inputJson = inputJson.substring(inputJson.indexOf("},{") + 2, inputJson.length());
     }
-    outputVector
-        .add(inputJson.substring(inputJson.indexOf("{"), inputJson.length())); //last register
+    outputVector.add(inputJson.substring(inputJson.indexOf("{"), inputJson.length())); //last register
     return outputVector;
   }
 
-  public Vector<Product> vectorStringsToProducts(Vector<String> vectorStringIn)
+  public List<Product> vectorStringsToProducts(Vector<String> vectorStringIn)
       throws JSONException {
-    Vector<Product> res = new Vector<Product>();
+    List<Product> res = new List<Product>();
 
     for (int i = 0; i < vectorStringIn.size(); i++) {
       JSONObject jsonObject = new JSONObject(vectorStringIn.elementAt(i));
