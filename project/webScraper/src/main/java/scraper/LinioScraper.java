@@ -1,6 +1,5 @@
 package scraper;
 
-import com.sun.org.apache.xpath.internal.SourceTree;
 import domain.Product;
 import domain.Shop;
 import java.io.IOException;
@@ -16,20 +15,22 @@ public class LinioScraper implements Scraper {
 
   private String baseURL = "https://www.linio.com.pe/c/computacion/portatiles";
 
+  private Document getHtmlFromURL(String PageURL) throws IOException {
+    return Jsoup.connect(PageURL).userAgent("Mozilla").get();
+  }
+
   private String extractJsonData(String productUrl) {
     /* Receives a product url.
      * Return a String containing a JSON object with the product data.
      * If this doesn't find the data, then it returns an empty string. */
 
+    String jsonData = "";
     try {
-      Document pageDoc = Jsoup.connect(productUrl)
-          .userAgent("Mozilla")
-          .get();
+      Document pageDoc = this.getHtmlFromURL(productUrl);
 
       Elements content = pageDoc.body()
           .getElementsByTag("script");
 
-      String jsonData = "";
       for (Element element : content) {
         if (element.data().contains("dataLayer")) {
           jsonData = element.data()
@@ -43,11 +44,10 @@ public class LinioScraper implements Scraper {
         }
       }
 
-      return jsonData;
     } catch (IOException e) {
       e.printStackTrace();
-      return "";
     }
+    return jsonData;
   }
 
   private Vector<String> getProductsURLs(String pageUrl) {
@@ -56,9 +56,7 @@ public class LinioScraper implements Scraper {
 
     Vector<String> productsUrls = new Vector<String>();
     try {
-      Document pageDoc = Jsoup.connect(pageUrl)
-          .userAgent("Mozilla")
-          .get();
+      Document pageDoc = this.getHtmlFromURL(pageUrl);
 
       Elements products = pageDoc.body()
           .getElementById("catalogue-product-container")
@@ -82,9 +80,7 @@ public class LinioScraper implements Scraper {
      */
     int lastPageNum = 0;
     try {
-      Document pageDoc = Jsoup.connect(baseUrl)
-          .userAgent("Mozilla")
-          .get();
+      Document pageDoc = this.getHtmlFromURL(baseUrl);
 
       String lastValidPage = pageDoc.body()
           .getElementsByClass("page-item").last()
@@ -127,9 +123,7 @@ public class LinioScraper implements Scraper {
   private String getModel(String productUrl) {
     String res = "";
     try {
-      Document pageDoc = Jsoup.connect(productUrl)
-          .userAgent("Mozilla")
-          .get();
+      Document pageDoc = this.getHtmlFromURL(productUrl);
 
       Elements model = pageDoc.body()
           .getElementsByClass("product-description-container")
@@ -170,7 +164,15 @@ public class LinioScraper implements Scraper {
     return productsVec;
   }
 
-  // TODO: product model missing.
+  private Shop getShopData() {
+    Shop shop = new Shop();
+    shop.setName("Linio Perú");
+    shop.setUrl("https://www.linio.com.pe/");
+    shop.setAddress("Calle Rio de la plana Nro. 167 Urb. Chacarilla "
+        + "de Santa Crus (Piso 7) Lima - Lima - San Isidro");
+
+    return shop;
+  }
 
   @Override
   public List<Product> parseProduct() {
