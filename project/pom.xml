@@ -61,6 +61,12 @@
     </dependency>
 
     <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20170516</version>
+    </dependency>
+
+    <dependency>
       <groupId>is2</groupId>
       <artifactId>webScraper</artifactId>
       <version>0.0.1-SNAPSHOT</version>
