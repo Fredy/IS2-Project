@@ -105,20 +105,10 @@ public class TottusScraper implements Scraper {
   }
 
   @Override
-  public List<Product> parseProduct() {
+  public List<Product> parseProducts() {
     String res1 = this.urlToJsonArray(this.baseURL);
     Vector<String> res2 = this.oneToVector(res1);
     return this.vectorStringsToProducts(res2);
-  }
-
-  @Override
-  public void saveProduct(List<Product> product) {
-
-  }
-
-  @Override
-  public List<Product> getProduct() {
-    return null;
   }
 
   @Override
@@ -126,14 +116,4 @@ public class TottusScraper implements Scraper {
     return null;
   }
 
-  @Override
-  public void saveShop(Shop shop) {
-
-  }
-
-  @Override
-  public Shop getShop() {
-    return null;
-  }
-  
 }
