@@ -3,7 +3,10 @@ package scraper;
 import domain.Product;
 import domain.Shop;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Vector;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -15,7 +18,7 @@ import org.json.*;
 public class TottusScraper implements Scraper {
 
   private String baseURL = "http://www.tottus.com.pe/tottus/browse/Electrohogar-Tecnolog%C3%ADa-Laptops/_/N-82nnyu";
-  
+
   private Document getHtmlFromURL(String PageURL) throws IOException {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
   }
@@ -23,8 +26,8 @@ public class TottusScraper implements Scraper {
   public String urlToJsonArray(String baseURL) {
     String result = "";
     try {
-      Document doc = this.getHtmlFromURL(baseURL);  
-      
+      Document doc = this.getHtmlFromURL(baseURL);
+
       Elements scriptElements = doc.getElementsByTag("script");
 
       for (Element element : scriptElements) {
@@ -58,13 +61,129 @@ public class TottusScraper implements Scraper {
       outputVector.add(inputJson.substring(inputJson.indexOf("{"), inputJson.indexOf("},{") + 1));
       inputJson = inputJson.substring(inputJson.indexOf("},{") + 2, inputJson.length());
     }
-    outputVector.add(inputJson.substring(inputJson.indexOf("{"), inputJson.length())); //last register
+    outputVector
+        .add(inputJson.substring(inputJson.indexOf("{"), inputJson.length())); //last register
     return outputVector;
   }
 
   public List<Product> vectorStringsToProducts(Vector<String> vectorStringIn)
       throws JSONException {
-    List<Product> res = new List<Product>();
+    List<Product> res = new List<Product>() {
+      @Override
+      public int size() {
+        return 0;
+      }
+
+      @Override
+      public boolean isEmpty() {
+        return false;
+      }
+
+      @Override
+      public boolean contains(Object o) {
+        return false;
+      }
+
+      @Override
+      public Iterator<Product> iterator() {
+        return null;
+      }
+
+      @Override
+      public Object[] toArray() {
+        return new Object[0];
+      }
+
+      @Override
+      public <T> T[] toArray(T[] ts) {
+        return null;
+      }
+
+      @Override
+      public boolean add(Product product) {
+        return false;
+      }
+
+      @Override
+      public boolean remove(Object o) {
+        return false;
+      }
+
+      @Override
+      public boolean containsAll(Collection<?> collection) {
+        return false;
+      }
+
+      @Override
+      public boolean addAll(Collection<? extends Product> collection) {
+        return false;
+      }
+
+      @Override
+      public boolean addAll(int i, Collection<? extends Product> collection) {
+        return false;
+      }
+
+      @Override
+      public boolean removeAll(Collection<?> collection) {
+        return false;
+      }
+
+      @Override
+      public boolean retainAll(Collection<?> collection) {
+        return false;
+      }
+
+      @Override
+      public void clear() {
+
+      }
+
+      @Override
+      public Product get(int i) {
+        return null;
+      }
+
+      @Override
+      public Product set(int i, Product product) {
+        return null;
+      }
+
+      @Override
+      public void add(int i, Product product) {
+
+      }
+
+      @Override
+      public Product remove(int i) {
+        return null;
+      }
+
+      @Override
+      public int indexOf(Object o) {
+        return 0;
+      }
+
+      @Override
+      public int lastIndexOf(Object o) {
+        return 0;
+      }
+
+      @Override
+      public ListIterator<Product> listIterator() {
+        return null;
+      }
+
+      @Override
+      public ListIterator<Product> listIterator(int i) {
+        return null;
+      }
+
+      @Override
+      public List<Product> subList(int i, int i1) {
+        return null;
+      }
+    } ;
 
     for (int i = 0; i < vectorStringIn.size(); i++) {
       JSONObject jsonObject = new JSONObject(vectorStringIn.elementAt(i));
@@ -95,7 +214,7 @@ public class TottusScraper implements Scraper {
     }
     return res;
   }
-  
+
   private Shop getShopData() {
     Shop shop = new Shop();
     shop.setName("Tottus Perú");
@@ -113,7 +232,7 @@ public class TottusScraper implements Scraper {
 
   @Override
   public Shop parseShop() {
-    return null;
+    return this.getShopData();
   }
 
 }
