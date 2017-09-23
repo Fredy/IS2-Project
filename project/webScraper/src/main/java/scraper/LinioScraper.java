@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
 import org.json.JSONObject;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,7 +16,7 @@ public class LinioScraper implements Scraper {
 
   private String baseURL = "https://www.linio.com.pe/c/computacion/portatiles";
 
-  private Document getHtmlFromURL(String PageURL) throws IOException {
+  private Document getHtmlFromURL(String PageURL) throws IOException, HttpStatusException {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
   }
 
@@ -45,7 +46,7 @@ public class LinioScraper implements Scraper {
       }
 
     } catch (IOException e) {
-      e.printStackTrace();
+      return "";
     }
     return jsonData;
   }
@@ -121,7 +122,7 @@ public class LinioScraper implements Scraper {
   }
 
   private String getModel(String productUrl) {
-    String res = "";
+    String res = null;
     try {
       Document pageDoc = this.getHtmlFromURL(productUrl);
 
@@ -135,7 +136,7 @@ public class LinioScraper implements Scraper {
         res = model.last().text();
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      return null;
     }
     return res;
   }
@@ -147,7 +148,7 @@ public class LinioScraper implements Scraper {
     Vector<Product> productsVec = new Vector<Product>();
     int lastPageNum = this.getMaxPages(url);
 
-    for (int i = 1; i <= lastPageNum; i++) {
+    for (int i = 1; i <= 1; i++) {
       String pageUrl = url + "?page=" + Integer.toString(i);
       Vector<String> productsUrls = this.getProductsURLs(pageUrl);
       for (String prodUrl : productsUrls) {
@@ -170,37 +171,16 @@ public class LinioScraper implements Scraper {
     shop.setUrl("https://www.linio.com.pe/");
     shop.setAddress("Calle Rio de la plana Nro. 167 Urb. Chacarilla "
         + "de Santa Crus (Piso 7) Lima - Lima - San Isidro");
-
     return shop;
   }
 
+
   @Override
-  public List<Product> parseProduct() {
+  public List<Product> parseProducts() {
     return this.getProducts(this.baseURL);
   }
 
-  @Override
-  public void saveProduct(List<Product> product) {
-
-  }
-
-  @Override
-  public List<Product> getProduct() {
-    return null;
-  }
-
-  @Override
   public Shop parseShop() {
-    return null;
-  }
-
-  @Override
-  public void saveShop(Shop shop) {
-
-  }
-
-  @Override
-  public Shop getShop() {
-    return null;
+    return this.getShopData();
   }
 }
