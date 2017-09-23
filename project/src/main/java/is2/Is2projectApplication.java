@@ -25,14 +25,16 @@ public class Is2projectApplication {
   @Autowired
   ShopRepository shopRepository;
 
-  @PostConstruct
+  /*@PostConstruct
   void init() {
     TottusScraper tottusScraper = new TottusScraper();
+    List<Product> products = tottusScraper.parseProducts();
+    System.out.println("Number of scrape Products : "+products.size());
     Shop shop = tottusScraper.parseShop();
-    System.out.println(shop.getName());
-    System.out.println(shop.getAddress());
+    shop.setProducts(products);
+    productRepository.save(products) ;
     shopRepository.save(shop);
-  }
+  }*/
 
   public static void main(String[] args) {
     SpringApplication.run(Is2projectApplication.class, args);
