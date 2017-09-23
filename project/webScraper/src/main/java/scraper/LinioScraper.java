@@ -148,7 +148,7 @@ public class LinioScraper implements Scraper {
     Vector<Product> productsVec = new Vector<Product>();
     int lastPageNum = this.getMaxPages(url);
 
-    for (int i = 1; i <= 1; i++) {
+    for (int i = 1; i <= lastPageNum; i++) {
       String pageUrl = url + "?page=" + Integer.toString(i);
       Vector<String> productsUrls = this.getProductsURLs(pageUrl);
       for (String prodUrl : productsUrls) {
