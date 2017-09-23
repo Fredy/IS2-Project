@@ -37,7 +37,7 @@ public class Shop {
   }
 
   @OneToMany
-  @JoinColumn(name = "shop")
+  @JoinColumn(name = "shop_id")
   public List<Product> getProducts() {
     return products;
   }
