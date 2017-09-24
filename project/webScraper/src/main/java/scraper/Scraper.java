@@ -7,6 +7,7 @@ import java.util.List;
 public interface Scraper {
 
   public List<Product> parseProducts();
+
   public Shop parseShop();
 
 }
