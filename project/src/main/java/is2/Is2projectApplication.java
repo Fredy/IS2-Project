@@ -7,10 +7,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import repository.ProductRepository;
 import repository.ShopRepository;
-import domain.Product;
-import domain.Shop;
-import java.util.List;
-import javax.annotation.PostConstruct;
 
 @SpringBootApplication
 @EntityScan("domain")
