@@ -151,30 +151,21 @@ public class SagaScraper implements Scraper {
   //Product model
 
   @Override
-  public List<Product> parseProduct() {
+  public List<Product> parseProducts(){
+    try {
+      return this.parse(this.url);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     return null;
   }
 
-  @Override
-  public void saveProduct(List<Product> product) {
-
-  }
-
-  @Override
-  public List<Product> getProduct() {
-    return null;
-  }
 
   @Override
   public Shop parseShop() {
-    return null;
+    return this.getShop();
   }
 
-  @Override
-  public void saveShop(Shop shop) {
-  }
-
-  @Override
   public Shop getShop() {
     Shop shop = new Shop();
     shop.setName("Saga Falabella Perú");
