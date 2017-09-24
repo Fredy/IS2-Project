@@ -1,10 +1,5 @@
 package is2;
 
-
-import domain.Product;
-import domain.Shop;
-import java.util.List;
-import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,6 +7,10 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import repository.ProductRepository;
 import repository.ShopRepository;
+import domain.Product;
+import domain.Shop;
+import java.util.List;
+import javax.annotation.PostConstruct;
 
 @SpringBootApplication
 @EntityScan("domain")
@@ -36,7 +35,6 @@ public class Is2projectApplication {
       shopRepository.save(shop);
     }
   */
-
   public static void main(String[] args) {
     SpringApplication.run(Is2projectApplication.class, args);
   }
