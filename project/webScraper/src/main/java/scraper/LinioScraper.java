@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
 import org.json.JSONObject;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,36 +14,41 @@ import org.jsoup.select.Elements;
 
 public class LinioScraper implements Scraper {
 
+  private String baseURL = "https://www.linio.com.pe/c/computacion/portatiles";
+
+  private Document getHtmlFromURL(String PageURL) throws IOException, HttpStatusException {
+    return Jsoup.connect(PageURL).userAgent("Mozilla").get();
+  }
+
   private String extractJsonData(String productUrl) {
     /* Receives a product url.
      * Return a String containing a JSON object with the product data.
      * If this doesn't find the data, then it returns an empty string. */
 
+    String jsonData = "";
     try {
-      Document pageDoc = Jsoup.connect(productUrl)
-          .userAgent("Mozilla")
-          .get();
+      Document pageDoc = this.getHtmlFromURL(productUrl);
 
-      Element content = pageDoc.body()
-          .getElementsByTag("script")
-          .first();
+      Elements content = pageDoc.body()
+          .getElementsByTag("script");
 
-      // The content data have 2 parts, the product data and a function
-      // We split them using "];"
-      String jsonData = content.data()
-          .split("];")[0];
+      for (Element element : content) {
+        if (element.data().contains("dataLayer")) {
+          jsonData = element.data()
+              .split("];")[0];
+          // The content data have 2 parts, the product data and a function
+          // We split them using "];"
 
-      if (!jsonData.contains("dataLayer")) {
-        return ""; // TODO: if datLayer is not found, then this page doesn't have contents.
+          jsonData = jsonData.substring(jsonData.indexOf("[") + 1, jsonData.length());
+          // We just need the JSON part of this script:
+          break;
+        }
       }
 
-      // We just need the JSON part of this script:
-      jsonData = jsonData.substring(jsonData.indexOf("[") + 1, jsonData.length());
-      return jsonData;
     } catch (IOException e) {
-      e.printStackTrace();
       return "";
     }
+    return jsonData;
   }
 
   private Vector<String> getProductsURLs(String pageUrl) {
@@ -51,9 +57,7 @@ public class LinioScraper implements Scraper {
 
     Vector<String> productsUrls = new Vector<String>();
     try {
-      Document pageDoc = Jsoup.connect(pageUrl)
-          .userAgent("Mozilla")
-          .get();
+      Document pageDoc = this.getHtmlFromURL(pageUrl);
 
       Elements products = pageDoc.body()
           .getElementById("catalogue-product-container")
@@ -77,9 +81,7 @@ public class LinioScraper implements Scraper {
      */
     int lastPageNum = 0;
     try {
-      Document pageDoc = Jsoup.connect(baseUrl)
-          .userAgent("Mozilla")
-          .get();
+      Document pageDoc = this.getHtmlFromURL(baseUrl);
 
       String lastValidPage = pageDoc.body()
           .getElementsByClass("page-item").last()
@@ -97,77 +99,88 @@ public class LinioScraper implements Scraper {
     return lastPageNum;
   }
 
-  private void jsonToObject(String jsonData) {
+  private Product jsonToObject(String jsonData) {
     // TODO: make this function convert jsonData into a Product object.
     if (jsonData == null || jsonData.isEmpty()) {
-      return;
+      return null;
     }
     JSONObject jsonObject = new JSONObject(jsonData);
     String name = jsonObject.getString("product_name");
     double webPrice = jsonObject.getDouble("price");
     double offerPrice = jsonObject.getDouble("special_price");
     String sku = jsonObject.getString("sku_config");
-    String model = "";
     String brand = jsonObject.getString("brand");
-    System.out.print(name);
-    System.out.print(" - ");
-    System.out.print(webPrice);
-    System.out.print(" - ");
-    System.out.print(offerPrice);
-    System.out.print(" - ");
-    System.out.print(sku);
-    System.out.print(" - ");
-    System.out.print(model);
-    System.out.print(" - ");
-    System.out.print(brand);
-    System.out.println();
+
+    Product product = new Product();
+    product.setName(name);
+    product.setWebPrice(webPrice);
+    product.setOfferPrice(offerPrice);
+    product.setSku(sku);
+    product.setBrand(brand);
+
+    return product;
   }
 
-  private void getProducts(String url) {
+  private String getModel(String productUrl) {
+    String res = null;
+    try {
+      Document pageDoc = this.getHtmlFromURL(productUrl);
+
+      Elements model = pageDoc.body()
+          .getElementsByClass("product-description-container")
+          .first().getElementsByClass("features-box-section")
+          .first().getElementsByTag("tr")
+          .get(1).getElementsByTag("td");
+
+      if (model.first().text().equals("Modelo")) {
+        res = model.last().text();
+      }
+    } catch (IOException e) {
+      return null;
+    }
+    return res;
+  }
+
+  private Vector<Product> getProducts(String url) {
     /* This function gets a category url, using the above methods it scrape
      * and parse the page and returns all the products in that category. */
 
-    // TODO: make it return a vector<Product>
+    Vector<Product> productsVec = new Vector<Product>();
     int lastPageNum = this.getMaxPages(url);
+
     for (int i = 1; i <= lastPageNum; i++) {
       String pageUrl = url + "?page=" + Integer.toString(i);
       Vector<String> productsUrls = this.getProductsURLs(pageUrl);
       for (String prodUrl : productsUrls) {
         String jsonData = this.extractJsonData(prodUrl);
-        this.jsonToObject(jsonData);
+        Product product = this.jsonToObject(jsonData);
+        if (product == null) {
+          continue;
+        }
+        String model = this.getModel(prodUrl);
+        product.setModel(model);
+        productsVec.add(product);
       }
     }
+    return productsVec;
   }
 
-  // TODO: product model missing.
-
-  @Override
-  public List<Product> parseProduct() {
-    return null;
+  private Shop getShopData() {
+    Shop shop = new Shop();
+    shop.setName("Linio Perú");
+    shop.setUrl("https://www.linio.com.pe/");
+    shop.setAddress("Calle Rio de la plana Nro. 167 Urb. Chacarilla "
+        + "de Santa Crus (Piso 7) Lima - Lima - San Isidro");
+    return shop;
   }
 
-  @Override
-  public void saveProduct(List<Product> product) {
 
+  @Override
+  public List<Product> parseProducts() {
+    return this.getProducts(this.baseURL);
   }
 
-  @Override
-  public List<Product> getProduct() {
-    return null;
-  }
-
-  @Override
   public Shop parseShop() {
-    return null;
-  }
-
-  @Override
-  public void saveShop(Shop shop) {
-
-  }
-
-  @Override
-  public Shop getShop() {
-    return null;
+    return this.getShopData();
   }
 }
