@@ -15,47 +15,26 @@ public class SagaScraper implements Scraper {
 
   private static String url = "http://www.falabella.com.pe/falabella-pe/category/cat1590466/Laptops";
 
-  public static void main(String[] args) throws IOException {
-    Vector<Product> parse = parse(url);
-  }
-
-  private static void print(String msg, Object... args) {
-    System.out.println(String.format(msg, args));
-  }
-
-  private static String trim(String s, int width) {
-    if (s.length() > width) {
-      return s.substring(0, width - 1) + ".";
-    } else {
-      return s;
-    }
-  }
-
-
   public static Vector<Product> parse(String url) throws IOException {
 
     Vector<Product> productsUrls = new Vector<Product>();
     Product product = new Product();
 
     Document doc = Jsoup.connect(url)
+        .userAgent("Mozilla")
         .get();
 
     String htmlString = doc.html();
-
     Document document = Jsoup.parse(htmlString);
     Elements elements = document
         .select(
             ".site-wrapper #main > div#fbra_browseProductList .fb-filters .fb-pod-group > div.fb-pod-group__item .fb-pod__item > .fb-pod__header > a[href]");
 
     for (Element element : elements) {
-/*
       Element elementInt = document
           .select(
-              ".site-wrapper #main > div#fbra_browseProductList .fb-filters .fb-pod-group > div.fb-pod-group__item .fb-pod__item  .fb-pod__prices-wrapper ")
-          .get(1);
-
-
-      System.out.println("elementInt  "+elementInt);*/
+              ".site-wrapper #main > div#fbra_browseProductList .fb-filters .fb-pod-group > div.fb-pod-group__item .fb-pod__item .fb-pod__body  div")// .fb-pod__prices-wrapper ")
+          .get(0);
 
       String relUrl = "http://www.falabella.com.pe" + element.attr("href");
 
@@ -63,47 +42,57 @@ public class SagaScraper implements Scraper {
        /*Begin*/
 
       Document docIn = Jsoup.connect(relUrl)
+          .userAgent("Mozilla")
           .get();
       String htmlStringIn = docIn.html();
 
-      Document documentIn = Jsoup.parse(htmlStringIn);
 
+      /*Price*/
+      try {
+        product.setNormalPrice(getPrice(docIn));
+      } catch (IOException e) {
+        e.printStackTrace();
+        product.setNormalPrice(null);
+      }
+
+      Document documentIn = Jsoup.parse(htmlStringIn);
       Element elementIn = documentIn
           .select(
               ".site-wrapper #main > .fb-module-wrapper .fb-accordion-tabs section.fb-accordion-tabs__content .fb-product-information__product-information-tab .fb-product-information-tab__copy ul")
           .get(0);
 
        /*Brand*/
-
       String relUrlIn = elementIn.text();
-      String stringBandP[] = relUrlIn.split("Marca:");
-      String stringBand[] = stringBandP[1].split(" ");
-      System.out.println("band  " + stringBand[1]);
-      product.setBrand(stringBand[1]);
+      try {
+        product.setBrand(getBrand(relUrlIn));
+      } catch (IOException e) {
+        e.printStackTrace();
+        product.setBrand(null);
+
+      }
 
       /*Model*/
-
-      String stringModelP[] = relUrlIn.split("Modelo:");
-      String stringModel[] = stringModelP[1].split(" ");
-      System.out.println("model  " + stringModel[1]);
-      product.setBrand(stringModel[1]);
+      try {
+        product.setModel(getModel(relUrlIn));
+      } catch (IOException e) {
+        e.printStackTrace();
+        product.setModel(null);
+      }
 
        /*Sku*/
-
       elementIn = documentIn
           .select(
               ".site-wrapper #main > #fbra_browseMainProduct .fb-product__form .fb-product-cta .fb-product-cta__container .fb-product-cta--desktop")
           .get(0);
 
       relUrlIn = elementIn.text();
-
       String stringArray[] = relUrlIn.split(":");
       String stringProd[] = stringArray[1].split(" ");
       System.out.println("sku " + stringProd[0]);
       product.setSku(stringProd[0]);
 
-      /*Name*/
 
+      /*Name*/
       String name = "";
       int j;
       for (j = 1; j < stringProd.length; j++) {
@@ -112,36 +101,8 @@ public class SagaScraper implements Scraper {
       System.out.println("name:  " + name);
       product.setName(name);
 
-
-    /*
-    //
-    product.setNormalPrice();
-    product.setOfferPrice();
-    product.setWebPrice();*/
-
-      System.out.println("                    ");
-
-      Elements elementIns = documentIn
-          .select(
-              ".site-wrapper #main > #fbra_browseMainProduct div.fb-product__form div.fb-product-cta > div.fb-product-cta__container > div.fb-product-sets__product-prices  p");
-      //elementIns.select("div.fb-product-cta__prices");
-
-      //  System.out.println(elementIns.first().childNodes().get(1));
-
-      for (Element e : elementIns) {
-
-        Elements paragraphs = e.getElementsByTag("p");
-        for (Element p : paragraphs) {
-
-          relUrlIn = p.text();
-          System.out.println("other Chaactest pem " + relUrlIn);
-        }
-
-        relUrlIn = e.text();
-        System.out.println("other Chaactest pem " + relUrlIn);
-      }
-
-      System.out.println("                    ");
+      product.setWebPrice(null);
+      product.setOfferPrice(null);
 
       /*End*/
 
@@ -150,16 +111,41 @@ public class SagaScraper implements Scraper {
     return productsUrls;
   }
 
-  public static int findSt(String st1, String st2) {
-    int intIndex = st1.indexOf(st2);
 
-    if (intIndex == -1) {
-      System.out.println("not found");
-      return -1;
-    } else {
-      System.out.println("Found at index " + intIndex);
-      return intIndex;
+  public static String getModel(String relUrlIn) throws IOException {
+    try {
+      String stringModelP[] = relUrlIn.split("Modelo:");
+      String stringModel[] = stringModelP[1].split(" ");
+//    System.out.println("model  " + stringModel[1]);
+      return stringModel[1];
+
+    } catch (ArrayIndexOutOfBoundsException excepcion) {
+      return null;
     }
+
+  }
+
+  public static String getBrand(String relUrlIn) throws IOException {
+    String stringBandP[] = relUrlIn.split("Marca:");
+    String stringBand[] = stringBandP[1].split(" ");
+    System.out.println("band  " + stringBand[1]);
+    return stringBand[1];
+
+  }
+
+  public static Double getPrice(Document docIn) throws IOException {
+    Element content = docIn.body().getElementsByAttributeValue("type", "text/javascript").get(0);
+    Element script = docIn.select("script").first();
+    String price = content.data();
+    String stringPrice[] = price.split("originalPrice");
+    String stringPriceP[] = stringPrice[1].split("," + "\"");
+    String stringP = stringPriceP[0];
+    stringP = stringP.substring(3, stringP.length() - 1);
+    stringP = stringP.replace(',', '.');
+    Double priceD = Double.parseDouble(stringP);
+    System.out.println("price " + priceD.toString());
+
+    return priceD;
   }
 
   //Product model
