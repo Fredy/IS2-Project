@@ -74,8 +74,10 @@ public class TottusScraper implements Scraper {
       JSONObject jsonObject = new JSONObject(vectorStringIn.elementAt(i));
       String fullname = jsonObject.getString("name");
       String name = fullname.substring(fullname.indexOf("Laptop"), fullname.indexOf("/"));
-      String model = "";
+      String model="";
+      Boolean hasModel = false;
       if (fullname.contains("Mod.")) {
+        hasModel = true;
         model = fullname.substring(fullname.indexOf("Mod.") + 5, fullname.length());
       }
       double webPrice = jsonObject.getDouble("price");
@@ -100,7 +102,9 @@ public class TottusScraper implements Scraper {
       tmp.setName(name);
       tmp.setWebPrice(webPrice);
       tmp.setSku(sku);
-      tmp.setModel(model);
+      if (hasModel) {
+        tmp.setModel(model);
+      }
       tmp.setBrand(brand);
       res.add(tmp);
     }
