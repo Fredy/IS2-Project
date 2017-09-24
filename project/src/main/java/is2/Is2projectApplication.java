@@ -30,7 +30,7 @@ public class Is2projectApplication {
       productRepository.save(products) ;
       shopRepository.save(shop);
     }
-    */
+  */
   public static void main(String[] args) {
     SpringApplication.run(Is2projectApplication.class, args);
   }
