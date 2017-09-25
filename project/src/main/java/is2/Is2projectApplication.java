@@ -25,6 +25,7 @@ import scraper.TottusScraper;
 @EnableJpaRepositories("repository")
 public class Is2projectApplication {
 
+
   @Autowired
   ProductRepository productRepository;
   @Autowired
