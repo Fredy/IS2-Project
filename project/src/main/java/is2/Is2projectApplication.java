@@ -48,22 +48,22 @@ public class Is2projectApplication {
   }
 
   private void processArgs(String shopName) {
-    System.out.println("Nombre de la tienda + " + shopName);
+    
     Scraper scraper;
     if (shopName.compareTo("linio") == 0 || shopName.compareTo("Linio") == 0) {
-      System.out.println("linio scrapping");
+      
       scraper = new LinioScraper();
     } else if (shopName.compareTo("oechsle") == 0 || shopName.compareTo("Oechsle") == 0) {
-      System.out.println("oh scrapping");
+      
       scraper = new OechsleScraper();
     } else if (shopName.compareTo("ripley") == 0 || shopName.compareTo("Ripley") == 0) {
-      System.out.println("ripley scrapping");
+      
       scraper = new RipleyScraper();
     } else if (shopName.compareTo("saga") == 0 || shopName.compareTo("Saga") == 0) {
-      System.out.println("saga scrapping");
+      
       scraper = new SagaScraper();
     } else if (shopName.compareTo("tottus") == 0 || shopName.compareTo("Tottus") == 0) {
-      System.out.println("tottus scrapping");
+      
       scraper = new TottusScraper();
     } else {
       System.out.println("La tienda ingresada no es manejada");
