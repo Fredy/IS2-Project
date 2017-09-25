@@ -101,5 +101,4 @@ public class Product {
     this.brand = brand;
   }
 
-
 }
