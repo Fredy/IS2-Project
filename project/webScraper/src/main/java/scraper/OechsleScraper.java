@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OechsleScraper implements Scraper {
 
-  private String urlOechsle = "http://www.oechsle.pe/laptops";
+  private String urlOechsle = "http://www.oechsle.pe/tecnologia/computo/laptops?PS=66";
 
   @Override
   public List<Product> parseProducts() {
@@ -35,7 +36,7 @@ public class OechsleScraper implements Scraper {
     /*
     * Returns a vector with all urls of products of @Param baseUrl
     */
-    Collection<String> urls = new Vector<String>();
+    Collection<String> urls = new Vector<>();
     try {
       Document doc = Jsoup.connect(baseUrl).get();
       Elements content = doc.getElementsByAttributeValue("class", "viewDetail");
@@ -78,7 +79,7 @@ public class OechsleScraper implements Scraper {
     * Returns a vector of prices founded in @Param html
     * */
 
-    Vector<Double> prices = new Vector<Double>();
+    Vector<Double> prices = new Vector<>();
     String normal_price = html.select("strong.skuListPrice").text();
     String offer_price = html.select("strong.skuBestPrice").text();
 
@@ -94,14 +95,13 @@ public class OechsleScraper implements Scraper {
     return prices;
   }
 
-  private Document getHtmlFromUrl(String url) throws IOException {
-    Document doc = Jsoup.connect(url).get();
-    return doc;
+  private Document getHtmlFromUrl(String url) throws IOException, HttpStatusException {
+    return Jsoup.connect(url).get();
   }
 
   private Product getProduct(String urlProduct) {
     Product product = new Product();
-    Vector<Double> prices = new Vector<Double>(2);
+    Vector<Double> prices = new Vector<>(2);
     try {
       Document doc = getHtmlFromUrl(urlProduct);
       String nameProduct = getProductName(doc);
@@ -129,7 +129,7 @@ public class OechsleScraper implements Scraper {
     /*
       Return a vector of characteristcs of Product contents in @Param url
     */
-    Vector<Product> products = new Vector<Product>();
+    Vector<Product> products = new Vector<>();
     Collection<String> urls = getUrlsProducts(url);
     Product product = new Product();
     for (String urlProduct : urls) {
