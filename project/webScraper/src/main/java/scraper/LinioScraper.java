@@ -62,7 +62,13 @@ public class LinioScraper implements Scraper {
       for (Element element : products) {
         String relUrl = element.getElementsByTag("a")
             .attr("abs:href");
-        productsUrls.add(relUrl);
+        // NOTE: this if is used to just get laptops.
+        if (relUrl.contains("notebook") || relUrl.contains("laptop") || relUrl.contains("macbook")
+            || relUrl.contains("portatil")) {
+          productsUrls.add(relUrl);
+        } else {
+          continue;
+        }
       }
     } catch (IOException e) {
       e.printStackTrace();
