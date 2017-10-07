@@ -48,32 +48,33 @@ public class Is2projectApplication {
   }
 
   private void processArgs(String shopName) {
-    
+
     Scraper scraper;
     if (shopName.compareTo("linio") == 0 || shopName.compareTo("Linio") == 0) {
-      
+
       scraper = new LinioScraper();
     } else if (shopName.compareTo("oechsle") == 0 || shopName.compareTo("Oechsle") == 0) {
-      
+
       scraper = new OechsleScraper();
     } else if (shopName.compareTo("ripley") == 0 || shopName.compareTo("Ripley") == 0) {
-      
+
       scraper = new RipleyScraper();
     } else if (shopName.compareTo("saga") == 0 || shopName.compareTo("Saga") == 0) {
-      
+
       scraper = new SagaScraper();
     } else if (shopName.compareTo("tottus") == 0 || shopName.compareTo("Tottus") == 0) {
-      
+
       scraper = new TottusScraper();
     } else {
       System.out.println("La tienda ingresada no es manejada");
       return;
     }
     List<Product> products = scraper.parseProducts();
-    System.out.println(products.size());
+    System.out.println(">> Productos Scrapeados: " + Integer.toString(products.size()));
     Shop shop = scraper.parseShop();
     shop.setProducts(products);
     productRepository.save(products);
     shopRepository.save(shop);
+    System.out.println(">>[OK] Productos almacenados en base de datos");
   }
 }
