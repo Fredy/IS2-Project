@@ -18,7 +18,6 @@ public class SagaScraper implements Scraper {
   public static Vector<Product> parse(String url) throws IOException {
 
     Vector<Product> productsUrls = new Vector<Product>();
-    Product product = new Product();
 
     Document doc = Jsoup.connect(url)
         .userAgent("Mozilla")
@@ -31,6 +30,7 @@ public class SagaScraper implements Scraper {
             ".site-wrapper #main > div#fbra_browseProductList .fb-filters .fb-pod-group > div.fb-pod-group__item .fb-pod__item > .fb-pod__header > a[href]");
 
     for (Element element : elements) {
+      Product product = new Product();
       Element elementInt = document
           .select(
               ".site-wrapper #main > div#fbra_browseProductList .fb-filters .fb-pod-group > div.fb-pod-group__item .fb-pod__item .fb-pod__body  div")// .fb-pod__prices-wrapper ")
@@ -88,7 +88,7 @@ public class SagaScraper implements Scraper {
       relUrlIn = elementIn.text();
       String stringArray[] = relUrlIn.split(":");
       String stringProd[] = stringArray[1].split(" ");
-      System.out.println("sku " + stringProd[0]);
+      // System.out.println("sku " + stringProd[0]);
       product.setSku(stringProd[0]);
 
 
@@ -98,7 +98,7 @@ public class SagaScraper implements Scraper {
       for (j = 1; j < stringProd.length; j++) {
         name += stringProd[j] + " ";
       }
-      System.out.println("name:  " + name);
+      // System.out.println("name:  " + name);
       product.setName(name);
 
       product.setWebPrice(null);
@@ -116,7 +116,7 @@ public class SagaScraper implements Scraper {
     try {
       String stringModelP[] = relUrlIn.split("Modelo:");
       String stringModel[] = stringModelP[1].split(" ");
-//    System.out.println("model  " + stringModel[1]);
+      // System.out.println("model  " + stringModel[1]);
       return stringModel[1];
 
     } catch (ArrayIndexOutOfBoundsException excepcion) {
@@ -126,11 +126,15 @@ public class SagaScraper implements Scraper {
   }
 
   public static String getBrand(String relUrlIn) throws IOException {
-    String stringBandP[] = relUrlIn.split("Marca:");
-    String stringBand[] = stringBandP[1].split(" ");
-    System.out.println("band  " + stringBand[1]);
-    return stringBand[1];
+    try {
+      String stringBandP[] = relUrlIn.split("Marca:");
+      String stringBand[] = stringBandP[1].split(" ");
+      // System.out.println("band  " + stringBand[1]);
+      return stringBand[1];
 
+    } catch (ArrayIndexOutOfBoundsException excepcion) {
+      return null;
+    }
   }
 
   public static Double getPrice(Document docIn) throws IOException {
@@ -143,7 +147,7 @@ public class SagaScraper implements Scraper {
     stringP = stringP.substring(3, stringP.length() - 1);
     stringP = stringP.replace(',', '.');
     Double priceD = Double.parseDouble(stringP);
-    System.out.println("price " + priceD.toString());
+    // System.out.println("price " + priceD.toString());
 
     return priceD;
   }
@@ -151,7 +155,7 @@ public class SagaScraper implements Scraper {
   //Product model
 
   @Override
-  public List<Product> parseProducts(){
+  public List<Product> parseProducts() {
     try {
       return this.parse(this.url);
     } catch (IOException e) {

@@ -66,35 +66,26 @@ public class TottusScraper implements Scraper {
   public List<Product> vectorStringsToProducts(Vector<String> vectorStringIn)
       throws JSONException {
     Vector<Product> res = new Vector<Product>();
-
     for (int i = 0; i < vectorStringIn.size(); i++) {
       JSONObject jsonObject = new JSONObject(vectorStringIn.elementAt(i));
       String fullname = jsonObject.getString("name");
-      String name = fullname.substring(fullname.indexOf("Laptop"), fullname.indexOf("/"));
-      String model="";
+      String name;
+      if (fullname.contains("\\")) {
+        name = fullname.substring(fullname.indexOf("Laptop"), fullname.indexOf("\\"));
+      } else {
+        name = fullname.substring(fullname.indexOf("Laptop"), fullname.indexOf("/"));
+      }
+      String model = "";
       Boolean hasModel = false;
+
       if (fullname.contains("Mod.")) {
         hasModel = true;
-        model = fullname.substring(fullname.indexOf("Mod.") + 5, fullname.length());
+        model = fullname.substring(fullname.indexOf("Mod."), fullname.length());
       }
       double webPrice = jsonObject.getDouble("price");
       String sku = jsonObject.getString("id");
-
       String brand = jsonObject.getString("brand");
 
-      /*
-      System.out.print(name);
-      System.out.print(" + ");
-      System.out.print(webPrice);
-      System.out.print(" + ");
-      System.out.print(offerPrice);
-      System.out.print(" + ");
-      System.out.print(sku);
-      System.out.print(" + ");
-      System.out.print(model);
-      System.out.print(" + ");
-      System.out.print(brand);
-      System.out.println();*/
       Product tmp = new Product();
       tmp.setName(name);
       tmp.setWebPrice(webPrice);
