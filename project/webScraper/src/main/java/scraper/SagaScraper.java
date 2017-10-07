@@ -18,7 +18,6 @@ public class SagaScraper implements Scraper {
   public static Vector<Product> parse(String url) throws IOException {
 
     Vector<Product> productsUrls = new Vector<Product>();
-    Product product = new Product();
 
     Document doc = Jsoup.connect(url)
         .userAgent("Mozilla")
@@ -31,6 +30,7 @@ public class SagaScraper implements Scraper {
             ".site-wrapper #main > div#fbra_browseProductList .fb-filters .fb-pod-group > div.fb-pod-group__item .fb-pod__item > .fb-pod__header > a[href]");
 
     for (Element element : elements) {
+      Product product = new Product();
       Element elementInt = document
           .select(
               ".site-wrapper #main > div#fbra_browseProductList .fb-filters .fb-pod-group > div.fb-pod-group__item .fb-pod__item .fb-pod__body  div")// .fb-pod__prices-wrapper ")
@@ -126,11 +126,15 @@ public class SagaScraper implements Scraper {
   }
 
   public static String getBrand(String relUrlIn) throws IOException {
+    try {
     String stringBandP[] = relUrlIn.split("Marca:");
     String stringBand[] = stringBandP[1].split(" ");
     System.out.println("band  " + stringBand[1]);
     return stringBand[1];
 
+    } catch (ArrayIndexOutOfBoundsException excepcion) {
+      return null;
+    }
   }
 
   public static Double getPrice(Document docIn) throws IOException {
