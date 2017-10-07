@@ -66,36 +66,69 @@ public class TottusScraper implements Scraper {
   public List<Product> vectorStringsToProducts(Vector<String> vectorStringIn)
       throws JSONException {
     Vector<Product> res = new Vector<Product>();
-    for (int i = 0; i < vectorStringIn.size(); i++) {
-      JSONObject jsonObject = new JSONObject(vectorStringIn.elementAt(i));
-      String fullname = jsonObject.getString("name");
-      String name;
-      if (fullname.contains("\\")) {
-        name = fullname.substring(fullname.indexOf("Laptop"), fullname.indexOf("\\"));
-      } else {
-        name = fullname.substring(fullname.indexOf("Laptop"), fullname.indexOf("/"));
-      }
-      String model = "";
-      Boolean hasModel = false;
+    try {
+      Document doc = this.getHtmlFromURL(baseURL);
 
-      if (fullname.contains("Mod.")) {
-        hasModel = true;
-        model = fullname.substring(fullname.indexOf("Mod."), fullname.length());
-      }
-      double webPrice = jsonObject.getDouble("price");
-      String sku = jsonObject.getString("id");
-      String brand = jsonObject.getString("brand");
+      Vector<Vector<String>> nulePrices = getPrices(doc);
 
-      Product tmp = new Product();
-      tmp.setName(name);
-      tmp.setWebPrice(webPrice);
-      tmp.setSku(sku);
-      if (hasModel) {
-        tmp.setModel(model);
+      for (int i = 0; i < vectorStringIn.size(); i++) {
+        JSONObject jsonObject = new JSONObject(vectorStringIn.elementAt(i));
+        String fullname = jsonObject.getString("name");
+        String name;
+        if (fullname.contains("\\")) {
+          name = fullname.substring(fullname.indexOf("Laptop"), fullname.indexOf("\\"));
+        } else {
+          name = fullname.substring(fullname.indexOf("Laptop"), fullname.indexOf("/"));
+        }
+        String model = "";
+        Boolean hasModel = false;
+
+        if (fullname.contains("Mod.")) {
+          hasModel = true;
+          model = fullname.substring(fullname.indexOf("Mod."), fullname.length());
+        }
+        String sku = jsonObject.getString("id");
+        String brand = jsonObject.getString("brand");
+        Double normalPrice = null;
+        Double webPrice = null;
+        Double offerPrice = null;
+        if (nulePrices.get(i).size() == 3) {
+          normalPrice = Double.parseDouble(nulePrices.get(i).get(1).replaceAll(",", ""));
+          webPrice = Double.parseDouble(nulePrices.get(i).get(0).replaceAll(",", ""));
+          offerPrice = Double.parseDouble(nulePrices.get(i).get(2).replaceAll(",", ""));
+        }
+
+        if (nulePrices.get(i).size() == 2) {
+          normalPrice = Double.parseDouble(nulePrices.get(i).get(1).replaceAll(",", ""));
+          webPrice = Double.parseDouble(nulePrices.get(i).get(0).replaceAll(",", ""));
+        }
+        if (nulePrices.get(i).size() == 1) {
+          webPrice = Double.parseDouble(nulePrices.get(i).get(0).replaceAll(",", ""));
+        }
+
+        Product tmp = new Product();
+        tmp.setName(name);
+        if (normalPrice != null) {
+          tmp.setNormalPrice(normalPrice);
+        }
+        if (webPrice != null) {
+          tmp.setWebPrice(webPrice);
+        }
+        if (offerPrice != null) {
+          tmp.setOfferPrice(offerPrice);
+        }
+        tmp.setSku(sku);
+        if (hasModel) {
+          tmp.setModel(model);
+        }
+        tmp.setBrand(brand);
+        res.add(tmp);
       }
-      tmp.setBrand(brand);
-      res.add(tmp);
+
+    } catch (IOException e) {
+      e.printStackTrace();
     }
+
     return res;
   }
 
@@ -105,6 +138,61 @@ public class TottusScraper implements Scraper {
     shop.setUrl("http://www.tottus.com.pe/tottus/");
     shop.setAddress("Av. Parra 220 Arequipa, Arequipa, PE ");
     return shop;
+  }
+
+  private Vector<Vector<String>> getPrices(Document productDoc) {
+    Vector<Vector<String>> res = new Vector<Vector<String>>();
+    if (productDoc == null) {
+      return null;
+    }
+
+    Elements npriceElements = productDoc.body()
+        .getElementsByClass("caption-bottom-wrapper");
+
+    System.out.println("SIZE: " + npriceElements.size());
+    for (Element element : npriceElements) {
+
+      String product = element.text();
+      Boolean hasCMRPrice = Boolean.FALSE;
+      String cmrPrice = null;
+      if (product.contains(" Exclusivo con CMR")) {
+        hasCMRPrice = Boolean.TRUE;
+        cmrPrice = product.substring(product.indexOf("S/") + 3, product.indexOf("Ex"));
+      }
+
+      if (product.contains(" S/")) {
+        String prices = null;
+        String nulePrice = null;
+        String activePrice = null;
+        if (hasCMRPrice) {
+          prices = product.substring(product.indexOf("condiciones S/") + 14, product.indexOf("UN"));
+        } else {
+          prices = product.substring(product.indexOf("S/") + 3, product.indexOf("UN"));
+        }
+
+        if (prices.contains("S/")) {
+          nulePrice = prices.substring(0, prices.indexOf("S/"));
+          activePrice = prices.substring(prices.indexOf("S/") + 3, prices.length());
+        } else {
+          activePrice = prices;
+        }
+        Vector<String> pricesPerProduct = new Vector<String>();
+
+        pricesPerProduct.add(activePrice);
+        if (nulePrice != null) {
+
+          pricesPerProduct.add(nulePrice);
+        }
+        if (cmrPrice != null) {
+
+          pricesPerProduct.add(cmrPrice);
+        }
+        res.add(pricesPerProduct);
+
+      }
+    }
+
+    return res;
   }
 
   @Override
