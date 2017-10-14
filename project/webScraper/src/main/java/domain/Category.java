@@ -48,7 +48,7 @@ public class Category {
   }
 
   @OneToMany
-  @JoinColumn(name = "sub_category_id")
+  @JoinColumn(name = "category_id")
   public List<SubCategory> getSubCategories() {
     return subCategories;
   }

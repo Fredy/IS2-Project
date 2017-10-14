@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 @Entity
 public class SubSubCategory {
@@ -12,7 +11,6 @@ public class SubSubCategory {
   private Long id;
   private String name;
   private String url;
-  private SubCategory subCategory;
 
   public SubSubCategory() {
   }
@@ -43,12 +41,4 @@ public class SubSubCategory {
     this.url = url;
   }
 
-  @ManyToOne
-  public SubCategory getSubCategory() {
-    return subCategory;
-  }
-
-  public void setSubCategory(SubCategory subCategory) {
-    this.subCategory = subCategory;
-  }
 }
