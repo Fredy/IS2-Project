@@ -6,8 +6,9 @@ import java.util.List;
 
 public interface Scraper {
 
-  public List<Product> parseProducts();
+  List<Product> parseProducts(/*SubSubCategory subSubCategory*/);
+  // TODO: uncomment and include SubSubCategory when implemented
 
-  public Shop parseShop();
+  Shop parseShop();
 
 }
