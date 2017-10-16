@@ -2,6 +2,7 @@ package is2;
 
 import domain.Product;
 import domain.Shop;
+import domain.SubSubCategory;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -32,7 +33,7 @@ public class Is2projectApplication {
   ShopRepository shopRepository;
 
   public static void main(String[] args) {
-    SpringApplication.run(Is2projectApplication.class, args);
+    SpringApplication.run(Is2projectApplication.class, "tottus");
   }
 
   @Bean
@@ -50,6 +51,8 @@ public class Is2projectApplication {
   private void processArgs(String shopName) {
 
     Scraper scraper;
+    String urlTest = "";
+    String categoryNameTest = "";
     if (shopName.compareTo("linio") == 0 || shopName.compareTo("Linio") == 0) {
 
       scraper = new LinioScraper();
@@ -65,11 +68,19 @@ public class Is2projectApplication {
     } else if (shopName.compareTo("tottus") == 0 || shopName.compareTo("Tottus") == 0) {
 
       scraper = new TottusScraper();
+      urlTest = "http://www.tottus.com.pe/tottus/browse/Electrohogar-Tecnolog%C3%ADa-Laptops/_/N-82nnyu";
+      categoryNameTest = "Laptops";
     } else {
       System.out.println("La tienda ingresada no es manejada");
       return;
     }
-    List<Product> products = scraper.parseProducts();
+    //Only for test
+
+    SubSubCategory test1 = new SubSubCategory();
+    test1.setName(categoryNameTest);
+    test1.setUrl(urlTest);
+
+    List<Product> products = scraper.parseProducts(test1);
     System.out.println(">> Productos Scrapeados: " + Integer.toString(products.size()));
     Shop shop = scraper.parseShop();
     shop.setProducts(products);

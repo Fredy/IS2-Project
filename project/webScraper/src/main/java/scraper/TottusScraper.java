@@ -2,6 +2,7 @@ package scraper;
 
 import domain.Product;
 import domain.Shop;
+import domain.SubSubCategory;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
@@ -14,7 +15,7 @@ import org.jsoup.select.Elements;
 
 public class TottusScraper implements Scraper {
 
-  private String baseURL = "http://www.tottus.com.pe/tottus/browse/Electrohogar-Tecnolog%C3%ADa-Laptops/_/N-82nnyu";
+  private String baseURL = "";
 
   private Document getHtmlFromURL(String PageURL) throws IOException {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
@@ -30,7 +31,6 @@ public class TottusScraper implements Scraper {
       for (Element element : scriptElements) {
 
         String jsonData = element.data();
-
         if (!jsonData.contains("dataLayer")) { //To discard other scripts
           jsonData = "";
         }
@@ -60,6 +60,8 @@ public class TottusScraper implements Scraper {
     }
     outputVector
         .add(inputJson.substring(inputJson.indexOf("{"), inputJson.length())); //last register
+    for (int i = 0; i < outputVector.size(); i++) {
+    }
     return outputVector;
   }
 
@@ -74,24 +76,26 @@ public class TottusScraper implements Scraper {
       for (int i = 0; i < vectorStringIn.size(); i++) {
         JSONObject jsonObject = new JSONObject(vectorStringIn.elementAt(i));
         String fullname = jsonObject.getString("name");
-        String name;
+        //System.out.println("FulName: "+ fullname);
+        /*String name;
         if (fullname.contains("\\")) {
           name = fullname.substring(fullname.indexOf("Laptop"), fullname.indexOf("\\"));
         } else {
           name = fullname.substring(fullname.indexOf("Laptop"), fullname.indexOf("/"));
-        }
+        }*/
         String model = "";
         Boolean hasModel = false;
 
         if (fullname.contains("Mod.")) {
           hasModel = true;
-          model = fullname.substring(fullname.indexOf("Mod."), fullname.length());
+          model = fullname.substring(fullname.indexOf("Mod."), fullname.length()); //quitar el Mod.
         }
         String sku = jsonObject.getString("id");
         String brand = jsonObject.getString("brand");
         Double normalPrice = null;
         Double webPrice = null;
         Double offerPrice = null;
+
         if (nulePrices.get(i).size() == 3) {
           normalPrice = Double.parseDouble(nulePrices.get(i).get(1).replaceAll(",", ""));
           webPrice = Double.parseDouble(nulePrices.get(i).get(0).replaceAll(",", ""));
@@ -107,7 +111,7 @@ public class TottusScraper implements Scraper {
         }
 
         Product tmp = new Product();
-        tmp.setName(name);
+        tmp.setName(fullname);
         if (normalPrice != null) {
           tmp.setNormalPrice(normalPrice);
         }
@@ -149,13 +153,13 @@ public class TottusScraper implements Scraper {
     Elements npriceElements = productDoc.body()
         .getElementsByClass("caption-bottom-wrapper");
 
-    System.out.println("SIZE: " + npriceElements.size());
+   // System.out.println("SIZE: " + npriceElements.size());
     for (Element element : npriceElements) {
 
       String product = element.text();
       Boolean hasCMRPrice = Boolean.FALSE;
       String cmrPrice = null;
-      if (product.contains(" Exclusivo con CMR")) {
+      if (product.contains(" Exclusivo con CMR") && !product.contains("%")) {
         hasCMRPrice = Boolean.TRUE;
         cmrPrice = product.substring(product.indexOf("S/") + 3, product.indexOf("Ex"));
       }
@@ -164,10 +168,19 @@ public class TottusScraper implements Scraper {
         String prices = null;
         String nulePrice = null;
         String activePrice = null;
+
         if (hasCMRPrice) {
           prices = product.substring(product.indexOf("condiciones S/") + 14, product.indexOf("UN"));
         } else {
-          prices = product.substring(product.indexOf("S/") + 3, product.indexOf("UN"));
+          if (product.contains("KG")) { //products sold in KG
+            prices = product.substring(product.indexOf("S/") + 3, product.indexOf("KG") - 5);
+          } else {//products sold in UN
+            prices = product.substring(product.indexOf("S/") + 3, product.indexOf("UN"));
+          }
+
+        }
+        if (product.contains(" xclusivo con CMR")) { //ERROR Page
+          prices = product.substring(product.indexOf("condiciones S/") + 14, product.indexOf("UN"));
         }
 
         if (prices.contains("S/")) {
@@ -196,8 +209,9 @@ public class TottusScraper implements Scraper {
   }
 
   @Override
-  public List<Product> parseProducts() {
-    String res1 = this.urlToJsonArray(this.baseURL);
+  public List<Product> parseProducts(SubSubCategory subSubCategory) {
+    baseURL = subSubCategory.getUrl();
+    String res1 = this.urlToJsonArray(baseURL);
     Vector<String> res2 = this.oneToVector(res1);
     return this.vectorStringsToProducts(res2);
   }
