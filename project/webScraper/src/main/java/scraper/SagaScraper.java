@@ -2,6 +2,7 @@ package scraper;
 
 import domain.Product;
 import domain.Shop;
+import domain.SubSubCategory;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
@@ -12,8 +13,6 @@ import org.jsoup.select.Elements;
 
 
 public class SagaScraper implements Scraper {
-
-  private static String url = "http://www.falabella.com.pe/falabella-pe/category/cat1590466/Laptops";
 
   public static Vector<Product> parse(String url) throws IOException {
 
@@ -145,25 +144,22 @@ public class SagaScraper implements Scraper {
     String stringPriceP[] = stringPrice[1].split("," + "\"");
     String stringP = stringPriceP[0];
     stringP = stringP.substring(3, stringP.length() - 1);
-    stringP = stringP.replace(',', '.');
+    stringP = stringP.replace(",", "");
     Double priceD = Double.parseDouble(stringP);
-    // System.out.println("price " + priceD.toString());
 
     return priceD;
   }
 
-  //Product model
-
   @Override
-  public List<Product> parseProducts() {
+  public List<Product> parseProducts(SubSubCategory subSubCategory) {
     try {
-      return this.parse(this.url);
+      String url = subSubCategory.getUrl();
+      return this.parse(url);
     } catch (IOException e) {
       e.printStackTrace();
     }
     return null;
   }
-
 
   @Override
   public Shop parseShop() {
