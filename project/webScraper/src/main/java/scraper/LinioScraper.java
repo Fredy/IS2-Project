@@ -2,6 +2,7 @@ package scraper;
 
 import domain.Product;
 import domain.Shop;
+import domain.SubSubCategory;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
@@ -12,8 +13,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class LinioScraper implements Scraper {
-
-  private String baseURL = "https://www.linio.com.pe/c/computacion/portatiles";
 
   private Document getHtmlFromURL(String PageURL) throws IOException {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
@@ -51,7 +50,7 @@ public class LinioScraper implements Scraper {
     /* Receives a page url that contains several products.
      * Return a Vector<String> containing all the products urls. */
 
-    Vector<String> productsUrls = new Vector<String>();
+    Vector<String> productsUrls = new Vector<>();
     try {
       Document pageDoc = this.getHtmlFromURL(pageUrl);
 
@@ -66,8 +65,6 @@ public class LinioScraper implements Scraper {
         if (relUrl.contains("notebook") || relUrl.contains("laptop") || relUrl.contains("macbook")
             || relUrl.contains("portatil")) {
           productsUrls.add(relUrl);
-        } else {
-          continue;
         }
       }
     } catch (IOException e) {
@@ -102,7 +99,6 @@ public class LinioScraper implements Scraper {
   }
 
   private Product jsonToObject(String jsonData) {
-    // TODO: make this function convert jsonData into a Product object.
     if (jsonData == null || jsonData.isEmpty()) {
       return null;
     }
@@ -145,7 +141,7 @@ public class LinioScraper implements Scraper {
     /* This function gets a category url, using the above methods it scrape
      * and parse the page and returns all the products in that category. */
 
-    Vector<Product> productsVec = new Vector<Product>();
+    Vector<Product> productsVec = new Vector<>();
     int lastPageNum = this.getMaxPages(url);
 
     for (int i = 1; i <= lastPageNum; i++) {
@@ -182,8 +178,9 @@ public class LinioScraper implements Scraper {
 
 
   @Override
-  public List<Product> parseProducts() {
-    return this.getProducts(this.baseURL);
+  public List<Product> parseProducts(SubSubCategory subSubCategory) {
+    String sscategoryUrl = subSubCategory.getUrl();
+    return this.getProducts(sscategoryUrl);
   }
 
   public Shop parseShop() {
