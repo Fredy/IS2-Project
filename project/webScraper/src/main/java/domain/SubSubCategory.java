@@ -1,9 +1,13 @@
 package domain;
 
+import java.util.List;
+import java.util.Vector;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class SubSubCategory {
@@ -11,8 +15,10 @@ public class SubSubCategory {
   private Long id;
   private String name;
   private String url;
+  private List<Product> products;
 
   public SubSubCategory() {
+    products = new Vector<>();
   }
 
   @Id
@@ -41,4 +47,13 @@ public class SubSubCategory {
     this.url = url;
   }
 
+  @ManyToOne
+  @JoinColumn(name = "sub_sub_category_id")
+  public List<Product> getProducts() {
+    return products;
+  }
+
+  public void setProducts(List<Product> products) {
+    this.products = products;
+  }
 }
