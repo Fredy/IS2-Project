@@ -15,8 +15,6 @@ import org.jsoup.select.Elements;
 
 public class TottusScraper implements Scraper {
 
-  private String baseURL = "";
-
   private Document getHtmlFromURL(String PageURL) throws IOException {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
   }
@@ -65,11 +63,11 @@ public class TottusScraper implements Scraper {
     return outputVector;
   }
 
-  public List<Product> vectorStringsToProducts(Vector<String> vectorStringIn)
+  public List<Product> vectorStringsToProducts(Vector<String> vectorStringIn, String sscategoryUrl)
       throws JSONException {
     Vector<Product> res = new Vector<Product>();
     try {
-      Document doc = this.getHtmlFromURL(baseURL);
+      Document doc = this.getHtmlFromURL(sscategoryUrl);
 
       Vector<Vector<String>> nulePrices = getPrices(doc);
 
@@ -153,7 +151,7 @@ public class TottusScraper implements Scraper {
     Elements npriceElements = productDoc.body()
         .getElementsByClass("caption-bottom-wrapper");
 
-   // System.out.println("SIZE: " + npriceElements.size());
+    // System.out.println("SIZE: " + npriceElements.size());
     for (Element element : npriceElements) {
 
       String product = element.text();
@@ -210,10 +208,11 @@ public class TottusScraper implements Scraper {
 
   @Override
   public List<Product> parseProducts(SubSubCategory subSubCategory) {
-    baseURL = subSubCategory.getUrl();
-    String res1 = this.urlToJsonArray(baseURL);
+
+    String sscategoryUrl = subSubCategory.getUrl();
+    String res1 = this.urlToJsonArray(sscategoryUrl);
     Vector<String> res2 = this.oneToVector(res1);
-    return this.vectorStringsToProducts(res2);
+    return this.vectorStringsToProducts(res2, sscategoryUrl);
   }
 
   @Override

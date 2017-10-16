@@ -51,8 +51,6 @@ public class Is2projectApplication {
   private void processArgs(String shopName) {
 
     Scraper scraper;
-    String urlTest = "";
-    String categoryNameTest = "";
     if (shopName.compareTo("linio") == 0 || shopName.compareTo("Linio") == 0) {
 
       scraper = new LinioScraper();
@@ -68,17 +66,12 @@ public class Is2projectApplication {
     } else if (shopName.compareTo("tottus") == 0 || shopName.compareTo("Tottus") == 0) {
 
       scraper = new TottusScraper();
-      urlTest = "http://www.tottus.com.pe/tottus/browse/Electrohogar-Tecnolog%C3%ADa-Laptops/_/N-82nnyu";
-      categoryNameTest = "Laptops";
     } else {
       System.out.println("La tienda ingresada no es manejada");
       return;
     }
-    //Only for test
 
-    SubSubCategory test1 = new SubSubCategory();
-    test1.setName(categoryNameTest);
-    test1.setUrl(urlTest);
+    SubSubCategory test1 = new SubSubCategory(); //TODO: #43 add more option to CLI
 
     List<Product> products = scraper.parseProducts(test1);
     System.out.println(">> Productos Scrapeados: " + Integer.toString(products.size()));
