@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,8 +20,10 @@ public class Product {
   private String sku;
   private String model;
   private String brand;
+  private Date date;
 
   public Product() {
+    date = new Date();
   }
 
   @Id
