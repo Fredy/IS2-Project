@@ -20,10 +20,10 @@ public class Shop {
   private String url;
   private String address;
 
-  private List<Category> categories;
+  private List<Product> products;
 
   public Shop() {
-    categories = new Vector<>();
+    products = new Vector<>();
   }
 
   @Id
@@ -38,12 +38,12 @@ public class Shop {
 
   @OneToMany
   @JoinColumn(name = "shop_id")
-  public List<Category> getCategories() {
-    return categories;
+  public List<Product> getProducts() {
+    return products;
   }
 
-  public void setCategories(List<Category> categories) {
-    this.categories = categories;
+  public void setProducts(List<Product> products) {
+    this.products = products;
   }
 
   public String getName() {
