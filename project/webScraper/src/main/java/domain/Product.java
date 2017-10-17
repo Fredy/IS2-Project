@@ -1,10 +1,10 @@
 package domain;
 
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -20,9 +20,10 @@ public class Product {
   private String sku;
   private String model;
   private String brand;
-  private Shop shop;
+  private Date date;
 
   public Product() {
+    date = new Date();
   }
 
   @Id
@@ -33,15 +34,6 @@ public class Product {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  @ManyToOne
-  public Shop getShop() {
-    return shop;
-  }
-
-  public void setShop(Shop shop) {
-    this.shop = shop;
   }
 
   public String getName() {
@@ -91,7 +83,6 @@ public class Product {
   public void setModel(String model) {
     this.model = model;
   }
-
 
   public String getBrand() {
     return brand;
