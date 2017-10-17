@@ -2,6 +2,7 @@ package domain;
 
 import java.util.List;
 import java.util.Vector;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,7 +24,7 @@ public class Shop {
   private List<Product> products;
 
   public Shop() {
-    products = new Vector<Product>();
+    products = new Vector<>();
   }
 
   @Id
@@ -36,7 +37,7 @@ public class Shop {
     this.id = id;
   }
 
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "shop_id")
   public List<Product> getProducts() {
     return products;

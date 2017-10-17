@@ -2,6 +2,7 @@ package domain;
 
 import java.util.List;
 import java.util.Vector;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -47,7 +48,7 @@ public class SubCategory {
     this.url = url;
   }
 
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "sub_category_id")
   public List<SubSubCategory> getSubSubCategories() {
     return subSubCategories;
