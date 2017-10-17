@@ -7,7 +7,7 @@ import java.util.List;
 
 public abstract class Crawler {
 
-  private String url;
+  protected String url;
   // You should set the url value in implementation classes.
 
   public abstract List<Category> getCategories();
