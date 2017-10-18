@@ -185,7 +185,7 @@ public class TottusScraper implements Scraper {
         } else {
           activePrice = prices;
         }
-        Vector<String> pricesPerProduct = new Vector<String>();
+        ArrayList<String> pricesPerProduct = new ArrayList<String>();
 
         pricesPerProduct.add(activePrice);
         if (nulePrice != null) {
