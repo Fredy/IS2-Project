@@ -4,7 +4,11 @@ import domain.Product;
 import domain.Shop;
 import domain.SubSubCategory;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Vector;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,8 +54,8 @@ public class TottusScraper implements Scraper {
     return result;
   }
 
-  public Vector<String> oneToVector(String inputJson) {
-    Vector<String> outputVector = new Vector<String>();
+  public ArrayList<String> oneToVector(String inputJson) {
+    ArrayList<String> outputVector = new ArrayList<String>();
     while (inputJson.indexOf("},{") > 0) {
       outputVector.add(inputJson.substring(inputJson.indexOf("{"), inputJson.indexOf("},{") + 1));
       inputJson = inputJson.substring(inputJson.indexOf("},{") + 2, inputJson.length());
@@ -63,24 +67,19 @@ public class TottusScraper implements Scraper {
     return outputVector;
   }
 
-  public List<Product> vectorStringsToProducts(Vector<String> vectorStringIn, String sscategoryUrl)
+  public List<Product> vectorStringsToProducts(ArrayList<String> vectorStringIn, String sscategoryUrl)
       throws JSONException {
-    Vector<Product> res = new Vector<Product>();
+    ArrayList<Product> res = new ArrayList<Product>();
     try {
       Document doc = this.getHtmlFromURL(sscategoryUrl);
 
-      Vector<Vector<String>> nulePrices = getPrices(doc);
+      List<List<String>> nulePrices = getPrices(doc);
 
       for (int i = 0; i < vectorStringIn.size(); i++) {
-        JSONObject jsonObject = new JSONObject(vectorStringIn.elementAt(i));
+        JSONObject jsonObject = new JSONObject(vectorStringIn.get(i));
         String fullname = jsonObject.getString("name");
         //System.out.println("FulName: "+ fullname);
-        /*String name;
-        if (fullname.contains("\\")) {
-          name = fullname.substring(fullname.indexOf("Laptop"), fullname.indexOf("\\"));
-        } else {
-          name = fullname.substring(fullname.indexOf("Laptop"), fullname.indexOf("/"));
-        }*/
+
         String model = "";
         Boolean hasModel = false;
 
@@ -142,8 +141,11 @@ public class TottusScraper implements Scraper {
     return shop;
   }
 
-  private Vector<Vector<String>> getPrices(Document productDoc) {
-    Vector<Vector<String>> res = new Vector<Vector<String>>();
+  private List<List<String>> getPrices(Document productDoc) {
+
+
+    List<List<String>> res = new ArrayList<List<String>>();
+
     if (productDoc == null) {
       return null;
     }
@@ -151,7 +153,7 @@ public class TottusScraper implements Scraper {
     Elements npriceElements = productDoc.body()
         .getElementsByClass("caption-bottom-wrapper");
 
-    // System.out.println("SIZE: " + npriceElements.size());
+     System.out.println("SIZE: " + npriceElements.size());
     for (Element element : npriceElements) {
 
       String product = element.text();
@@ -211,7 +213,7 @@ public class TottusScraper implements Scraper {
 
     String sscategoryUrl = subSubCategory.getUrl();
     String res1 = this.urlToJsonArray(sscategoryUrl);
-    Vector<String> res2 = this.oneToVector(res1);
+    ArrayList<String> res2 = this.oneToVector(res1);
     return this.vectorStringsToProducts(res2, sscategoryUrl);
   }
 
