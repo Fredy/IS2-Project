@@ -78,13 +78,54 @@ public class LinioCrawler extends Crawler {
 
   public List<SubCategory> buildSubCategory(Document pageHtml, Integer categoryIndex) {
     // This function should receive the Document from https://www.linio.com.pe/ng/main-menu
+
     String selector = String.format("[data-menu='%s']", categoryIndex.toString());
-    Elements subCategoryData = pageHtml.body().children().select(selector);
+    Elements subCategoryRawData = pageHtml.body().children().select(selector)
+        .first().getElementsByClass("col-lg-6 col-xl-5")
+        .first().getElementsByClass("col-xs-6");
 
-    // TODO: crawl all the categories and subcategories
+    Elements allSubAndSS = new Elements();
+    for (Element sCatData : subCategoryRawData) {
+      Elements tmpSubAndSS = sCatData.children();
+      allSubAndSS.addAll(tmpSubAndSS);
+    }
 
-    return null;
+    // TODO: convert all this to a new method...
+    List<SubCategory> subCategories = new ArrayList<>();
+    SubCategory subCategory = null;
+    for (int i = 0; i < allSubAndSS.size(); i++) {
 
+      String name = allSubAndSS.get(i).attr("title").toLowerCase().trim();
+      String url = allSubAndSS.get(i).attr("abs:href");
+      String className = allSubAndSS.get(i).attr("class");
+
+      if (className.contentEquals("subcategory-title")) {
+        if (name.contains("ofertas") || name.contains("tienda") || name.contains("más")) {
+          // Increment 'i' until it's element is a new sub Category, or there is no more
+          // elements.
+          for (; i < allSubAndSS.size(); i++) {
+            if (className.contentEquals("subcategory-title")) {
+              break;
+            }
+          }
+          i--;
+        }
+
+        subCategory = new SubCategory();
+        subCategory.setName(name);
+        subCategory.setUrl(url);
+        subCategories.add(subCategory);
+      } else {
+        // if subCategory == null : continue ???
+        SubSubCategory tmpSSC = new SubSubCategory();
+        tmpSSC.setName(name);
+        tmpSSC.setUrl(url);
+        subCategory.getSubSubCategories().add(tmpSSC);
+      }
+
+    }
+
+    return subCategories;
   }
 
   @Override
