@@ -2,9 +2,10 @@ package scraper;
 
 import domain.Product;
 import domain.Shop;
+import domain.SubSubCategory;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -13,8 +14,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class TottusScraper implements Scraper {
-
-  private String baseURL = "http://www.tottus.com.pe/tottus/browse/Electrohogar-Tecnolog%C3%ADa-Laptops/_/N-82nnyu";
 
   private Document getHtmlFromURL(String PageURL) throws IOException {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
@@ -30,7 +29,6 @@ public class TottusScraper implements Scraper {
       for (Element element : scriptElements) {
 
         String jsonData = element.data();
-
         if (!jsonData.contains("dataLayer")) { //To discard other scripts
           jsonData = "";
         }
@@ -52,50 +50,82 @@ public class TottusScraper implements Scraper {
     return result;
   }
 
-  public Vector<String> oneToVector(String inputJson) {
-    Vector<String> outputVector = new Vector<String>();
+  public List<String> oneToVector(String inputJson) {
+    ArrayList<String> outputVector = new ArrayList<String>();
     while (inputJson.indexOf("},{") > 0) {
       outputVector.add(inputJson.substring(inputJson.indexOf("{"), inputJson.indexOf("},{") + 1));
       inputJson = inputJson.substring(inputJson.indexOf("},{") + 2, inputJson.length());
     }
     outputVector
         .add(inputJson.substring(inputJson.indexOf("{"), inputJson.length())); //last register
+    for (int i = 0; i < outputVector.size(); i++) {
+    }
     return outputVector;
   }
 
-  public List<Product> vectorStringsToProducts(Vector<String> vectorStringIn)
+  public List<Product> vectorStringsToProducts(List<String> vectorStringIn, String sscategoryUrl)
       throws JSONException {
-    Vector<Product> res = new Vector<Product>();
-    for (int i = 0; i < vectorStringIn.size(); i++) {
-      JSONObject jsonObject = new JSONObject(vectorStringIn.elementAt(i));
-      String fullname = jsonObject.getString("name");
-      String name;
-      if (fullname.contains("\\")) {
-        name = fullname.substring(fullname.indexOf("Laptop"), fullname.indexOf("\\"));
-      } else {
-        name = fullname.substring(fullname.indexOf("Laptop"), fullname.indexOf("/"));
-      }
-      String model = "";
-      Boolean hasModel = false;
+    List<Product> res = new ArrayList<Product>();
+    try {
+      Document doc = this.getHtmlFromURL(sscategoryUrl);
 
-      if (fullname.contains("Mod.")) {
-        hasModel = true;
-        model = fullname.substring(fullname.indexOf("Mod."), fullname.length());
-      }
-      double webPrice = jsonObject.getDouble("price");
-      String sku = jsonObject.getString("id");
-      String brand = jsonObject.getString("brand");
+      List<List<String>> nulePrices = getPrices(doc);
 
-      Product tmp = new Product();
-      tmp.setName(name);
-      tmp.setWebPrice(webPrice);
-      tmp.setSku(sku);
-      if (hasModel) {
-        tmp.setModel(model);
+      for (int i = 0; i < vectorStringIn.size(); i++) {
+        JSONObject jsonObject = new JSONObject(vectorStringIn.get(i));
+        String fullname = jsonObject.getString("name");
+        //System.out.println("FulName: "+ fullname);
+
+        String model = "";
+        Boolean hasModel = false;
+
+        if (fullname.contains("Mod.")) {
+          hasModel = true;
+          model = fullname.substring(fullname.indexOf("Mod."), fullname.length()); //quitar el Mod.
+        }
+        String sku = jsonObject.getString("id");
+        String brand = jsonObject.getString("brand");
+        Double normalPrice = null;
+        Double webPrice = null;
+        Double offerPrice = null;
+
+        if (nulePrices.get(i).size() == 3) {
+          normalPrice = Double.parseDouble(nulePrices.get(i).get(1).replaceAll(",", ""));
+          webPrice = Double.parseDouble(nulePrices.get(i).get(0).replaceAll(",", ""));
+          offerPrice = Double.parseDouble(nulePrices.get(i).get(2).replaceAll(",", ""));
+        }
+
+        if (nulePrices.get(i).size() == 2) {
+          normalPrice = Double.parseDouble(nulePrices.get(i).get(1).replaceAll(",", ""));
+          webPrice = Double.parseDouble(nulePrices.get(i).get(0).replaceAll(",", ""));
+        }
+        if (nulePrices.get(i).size() == 1) {
+          webPrice = Double.parseDouble(nulePrices.get(i).get(0).replaceAll(",", ""));
+        }
+
+        Product tmp = new Product();
+        tmp.setName(fullname);
+        if (normalPrice != null) {
+          tmp.setNormalPrice(normalPrice);
+        }
+        if (webPrice != null) {
+          tmp.setWebPrice(webPrice);
+        }
+        if (offerPrice != null) {
+          tmp.setOfferPrice(offerPrice);
+        }
+        tmp.setSku(sku);
+        if (hasModel) {
+          tmp.setModel(model);
+        }
+        tmp.setBrand(brand);
+        res.add(tmp);
       }
-      tmp.setBrand(brand);
-      res.add(tmp);
+
+    } catch (IOException e) {
+      e.printStackTrace();
     }
+
     return res;
   }
 
@@ -107,11 +137,80 @@ public class TottusScraper implements Scraper {
     return shop;
   }
 
+  private List<List<String>> getPrices(Document productDoc) {
+
+
+    List<List<String>> res = new ArrayList<List<String>>();
+
+    if (productDoc == null) {
+      return null;
+    }
+
+    Elements npriceElements = productDoc.body()
+        .getElementsByClass("caption-bottom-wrapper");
+
+     System.out.println("SIZE: " + npriceElements.size());
+    for (Element element : npriceElements) {
+
+      String product = element.text();
+      Boolean hasCMRPrice = Boolean.FALSE;
+      String cmrPrice = null;
+      if (product.contains(" Exclusivo con CMR") && !product.contains("%")) {
+        hasCMRPrice = Boolean.TRUE;
+        cmrPrice = product.substring(product.indexOf("S/") + 3, product.indexOf("Ex"));
+      }
+
+      if (product.contains(" S/")) {
+        String prices = null;
+        String nulePrice = null;
+        String activePrice = null;
+
+        if (hasCMRPrice) {
+          prices = product.substring(product.indexOf("condiciones S/") + 14, product.indexOf("UN"));
+        } else {
+          if (product.contains("KG")) { //products sold in KG
+            prices = product.substring(product.indexOf("S/") + 3, product.indexOf("KG") - 5);
+          } else {//products sold in UN
+            prices = product.substring(product.indexOf("S/") + 3, product.indexOf("UN"));
+          }
+
+        }
+        if (product.contains(" xclusivo con CMR")) { //ERROR Page
+          prices = product.substring(product.indexOf("condiciones S/") + 14, product.indexOf("UN"));
+        }
+
+        if (prices.contains("S/")) {
+          nulePrice = prices.substring(0, prices.indexOf("S/"));
+          activePrice = prices.substring(prices.indexOf("S/") + 3, prices.length());
+        } else {
+          activePrice = prices;
+        }
+        ArrayList<String> pricesPerProduct = new ArrayList<String>();
+
+        pricesPerProduct.add(activePrice);
+        if (nulePrice != null) {
+
+          pricesPerProduct.add(nulePrice);
+        }
+        if (cmrPrice != null) {
+
+          pricesPerProduct.add(cmrPrice);
+        }
+        res.add(pricesPerProduct);
+
+      }
+    }
+
+    return res;
+  }
+
   @Override
-  public List<Product> parseProducts() {
-    String res1 = this.urlToJsonArray(this.baseURL);
-    Vector<String> res2 = this.oneToVector(res1);
-    return this.vectorStringsToProducts(res2);
+  public List<Product> parseProducts(SubSubCategory subSubCategory) {
+
+    String sscategoryUrl = subSubCategory.getUrl();
+    String res1 = this.urlToJsonArray(sscategoryUrl);
+    List<String> res2 = this.oneToVector(res1);
+    return this.vectorStringsToProducts(res2, sscategoryUrl);
   }
 
   @Override
