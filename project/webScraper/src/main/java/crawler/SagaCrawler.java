@@ -85,10 +85,16 @@ public abstract class SagaCrawler extends Crawler {
 
         for (Element ssc : elssc) {
           SubSubCategory subSubCategory = new SubSubCategory();
-          subSubCategory.setName(ssc.text());
-          subSubCategory.setUrl(url + ssc.attr("href"));
-          subSubCategoryUrls.add(subSubCategory);
-          this.subSubCategories.add(subSubCategory);
+          String cadena = "ver todo";
+          int resultado = ssc.text().toLowerCase().indexOf(cadena);
+
+          if (resultado == -1) {
+            subSubCategory.setName(ssc.text());
+            subSubCategory.setUrl(url + ssc.attr("href"));
+            subSubCategoryUrls.add(subSubCategory);
+            this.subSubCategories.add(subSubCategory);
+          }
+
         }
 
         subCategory.setSubSubCategories(subSubCategoryUrls);
