@@ -1,8 +1,8 @@
 package crawler;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import domain.Category;
 import domain.SubCategory;
@@ -13,17 +13,49 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public abstract class SagaCrawler extends Crawler{
+public abstract class SagaCrawler extends Crawler {
 
-  private static String url = "http://www.falabella.com.pe/";
+  private List<Category> categories;
+  private List<SubCategory> subCategories;
+  private List<SubSubCategory> subSubCategories;
 
-  public Vector<Category> categories() throws IOException {
+  public SagaCrawler() {
+    this.url = "http://www.falabella.com.pe/";
+    categories();
+  }
 
-    Vector<Category> categoryUrls = new Vector<Category>();
+  @Override
+  public List<Category> getCategories() {
+    // TODO: process categories.
+    return this.categories;
+  }
 
-    Document doc = Jsoup.connect(url)
-        .userAgent("Mozilla")
-        .get();
+  @Override
+  public List<SubCategory> getSubCategories() {
+    // TODO: process subCategories
+    return this.subCategories;
+  }
+
+  @Override
+  public List<SubSubCategory> getSubSubCategories() {
+    // TODO: process subSubCategories
+    return this.subSubCategories;
+  }
+
+  private Document getHtmlFromURL(String PageURL) throws IOException {
+    return Jsoup.connect(PageURL).userAgent("Mozilla").get();
+  }
+
+  public List<Category> categories() {
+
+    List<Category> categoryUrls = new ArrayList<Category>();
+
+    Document doc = null;
+    try {
+      doc = getHtmlFromURL(url);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 
     String htmlString = doc.html();
     Document document = Jsoup.parse(htmlString);
@@ -33,7 +65,7 @@ public abstract class SagaCrawler extends Crawler{
 
     for (Element element : elements) {
 
-      Vector<SubCategory> subCategoryUrls = new Vector<SubCategory>();
+      List<SubCategory> subCategoryUrls = new ArrayList<SubCategory>();
 
       Category category = new Category();
       category.setName(element.select("h3").text());
@@ -43,11 +75,10 @@ public abstract class SagaCrawler extends Crawler{
           ".fb-masthead__child-wrapper > .fb-masthead__child-wrapper-content li.fb-masthead__child-links__item ");
 
       for (Element sc : elsc) {
-        Vector<SubSubCategory> subSubCategoryUrls = new Vector<SubSubCategory>();
+        List<SubSubCategory> subSubCategoryUrls = new ArrayList<SubSubCategory>();
 
         SubCategory subCategory = new SubCategory();
         subCategory.setName(sc.select("a.fb-masthead__child-links__item__link h4").text());
-
         subCategory.setUrl(url + sc.select("a.fb-masthead__child-links__item__link ").attr("href"));
 
         Elements elssc = sc.select(".fb-masthead__grandchild-links li a");
@@ -57,31 +88,21 @@ public abstract class SagaCrawler extends Crawler{
           subSubCategory.setName(ssc.text());
           subSubCategory.setUrl(url + ssc.attr("href"));
           subSubCategoryUrls.add(subSubCategory);
+          this.subSubCategories.add(subSubCategory);
         }
 
         subCategory.setSubSubCategories(subSubCategoryUrls);
         subCategoryUrls.add(subCategory);
+        this.subCategories.add(subCategory);
       }
 
       category.setSubCategories(subCategoryUrls);
       categoryUrls.add(category);
+      this.categories.add(category);
     }
 
     return categoryUrls;
 
-  }
-
-
-  public List<Category> getCategories() {
-    return null;
-  }
-
-  public List<SubCategory> getSubCategories() {
-    return null;
-  }
-
-  public List<SubSubCategory> getSubSubCategories() {
-    return null;
   }
 
 }
