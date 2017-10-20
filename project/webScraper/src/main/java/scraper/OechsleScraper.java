@@ -2,6 +2,7 @@ package scraper;
 
 import domain.Product;
 import domain.Shop;
+import domain.SubSubCategory;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
@@ -16,11 +17,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class OechsleScraper implements Scraper {
 
-  private String urlOechsle = "http://www.oechsle.pe/tecnologia/computo/laptops?PS=66";
-
   @Override
-  public List<Product> parseProducts() {
-    return this.getProductsData(this.urlOechsle);
+  public List<Product> parseProducts(SubSubCategory subSubCategory) {
+    return this.getProductsData(subSubCategory.getUrl());
   }
 
   @Override
@@ -51,9 +50,6 @@ public class OechsleScraper implements Scraper {
   }
 
   private String getValueData(Document doc, String nameField) {
-    /*
-    * Returns text of a table.td with class ends in @Param nameField
-     */
     String query = "td[class$=" + nameField + "]";
     Elements values = doc.select(query);
     if (values.isEmpty()) {
@@ -75,9 +71,6 @@ public class OechsleScraper implements Scraper {
   }
 
   private Vector<Double> getPrices(Document html) {
-    /*
-    * Returns a vector of prices founded in @Param html
-    * */
 
     Vector<Double> prices = new Vector<>();
     String normal_price = html.select("strong.skuListPrice").text();
@@ -119,6 +112,7 @@ public class OechsleScraper implements Scraper {
       product.setBrand(brand);
       product.setNormalPrice(normal_price);
       product.setOfferPrice(offer_price);
+
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -126,9 +120,6 @@ public class OechsleScraper implements Scraper {
   }
 
   private Vector<Product> getProductsData(String url) {
-    /*
-      Return a vector of characteristcs of Product contents in @Param url
-    */
     Vector<Product> products = new Vector<>();
     Collection<String> urls = getUrlsProducts(url);
     Product product = new Product();
