@@ -17,40 +17,20 @@ public class OechsleCrawler extends Crawler {
   public OechsleCrawler() {
     url = "http://www.oechsle.pe";
     categories = new Vector<>();
-
   }
 
   @Override
-  protected List<Category> buildCategories(Document homePage) {
-
-    return this.categories;
-  }
-
-  @Override
-  public List<Category> getCategories() {
-    return categories;
-  }
-
-  @Override
-  public List<SubCategory> getSubCategories() {
-    return null;
-  }
-
-  @Override
-  public List<SubSubCategory> getSubSubCategories() {
-    return null;
-  }
-
-
-  private void crawlingShop() {
+  protected List<Category> buildCategories() {
     try {
       Document homePage = getHtmlFromUrl(this.url);
       categories = crawlingCategories(homePage);
       crawlingSubCategories(homePage);
       crawlingSubSubCategories(homePage);
     } catch (IOException e) {
-      e.printStackTrace();
+      System.out.println("We don't can to access to web page");
+      //e.printStackTrace();
     }
+    return this.categories;
   }
 
   private List<Category> crawlingCategories(Document doc) {
