@@ -43,7 +43,7 @@ public class OechsleCrawler extends Crawler {
       String nameCategory = catElement.text().toLowerCase();
 
       Element aux = catElement.getElementsByTag("a").first();
-      String urlCategory = this.url + aux.attr("href");
+      String urlCategory = aux.attr("abs:href");
 
       category.setName(nameCategory);
       category.setUrl(urlCategory);
@@ -71,7 +71,7 @@ public class OechsleCrawler extends Crawler {
         Elements nameSubCats = catItem.getElementsByAttributeValue("class", "tit");
 
         nameSubCategory = nameSubCats.text().toLowerCase();
-        urlSubCategory = this.url + nameSubCats.select("a").first().attr("href");
+        urlSubCategory = nameSubCats.select("a").first().attr("abs:href");
 
         subCategory.setName(nameSubCategory);
         subCategory.setUrl(urlSubCategory);
@@ -103,7 +103,7 @@ public class OechsleCrawler extends Crawler {
         for (Element subSubCatElement : subSubCats) {
           SubSubCategory subSubCategory = new SubSubCategory();
           String nameSubSubCat = subSubCatElement.text().toLowerCase();
-          String urlSubSubCat = this.url + subSubCatElement.attr("href");
+          String urlSubSubCat = subSubCatElement.attr("abs:href");
 
           subSubCategory.setName(nameSubSubCat);
           subSubCategory.setUrl(urlSubSubCat);
