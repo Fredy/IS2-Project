@@ -69,7 +69,7 @@ public class TottusScraper implements Scraper {
     try {
       Document doc = this.getHtmlFromURL(sscategoryUrl);
 
-      List<List<String>> nulePrices = getPrices(doc);
+      //List<List<String>> nulePrices = getPrices(doc);
 
       for (int i = 0; i < vectorStringIn.size(); i++) {
         JSONObject jsonObject = new JSONObject(vectorStringIn.get(i));
@@ -85,7 +85,8 @@ public class TottusScraper implements Scraper {
         }
         String sku = jsonObject.getString("id");
         String brand = jsonObject.getString("brand");
-        Double normalPrice = null;
+        Double price= jsonObject.getDouble("price");
+        /*Double normalPrice = null;
         Double webPrice = null;
         Double offerPrice = null;
 
@@ -101,11 +102,12 @@ public class TottusScraper implements Scraper {
         }
         if (nulePrices.get(i).size() == 1) {
           webPrice = Double.parseDouble(nulePrices.get(i).get(0).replaceAll(",", ""));
-        }
+        }*/
 
         Product tmp = new Product();
         tmp.setName(fullname);
-        if (normalPrice != null) {
+        tmp.setOfferPrice(price);
+        /*if (normalPrice != null) {
           tmp.setNormalPrice(normalPrice);
         }
         if (webPrice != null) {
@@ -113,7 +115,8 @@ public class TottusScraper implements Scraper {
         }
         if (offerPrice != null) {
           tmp.setOfferPrice(offerPrice);
-        }
+        }*/
+
         tmp.setSku(sku);
         if (hasModel) {
           tmp.setModel(model);
