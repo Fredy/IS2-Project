@@ -92,4 +92,11 @@ public class Product {
     this.brand = brand;
   }
 
+  public Date getDate() {
+    return date;
+  }
+
+  public void setDate(Date date) {
+    this.date = date;
+  }
 }

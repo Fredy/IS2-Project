@@ -2,6 +2,7 @@ package scraper;
 
 import domain.Product;
 import domain.Shop;
+import domain.SubSubCategory;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
@@ -13,16 +14,18 @@ import org.jsoup.select.Elements;
 
 public class LinioScraper implements Scraper {
 
-  private String baseURL = "https://www.linio.com.pe/c/computacion/portatiles";
-
   private Document getHtmlFromURL(String PageURL) throws IOException {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
   }
 
+  /**
+   * Receives a product doc. Returns a String containing a JSON object with the product data. If
+   * this doesn't find the data, then it returns an empty string.
+   *
+   * @param productDoc Jsoup document containing the html of a product
+   * @return JSON object in a String
+   */
   private String extractJsonData(Document productDoc) {
-    /* Receives a product url.
-     * Return a String containing a JSON object with the product data.
-     * If this doesn't find the data, then it returns an empty string. */
     if (productDoc == null) {
       return "";
     }
@@ -47,11 +50,15 @@ public class LinioScraper implements Scraper {
     return jsonData;
   }
 
+  /**
+   * Receives a page url that contains several products. Return a Vector<String> containing all the
+   * products urls.
+   *
+   * @param pageUrl sub-subcategory url
+   * @return product's urls
+   */
   private Vector<String> getProductsURLs(String pageUrl) {
-    /* Receives a page url that contains several products.
-     * Return a Vector<String> containing all the products urls. */
-
-    Vector<String> productsUrls = new Vector<String>();
+    Vector<String> productsUrls = new Vector<>();
     try {
       Document pageDoc = this.getHtmlFromURL(pageUrl);
 
@@ -66,8 +73,6 @@ public class LinioScraper implements Scraper {
         if (relUrl.contains("notebook") || relUrl.contains("laptop") || relUrl.contains("macbook")
             || relUrl.contains("portatil")) {
           productsUrls.add(relUrl);
-        } else {
-          continue;
         }
       }
     } catch (IOException e) {
@@ -76,11 +81,14 @@ public class LinioScraper implements Scraper {
     return productsUrls;
   }
 
+  /**
+   * Receives an url of a sub-subcategory page. Returns the number of pages on which the products
+   * are, because a single page can't contain all the products.
+   *
+   * @param baseUrl sub-subcategory url
+   * @return number of pages in the current sub-subcategory
+   */
   private int getMaxPages(String baseUrl) {
-    /* Receives an url of a category page.
-     * Returns the number of pages on which the products are,
-     * because a single page can't contain all the products.
-     */
     int lastPageNum = 0;
     try {
       Document pageDoc = this.getHtmlFromURL(baseUrl);
@@ -101,8 +109,13 @@ public class LinioScraper implements Scraper {
     return lastPageNum;
   }
 
+  /**
+   * Converts a JSON object into a Product
+   *
+   * @param jsonData JSON object
+   * @return builded product
+   */
   private Product jsonToObject(String jsonData) {
-    // TODO: make this function convert jsonData into a Product object.
     if (jsonData == null || jsonData.isEmpty()) {
       return null;
     }
@@ -141,11 +154,15 @@ public class LinioScraper implements Scraper {
     return res;
   }
 
+  /**
+   * This function gets a sub-subcategory url, using the above methods it scrape and parse the page
+   * and returns all the products in that sub-subcategory.
+   *
+   * @param url sub-subcategory url
+   * @return all the products in current sub-subcategory
+   */
   private Vector<Product> getProducts(String url) {
-    /* This function gets a category url, using the above methods it scrape
-     * and parse the page and returns all the products in that category. */
-
-    Vector<Product> productsVec = new Vector<Product>();
+    Vector<Product> productsVec = new Vector<>();
     int lastPageNum = this.getMaxPages(url);
 
     for (int i = 1; i <= lastPageNum; i++) {
@@ -182,8 +199,9 @@ public class LinioScraper implements Scraper {
 
 
   @Override
-  public List<Product> parseProducts() {
-    return this.getProducts(this.baseURL);
+  public List<Product> parseProducts(SubSubCategory subSubCategory) {
+    String sscategoryUrl = subSubCategory.getUrl();
+    return this.getProducts(sscategoryUrl);
   }
 
   public Shop parseShop() {

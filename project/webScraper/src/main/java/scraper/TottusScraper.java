@@ -50,7 +50,7 @@ public class TottusScraper implements Scraper {
     return result;
   }
 
-  public ArrayList<String> oneToVector(String inputJson) {
+  public List<String> oneToVector(String inputJson) {
     ArrayList<String> outputVector = new ArrayList<String>();
     while (inputJson.indexOf("},{") > 0) {
       outputVector.add(inputJson.substring(inputJson.indexOf("{"), inputJson.indexOf("},{") + 1));
@@ -63,9 +63,9 @@ public class TottusScraper implements Scraper {
     return outputVector;
   }
 
-  public List<Product> vectorStringsToProducts(ArrayList<String> vectorStringIn, String sscategoryUrl)
+  public List<Product> vectorStringsToProducts(List<String> vectorStringIn, String sscategoryUrl)
       throws JSONException {
-    ArrayList<Product> res = new ArrayList<Product>();
+    List<Product> res = new ArrayList<Product>();
     try {
       Document doc = this.getHtmlFromURL(sscategoryUrl);
 
@@ -185,7 +185,7 @@ public class TottusScraper implements Scraper {
         } else {
           activePrice = prices;
         }
-        Vector<String> pricesPerProduct = new Vector<String>();
+        ArrayList<String> pricesPerProduct = new ArrayList<String>();
 
         pricesPerProduct.add(activePrice);
         if (nulePrice != null) {
@@ -209,7 +209,7 @@ public class TottusScraper implements Scraper {
 
     String sscategoryUrl = subSubCategory.getUrl();
     String res1 = this.urlToJsonArray(sscategoryUrl);
-    ArrayList<String> res2 = this.oneToVector(res1);
+    List<String> res2 = this.oneToVector(res1);
     return this.vectorStringsToProducts(res2, sscategoryUrl);
   }
 

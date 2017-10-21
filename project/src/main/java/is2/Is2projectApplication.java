@@ -2,7 +2,6 @@ package is2;
 
 import domain.Product;
 import domain.Shop;
-import domain.SubSubCategory;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -33,7 +32,7 @@ public class Is2projectApplication {
   ShopRepository shopRepository;
 
   public static void main(String[] args) {
-    SpringApplication.run(Is2projectApplication.class, "tottus");
+    SpringApplication.run(Is2projectApplication.class, args);
   }
 
   @Bean
@@ -70,10 +69,7 @@ public class Is2projectApplication {
       System.out.println("La tienda ingresada no es manejada");
       return;
     }
-
-    SubSubCategory test1 = new SubSubCategory(); //TODO: #43 add more option to CLI
-
-    List<Product> products = scraper.parseProducts(test1);
+    List<Product> products = scraper.parseProducts();
     System.out.println(">> Productos Scrapeados: " + Integer.toString(products.size()));
     Shop shop = scraper.parseShop();
     shop.setProducts(products);
