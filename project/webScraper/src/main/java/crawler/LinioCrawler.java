@@ -125,6 +125,16 @@ public class LinioCrawler extends Crawler {
       }
     }
 
+    // When a subcategory does not have subsubcategories, add itself as subsubcategory.
+    for (SubCategory sub : subCategories) {
+      if (sub.getSubSubCategories().isEmpty()) {
+        SubSubCategory sstemp = new SubSubCategory();
+        sstemp.setName(sub.getName());
+        sstemp.setUrl(sub.getUrl());
+        sub.getSubSubCategories().add(sstemp);
+      }
+    }
+
     return subCategories;
   }
 }
