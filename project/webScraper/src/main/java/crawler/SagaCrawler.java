@@ -15,38 +15,16 @@ import org.jsoup.select.Elements;
 
 public abstract class SagaCrawler extends Crawler {
 
-  private List<Category> categories;
-  private List<SubCategory> subCategories;
-  private List<SubSubCategory> subSubCategories;
-
   public SagaCrawler() {
     this.url = "http://www.falabella.com.pe/";
-    categories();
-  }
-
-  @Override
-  public List<Category> getCategories() {
-    // TODO: process categories.
-    return this.categories;
-  }
-
-  @Override
-  public List<SubCategory> getSubCategories() {
-    // TODO: process subCategories
-    return this.subCategories;
-  }
-
-  @Override
-  public List<SubSubCategory> getSubSubCategories() {
-    // TODO: process subSubCategories
-    return this.subSubCategories;
   }
 
   private Document getHtmlFromURL(String PageURL) throws IOException {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
   }
 
-  public List<Category> categories() {
+  @Override
+  protected List<Category> buildCategories() {
 
     List<Category> categoryUrls = new ArrayList<Category>();
 
@@ -63,11 +41,14 @@ public abstract class SagaCrawler extends Crawler {
         .select(
             ".site-wrapper #header > .fb-masthead__nav .fb-masthead__primary-wrapper .fb-masthead__primary-links__item");
 
-    for (Element element : elements) {
+    for (int c = 2 ; c < elements.size() ; c++)
+    {
+    Element element = elements.get(c);
 
       List<SubCategory> subCategoryUrls = new ArrayList<SubCategory>();
 
       Category category = new Category();
+
       category.setName(element.select("h3").text());
       category.setUrl(url);
 
@@ -92,19 +73,16 @@ public abstract class SagaCrawler extends Crawler {
             subSubCategory.setName(ssc.text());
             subSubCategory.setUrl(url + ssc.attr("href"));
             subSubCategoryUrls.add(subSubCategory);
-            this.subSubCategories.add(subSubCategory);
           }
 
         }
 
         subCategory.setSubSubCategories(subSubCategoryUrls);
         subCategoryUrls.add(subCategory);
-        this.subCategories.add(subCategory);
       }
 
       category.setSubCategories(subCategoryUrls);
       categoryUrls.add(category);
-      this.categories.add(category);
     }
 
     return categoryUrls;
