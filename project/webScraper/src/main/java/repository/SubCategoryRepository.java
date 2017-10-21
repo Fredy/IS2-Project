@@ -11,7 +11,7 @@ public interface SubCategoryRepository extends CrudRepository<SubCategory, Long>
   /**
    * @return All SubCategories with name {@code subCategoryName}
    */
-  @Query("SELECT s FROM SubCategory sc WHERE sc.name = ?1")
+  @Query("SELECT sc FROM SubCategory sc WHERE sc.name = ?1")
   Collection<SubCategory> getSubCategoriesByName(String subCategoryName);
 
   /**
