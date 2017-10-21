@@ -33,4 +33,4 @@ For execution:
 java -jar target/is2project-0.0.1-SNAPSHOT.jar <SHOP>
 ```
 replace ```<SHOP>``` with the shop you want to scrap (```tottus```, ```ripley```, ```linio```, ```oechsle```, ```saga```)
-
+, then you will be asked for a category, you will see the available categories, you should write the number of the category you want, then you must choose in the same way a sub-category and then a sub-sub-category, after that products of the chosen sub-sub-category will be saved in the data base.
