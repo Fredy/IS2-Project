@@ -14,7 +14,6 @@ import org.jsoup.select.Elements;
 public class RipleyScraper implements Scraper {
 
   private String MainUrl;
-  private String BaseUrl;
 
   private ArrayList<Product> getProductFromPage() throws IOException {
     ArrayList<ArrayList<String>> dataRaw = processPage();
@@ -146,7 +145,7 @@ public class RipleyScraper implements Scraper {
     Elements Container = page.select("[class^=catalog-container]")
         .select("[class^=catalog-product catalog-item]");
     for (Element element : Container) {
-      ans.add(BaseUrl + element.attr("href"));
+      ans.add(element.attr("abs:href"));
     }
     return ans;
   }
@@ -162,7 +161,6 @@ public class RipleyScraper implements Scraper {
   @Override
   public List<Product> parseProducts(SubSubCategory subSubCategory) {
     MainUrl = subSubCategory.getUrl();
-    BaseUrl = "http://simple.ripley.com.pe";
     ArrayList<Product> products = new ArrayList<>();
     try {
       products = this.getProductFromPage();
