@@ -24,10 +24,31 @@ public class LinioCrawler extends Crawler {
     return Jsoup.connect(pageURL).userAgent("Mozilla").get();
   }
 
-  public List<Category> buildCategories(Document homePage) {
+  @Override
+  protected List<Category> buildCategories() {
+    List<Category> crawledCategories = null;
+    try {
+      Document homePageHtml = getHtmlFromURL(this.url);
+      List<Integer> dataIndex = new ArrayList<>();
+      crawledCategories = crawlCategories(homePageHtml, dataIndex);
 
+      // TODO: make a try catch for this Document ?
+      Document subCategoriesHtml = this.getHtmlFromURL("https://www.linio.com.pe/ng/main-menu");
+      for (int i = 0; i < crawledCategories.size(); i++) {
+        List<SubCategory> subCategories = this
+            .crawlSubsAndSubSubs(subCategoriesHtml, dataIndex.get(i));
+        crawledCategories.get(i).setSubCategories(subCategories);
+
+      }
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return crawledCategories;
+  }
+
+  private List<Category> crawlCategories(Document homePage, List<Integer> outDataIndex) {
     List<Category> crawledCategories = new ArrayList<>();
-    List<Integer> dataIndex = new ArrayList<>();
 
     Elements categories = homePage.body().getElementById("navbar")
         .getElementById("main-menu")
@@ -36,13 +57,13 @@ public class LinioCrawler extends Crawler {
 
     for (Element category : categories) {
       Element data = category.getElementsByTag("a").first();
-      String name = data.attr("title");
+      String name = data.attr("title").toLowerCase().trim();
 
-      // "Solo Hoy", "Tiendas Oficiales" and "Supermercado" repeat products from others categories,
+      // "solo Hoy", "tiendas oficiales" and "supermercado" repeat products from others categories,
       // so we don't consider them.
-      if (name.contentEquals("Solo Hoy") ||
-          name.contentEquals("Tiendas Oficiales") ||
-          name.contentEquals("Supermercado")) {
+      if (name.contentEquals("solo hoy") ||
+          name.contentEquals("tiendas oficiales") ||
+          name.contentEquals("supermercado")) {
         continue;
       }
 
@@ -53,30 +74,13 @@ public class LinioCrawler extends Crawler {
       tmpCategory.setName(name);
       tmpCategory.setUrl(href);
       crawledCategories.add(tmpCategory);
-      dataIndex.add(index);
-    }
-
-    Document subCategoriesHtml = null;
-    try {
-      subCategoriesHtml = this.getHtmlFromURL("https://www.linio.com.pe/ng/main-menu");
-    } catch (IOException e) {
-      System.out.println("Linio Crawler: error loading Sub Categories page");
-      //e.printStackTrace();
-    }
-
-    if (subCategoriesHtml == null) {
-      return null;
-    }
-
-    for (int i = 0; i < crawledCategories.size(); i++) {
-      List<SubCategory> subCategories = this.buildSubCategory(subCategoriesHtml, dataIndex.get(i));
-      crawledCategories.get(i).setSubCategories(subCategories);
+      outDataIndex.add(index);
     }
 
     return crawledCategories;
   }
 
-  public List<SubCategory> buildSubCategory(Document pageHtml, Integer categoryIndex) {
+  private List<SubCategory> crawlSubsAndSubSubs(Document pageHtml, Integer categoryIndex) {
     // This function should receive the Document from https://www.linio.com.pe/ng/main-menu
 
     String selector = String.format("[data-menu='%s']", categoryIndex.toString());
@@ -90,25 +94,23 @@ public class LinioCrawler extends Crawler {
       allSubAndSS.addAll(tmpSubAndSS);
     }
 
-    // TODO: convert all this to a new method...
     List<SubCategory> subCategories = new ArrayList<>();
     SubCategory subCategory = null;
     for (int i = 0; i < allSubAndSS.size(); i++) {
-
       String name = allSubAndSS.get(i).attr("title").toLowerCase().trim();
       String url = allSubAndSS.get(i).attr("abs:href");
       String className = allSubAndSS.get(i).attr("class");
 
       if (className.contentEquals("subcategory-title")) {
-        if (name.contains("ofertas") || name.contains("tienda") || name.contains("más")) {
-          // Increment 'i' until it's element is a new sub Category, or there is no more
-          // elements.
-          for (; i < allSubAndSS.size(); i++) {
-            if (className.contentEquals("subcategory-title")) {
-              break;
-            }
-          }
+        if (name.contains("ofertas") || name.contains("tienda") || name.contains("más") ||
+            name.contains("liquidación")) {
+          // Increment i until it's element is a new sub Category, or there is no more elements.
+          do {
+            i++;
+          } while (i < allSubAndSS.size() && !allSubAndSS.get(i).attr("class")
+              .contentEquals("subcategory-title"));
           i--;
+          continue;
         }
 
         subCategory = new SubCategory();
@@ -116,36 +118,14 @@ public class LinioCrawler extends Crawler {
         subCategory.setUrl(url);
         subCategories.add(subCategory);
       } else {
-        // if subCategory == null : continue ???
         SubSubCategory tmpSSC = new SubSubCategory();
         tmpSSC.setName(name);
         tmpSSC.setUrl(url);
         subCategory.getSubSubCategories().add(tmpSSC);
       }
-
     }
 
     return subCategories;
-  }
-
-  @Override
-  public List<Category> getCategories() {
-    // TODO: process categories.
-    return this.categories;
-  }
-
-  @Override
-  public List<SubCategory> getSubCategories() {
-    // TODO: process subCategories
-
-    List<SubCategory> subCategories = null;
-    return subCategories;
-  }
-
-  @Override
-  public List<SubSubCategory> getSubSubCategories() {
-    // TODO: process subSubCategories
-    return null;
   }
 }
 
