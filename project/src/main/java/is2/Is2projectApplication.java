@@ -1,8 +1,18 @@
 package is2;
 
+import crawler.Crawler;
+import crawler.LinioCrawler;
+import crawler.OechsleCrawler;
+import crawler.RipleyCrawler;
+import crawler.SagaCrawler;
+import crawler.TottusCrawler;
+import domain.Category;
 import domain.Product;
 import domain.Shop;
-import java.util.List;
+import domain.SubCategory;
+import domain.SubSubCategory;
+import java.util.ArrayList;
+import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,8 +21,11 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import repository.CategoryRepository;
 import repository.ProductRepository;
 import repository.ShopRepository;
+import repository.SubCategoryRepository;
+import repository.SubSubCategoryRepository;
 import scraper.LinioScraper;
 import scraper.OechsleScraper;
 import scraper.RipleyScraper;
@@ -30,6 +43,12 @@ public class Is2projectApplication {
   ProductRepository productRepository;
   @Autowired
   ShopRepository shopRepository;
+  @Autowired
+  CategoryRepository categoryRepository;
+  @Autowired
+  SubCategoryRepository subCategoryRepository;
+  @Autowired
+  SubSubCategoryRepository subSubCategoryRepository;
 
   public static void main(String[] args) {
     SpringApplication.run(Is2projectApplication.class, args);
@@ -50,31 +69,64 @@ public class Is2projectApplication {
   private void processArgs(String shopName) {
 
     Scraper scraper;
+    Crawler crawler;
     if (shopName.compareTo("linio") == 0 || shopName.compareTo("Linio") == 0) {
-
       scraper = new LinioScraper();
+      crawler = new LinioCrawler();
     } else if (shopName.compareTo("oechsle") == 0 || shopName.compareTo("Oechsle") == 0) {
-
       scraper = new OechsleScraper();
+      crawler = new OechsleCrawler();
     } else if (shopName.compareTo("ripley") == 0 || shopName.compareTo("Ripley") == 0) {
-
       scraper = new RipleyScraper();
+      crawler = new RipleyCrawler();
     } else if (shopName.compareTo("saga") == 0 || shopName.compareTo("Saga") == 0) {
-
       scraper = new SagaScraper();
+      crawler = new SagaCrawler();
     } else if (shopName.compareTo("tottus") == 0 || shopName.compareTo("Tottus") == 0) {
-
       scraper = new TottusScraper();
+      crawler = new TottusCrawler();
     } else {
-      System.out.println("La tienda ingresada no es manejada");
+      System.out.println("La tienda ingresada no es manejada por el software");
       return;
     }
-    List<Product> products = scraper.parseProducts();
-    System.out.println(">> Productos Scrapeados: " + Integer.toString(products.size()));
+    //Create shop Register
     Shop shop = scraper.parseShop();
-    shop.setProducts(products);
-    productRepository.save(products);
+    //Create the categories tree.
+    System.out.println("tienda " + shopName);
+    ArrayList<Category> categories = (ArrayList<Category>) crawler.getCategories();
+    shop.setCategories(categories);
     shopRepository.save(shop);
-    System.out.println(">>[OK] Productos almacenados en base de datos");
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("La tienda presenta las siguientes categorias, elija la deseada: ");
+    for (int i = 0; i < categories.size(); ++i) {
+      System.out.println(String.valueOf(i) + ") " + categories.get(i).getName());
+    }
+    Category categoryS = categories.get(scanner.nextInt());
+
+    System.out.println("La categoria presenta las siguientes sub-categorias, elija la deseada: ");
+    for (int i = 0; i < categoryS.getSubCategories().size(); ++i) {
+      System.out.println(String.valueOf(i) + ") " + categoryS.getSubCategories().get(i).getName());
+    }
+    SubCategory subCategoryS = categoryS.getSubCategories().get(scanner.nextInt());
+
+    System.out
+        .println("La sub-categoria presenta las siguientes sub-sub-categorias, elija la deseada: ");
+    for (int i = 0; i < subCategoryS.getSubSubCategories().size(); ++i) {
+      System.out
+          .println(String.valueOf(i) + ") " + subCategoryS.getSubSubCategories().get(i).getName());
+    }
+    SubSubCategory subSubCategoryS = subCategoryS.getSubSubCategories().get(scanner.nextInt());
+    for (Category category : categories) {
+      for (SubCategory subCategory : category.getSubCategories()) {
+        for (SubSubCategory subSubCategory : subCategory.getSubSubCategories()) {
+          ArrayList<Product> products;
+          if (subSubCategoryS == subSubCategory) {
+            products = (ArrayList<Product>) scraper.parseProducts(subSubCategory);
+            subSubCategory.setProducts(products);
+          }
+        }
+      }
+    }
+    categoryRepository.save(categories);
   }
 }
