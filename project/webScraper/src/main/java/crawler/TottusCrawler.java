@@ -13,14 +13,13 @@ import org.jsoup.select.Elements;
 
 public class TottusCrawler extends Crawler {
 
+  private Document doc = null;
+  private List<Category> categories;
   public TottusCrawler() {
 
     this.url = "http://www.tottus.com.pe/tottus/";
     this.categories = null;
   }
-
-  private Document doc = null;
-  private List<Category> categories;
 
   private Document getHtmlFromURL(String PageURL) throws IOException {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
