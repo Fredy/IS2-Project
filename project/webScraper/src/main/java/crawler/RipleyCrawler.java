@@ -46,9 +46,10 @@ public class RipleyCrawler extends Crawler {
     for (Element element : elements) {
       String Name = element.select("[class^=main-category-name]")
           .select("[class^=main-category-active-text]").text();
+      Name = Name.toLowerCase();
       Category category = new Category();
       category.setName(Name);
-      category.setUrl(this.getUrl() + element.select("[class^=main-category-name]").attr("href"));
+      category.setUrl(element.select("[class^=main-category-name]").attr("abs:href"));
       buildSubCategories(element, category);
       RCategories.add(category);
     }
@@ -63,11 +64,12 @@ public class RipleyCrawler extends Crawler {
       Elements realCategory = element.select("[href~=^/[\\-a-z]+/[\\-a-z]+$]");
       if (!realCategory.isEmpty()) {
         String Name = realCategory.first().text();
-        if(Name.equals("Marcas"))continue;
+        Name = Name.toLowerCase();
+        if(Name.equals("marcas"))continue;
         //System.out.println("\t" + Name);
         SubCategory subCategory = new SubCategory();
         subCategory.setName(Name);
-        subCategory.setUrl(this.getUrl() + realCategory.attr("href"));
+        subCategory.setUrl(realCategory.attr("abs:href"));
         buildSubSubCategories(element, subCategory);
         RSubCategories.add(subCategory);
       }
@@ -82,10 +84,11 @@ public class RipleyCrawler extends Crawler {
     Elements elements = SubCategory.select("[href~=^/[\\-a-z]+/[\\-a-z]+/[\\-a-z]+$]");
     for (Element element : elements) {
       String Name = element.text();
+      Name = Name.toLowerCase();
       //System.out.println("\t\t"+Name);
       SubSubCategory subSubCategory = new SubSubCategory();
       subSubCategory.setName(Name);
-      subSubCategory.setUrl(this.getUrl() + element.attr("href"));
+      subSubCategory.setUrl(element.attr("abs:href"));
       RSubSubCategories.add(subSubCategory);
     }
     subCategory.setSubSubCategories(RSubSubCategories);
