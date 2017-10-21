@@ -65,10 +65,10 @@ public class TottusCrawler extends Crawler {
             String urlSubSub = ela.getElementsByTag("a").attr("abs:href");
             //System.out.println("SUBSUB_{" + nameSubSub + "}=[" + urlSubSub);
             if (cont > 1) {
-              SubSubCategory subSubtmp = new SubSubCategory();
-              subSubtmp.setName(nameSubSub.toLowerCase());
-              subSubtmp.setUrl(urlSubSub);
-              listSubSubtmp.add(subSubtmp);
+              SubSubCategory subSubTmp = new SubSubCategory();
+              subSubTmp.setName(nameSubSub.toLowerCase());
+              subSubTmp.setUrl(urlSubSub);
+              listSubSubtmp.add(subSubTmp);
             }
             cont++;
           }
