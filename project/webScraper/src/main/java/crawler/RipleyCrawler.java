@@ -63,6 +63,7 @@ public class RipleyCrawler extends Crawler {
       Elements realCategory = element.select("[href~=^/[\\-a-z]+/[\\-a-z]+$]");
       if (!realCategory.isEmpty()) {
         String Name = realCategory.first().text();
+        if(Name.equals("Marcas"))continue;
         //System.out.println("\t" + Name);
         SubCategory subCategory = new SubCategory();
         subCategory.setName(Name);
