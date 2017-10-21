@@ -9,42 +9,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 
 @Entity
-@Table(name = "shop")
-public class Shop {
+public class SubCategory {
 
   private Long id;
   private String name;
   private String url;
-  private String address;
+  private List<SubSubCategory> subSubCategories;
 
-  private List<Category> categories;
-
-  public Shop() {
-    categories = new Vector<>();
-  }
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  public Long getId() {
-    return id;
+  public SubCategory() {
+    subSubCategories = new Vector<>();
   }
 
   public void setId(Long id) {
     this.id = id;
   }
 
-  @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "shop_id")
-  public List<Category> getCategories() {
-    return categories;
-  }
-
-  public void setCategories(List<Category> categories) {
-    this.categories = categories;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  public Long getId() {
+    return id;
   }
 
   public String getName() {
@@ -63,11 +48,14 @@ public class Shop {
     this.url = url;
   }
 
-  public String getAddress() {
-    return address;
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "sub_category_id")
+  public List<SubSubCategory> getSubSubCategories() {
+    return subSubCategories;
   }
 
-  public void setAddress(String address) {
-    this.address = address;
+  public void setSubSubCategories(List<SubSubCategory> subSubCategories) {
+    this.subSubCategories = subSubCategories;
   }
+
 }

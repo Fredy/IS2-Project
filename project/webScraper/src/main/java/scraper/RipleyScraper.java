@@ -2,6 +2,7 @@ package scraper;
 
 import domain.Product;
 import domain.Shop;
+import domain.SubSubCategory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,45 +13,45 @@ import org.jsoup.select.Elements;
 
 public class RipleyScraper implements Scraper {
 
+  private String mainUrl;
+
   private ArrayList<Product> getProductFromPage() throws IOException {
     ArrayList<ArrayList<String>> dataRaw = processPage();
     ArrayList<Product> products = new ArrayList<>();
     for (ArrayList<String> raw : dataRaw) {
-      products.add(getProductU(raw));
+      products.add(getProductUtil(raw));
     }
     return products;
   }
 
-  private Product getProductU(ArrayList<String> raw) {
+  private Product getProductUtil(ArrayList<String> raw) {
     Product product = new Product();
-    if (raw.get(0).compareTo("N/A") != 0) {
+    if (!raw.get(0).isEmpty()) {
       product.setName(raw.get(0));
     }
-    if (raw.get(1).compareTo("-1") != 0) {
+    if (!raw.get(1).isEmpty()) {
       product.setNormalPrice(Double.parseDouble(raw.get(1)));
     }
-    if (raw.get(2).compareTo("-1") != 0) {
+    if (!raw.get(2).isEmpty()) {
       product.setWebPrice(Double.parseDouble(raw.get(2)));
     }
-    if (raw.get(3).compareTo("-1") != 0) {
+    if (!raw.get(3).isEmpty()) {
       product.setOfferPrice(Double.parseDouble(raw.get(3)));
     }
-    if (raw.get(4).compareTo("N/A") != 0) {
+    if (!raw.get(4).isEmpty()) {
       product.setSku(raw.get(4));
     }
-    if (raw.get(5).compareTo("N/A") != 0) {
+    if (!raw.get(5).isEmpty()) {
       product.setBrand(raw.get(5));
     }
-    if (raw.get(6).compareTo("N/A") != 0) {
+    if (!raw.get(6).isEmpty()) {
       product.setModel(raw.get(6));
     }
     return product;
   }
 
   private ArrayList<ArrayList<String>> processPage() throws IOException {
-    String URL = "http://simple.ripley.com.pe/computo/laptops/todas-las-laptops";
-    String URLTitle = "http://simple.ripley.com.pe";
-    ArrayList<String> links = getAllRealLinks(URL, URLTitle);
+    ArrayList<String> links = getAllRealLinks(mainUrl);
     ArrayList<ArrayList<String>> dataOfPage = new ArrayList<>();
     for (String link : links) {
       dataOfPage.add(getInformationOfOneProduct(link));
@@ -58,65 +59,52 @@ public class RipleyScraper implements Scraper {
     return dataOfPage;
   }
 
-  private ArrayList<String> getInformationOfOneProduct(String URL) throws IOException {
-    Document page = getHtmlFromURL(URL);
+  private ArrayList<String> getInformationOfOneProduct(String url) throws IOException {
+    Document page = getHtmlFromURL(url);
     ArrayList<String> dataCollected = new ArrayList<>(); // Structure is name, price normal, price web, offerprice, SKU, Brand, Model;
-    Elements names = page.select("[itemprop=name]");
-    Elements normalPrice = page.getElementsByClass("product-normal-price")
-        .select("[class=product-price]");
-    Elements internetPrice = page.getElementsByClass("product-internet-price")
-        .select("[class=product-price]");
-    if (internetPrice.isEmpty()) {
-      internetPrice = page.getElementsByClass("product-internet-price-not-best")
-          .select("[class=product-price]");
-    }
-    Elements sku = page.getElementsByClass("sku");
-    if (names.isEmpty()) {
-      dataCollected.add("N/A");
-    } else {
-      dataCollected.add(names.first().text());
-    }
+    Elements productheader = page.select("[class^=product-header hidden-xs]");
+    Elements productPrices = page.select("[class^=product-info]");
+    Elements productDetails = page.select("[class^=table table-striped]").select("tbody")
+        .select("[data-reactid]");
+    String name, sku, normalPrice, webPrice, offerPrice = "", brand, model;
+    name = productheader.select("[itemprop=name]").text();
+    sku = productheader.select("[class=sku]").text();
 
-    if (normalPrice.isEmpty()) {
-      dataCollected.add("-1");
-    } else {
-      dataCollected.add(formatStringToDouble(normalPrice.first().text()));
-    }
+    normalPrice = productPrices.select("[class=product-normal-price]")
+        .select("[class=product-price]").text();
+    normalPrice = formatStringToDouble(normalPrice);
 
-    if (internetPrice.isEmpty()) {
-      dataCollected.add("-1");
-    } else {
-      dataCollected.add(formatStringToDouble(internetPrice.first().text()));
-    }
+    webPrice = productPrices.select("[class=product-internet-price]")
+        .select("[class=product-price]").text();
+    webPrice = formatStringToDouble(webPrice);
 
-    dataCollected.add("-1");
-
-    if (sku.isEmpty()) {
-      dataCollected.add("N/A");
-    } else {
-      dataCollected.add(sku.first().text());
-    }
-
-    Elements anotherData;
-    Elements nextData;
-    int found = 0;
-    for (int i = 50; i < 300; i++) {
-      if (found >= 2) {
+    int i = 0;
+    String before = "";
+    brand = "";
+    model = "";
+    for (Element detail : productDetails) {
+      if (i >= 2) {
         break;
       }
-      anotherData = page.select("[data-reactid=" + String.valueOf(i) + "]");
-      if (!anotherData.isEmpty()) {
-        if (anotherData.first().text().compareTo("Marca") == 0
-            || anotherData.first().text().compareTo("Modelo") == 0) {
-          found++;
-          nextData = page.select("[data-reactid=" + String.valueOf(i + 1) + "]");
-          dataCollected.add(nextData.first().text());
-        }
+      String curr = detail.ownText();
+      if (before.equals("Marca")) {
+        brand = curr;
+        ++i;
+      } else if (before.equals("Modelo")) {
+        ++i;
+        model = curr;
       }
+      before = curr;
     }
+    dataCollected.add(name);
+    dataCollected.add(normalPrice);
+    dataCollected.add(webPrice);
+    dataCollected.add(offerPrice);
+    dataCollected.add(sku);
+    dataCollected.add(brand);
+    dataCollected.add(model);
     return dataCollected;
   }
-
 
   private String formatStringToDouble(String raw) {
     StringBuilder ans = new StringBuilder();
@@ -134,29 +122,30 @@ public class RipleyScraper implements Scraper {
         || character == '8' || character == '9';
   }
 
-  private Document getHtmlFromURL(String PageURL) throws IOException {
-    return Jsoup.connect(PageURL).userAgent("Mozilla/5.0").get();
+  private Document getHtmlFromURL(String pageURL) throws IOException {
+    return Jsoup.connect(pageURL).userAgent("Mozilla/5.0").get();
   }
 
-  private ArrayList<String> getAllRealLinks(String URL, String URLTitle) throws IOException {
+  private ArrayList<String> getAllRealLinks(String url) throws IOException {
     Document page;
     ArrayList<String> links = new ArrayList<>();
-    for (int i = 1; i < 6; i++) {
-      page = getHtmlFromURL(URL + "?page=" + String.valueOf(i));
-      links.addAll(getAllLinks(page, URLTitle));
+    for (int i = 1; i < 100; i++) {
+      try {
+        page = getHtmlFromURL(url + "?page=" + String.valueOf(i));
+        links.addAll(getAllLinks(page));
+      } catch (Exception e) {
+        break;
+      }
     }
     return links;
   }
 
-  private ArrayList<String> getAllLinks(Document page, String URL) {
+  private ArrayList<String> getAllLinks(Document page) {
     ArrayList<String> ans = new ArrayList<>();
-    Elements links = page.select("a[href]");
-    String strlink;
-    for (Element link : links) {
-      strlink = link.attr("href");
-      if (strlink.contains("-laptop-") || strlink.contains("-notebook-")) {
-        ans.add(URL + strlink);
-      }
+    Elements container = page.select("[class^=catalog-container]")
+        .select("[class^=catalog-product catalog-item]");
+    for (Element element : container) {
+      ans.add(element.attr("abs:href"));
     }
     return ans;
   }
@@ -164,26 +153,28 @@ public class RipleyScraper implements Scraper {
   private Shop getShopObject() throws IOException {
     Shop shop = new Shop();
     shop.setName("Ripley Peru");
-    shop.setUrl("http://simple.ripley.com.pe/computo/laptops/todas-las-laptops");
+    shop.setUrl("http://simple.ripley.com.pe");
     shop.setAddress("Av. Porongoche 500, Arequipa 04001");
     return shop;
   }
 
+  @Override
+  public List<Product> parseProducts(SubSubCategory subSubCategory) {
+    mainUrl = subSubCategory.getUrl();
+    ArrayList<Product> products = new ArrayList<>();
+    try {
+      products = this.getProductFromPage();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    subSubCategory.setProducts(products);
+    return products;
+  }
 
   @Override
   public Shop parseShop() {
     try {
       return this.getShopObject();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
-
-  @Override
-  public List<Product> parseProducts() {
-    try {
-      return this.getProductFromPage();
     } catch (IOException e) {
       e.printStackTrace();
     }

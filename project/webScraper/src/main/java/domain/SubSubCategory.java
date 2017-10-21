@@ -8,23 +8,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 
 @Entity
-@Table(name = "shop")
-public class Shop {
+public class SubSubCategory {
 
   private Long id;
   private String name;
   private String url;
-  private String address;
+  private List<Product> products;
 
-  private List<Category> categories;
-
-  public Shop() {
-    categories = new Vector<>();
+  public SubSubCategory() {
+    products = new Vector<>();
   }
 
   @Id
@@ -35,16 +31,6 @@ public class Shop {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "shop_id")
-  public List<Category> getCategories() {
-    return categories;
-  }
-
-  public void setCategories(List<Category> categories) {
-    this.categories = categories;
   }
 
   public String getName() {
@@ -63,11 +49,13 @@ public class Shop {
     this.url = url;
   }
 
-  public String getAddress() {
-    return address;
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "sub_sub_category_id")
+  public List<Product> getProducts() {
+    return products;
   }
 
-  public void setAddress(String address) {
-    this.address = address;
+  public void setProducts(List<Product> products) {
+    this.products = products;
   }
 }
