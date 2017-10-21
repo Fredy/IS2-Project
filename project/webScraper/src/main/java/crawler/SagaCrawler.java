@@ -48,7 +48,7 @@ public class SagaCrawler extends Crawler {
 
       Category category = new Category();
 
-      category.setName(element.select("h3").text());
+      category.setName(element.select("h3").text().toLowerCase().trim());
       category.setUrl(this.url);
 
       Elements elsc = element.select(
@@ -58,7 +58,7 @@ public class SagaCrawler extends Crawler {
         List<SubSubCategory> subSubCategoryUrls = new ArrayList<SubSubCategory>();
 
         SubCategory subCategory = new SubCategory();
-        subCategory.setName(sc.select("a.fb-masthead__child-links__item__link h4").text());
+        subCategory.setName(sc.select("a.fb-masthead__child-links__item__link h4").text().toLowerCase().trim());
         subCategory.setUrl(sc.select("a.fb-masthead__child-links__item__link ").attr("abs:href"));
 
         Elements elssc = sc.select(".fb-masthead__grandchild-links li a");
@@ -69,7 +69,7 @@ public class SagaCrawler extends Crawler {
           int resultado = ssc.text().toLowerCase().indexOf(cadena);
 
           if (resultado == -1) {
-            subSubCategory.setName(ssc.text());
+            subSubCategory.setName(ssc.text().toLowerCase().trim());
             subSubCategory.setUrl(ssc.attr("abs:href"));
             subSubCategoryUrls.add(subSubCategory);
           }
