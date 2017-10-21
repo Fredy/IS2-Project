@@ -36,11 +36,6 @@ public class RipleyCrawler extends Crawler {
       e.printStackTrace();
       return RCategories;
     }
-    try {
-      Page = getHtmlFromUrl(url);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
     Elements elements = Page.getElementsByClass("main-categories")
         .select("[class^=main-category first-column]");
     for (Element element : elements) {
