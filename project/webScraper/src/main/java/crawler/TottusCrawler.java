@@ -17,133 +17,75 @@ public class TottusCrawler extends Crawler {
 
     this.url = "http://www.tottus.com.pe/tottus/";
     this.categories = null;
-    this.subCategories = null;
-    this.subSubCategories = null;
   }
 
   private Document doc = null;
   private List<Category> categories;
-  private List<SubCategory> subCategories;
-  private List<SubSubCategory> subSubCategories;
 
   private Document getHtmlFromURL(String PageURL) throws IOException {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
   }
 
-  private List<Category> getListCategories() {
-    List<Category> res = new ArrayList<Category>();
+  protected List<Category> buildCategories() {
+    List<Category> res = new ArrayList<>();
     try {
       doc = this.getHtmlFromURL(url);
     } catch (IOException e) {
       e.printStackTrace();
     }
     if (doc != null) {
-      Elements npriceElements = doc.body()
-          .getElementsByClass(
-              "icon icon-display");
+      Elements categoryElements = doc.body()
+          .getElementsByClass("small-nav-menu");
+      //System.out.println("SIZE Categories: " + categoryElements.size());
+      for (Element element : categoryElements) {
 
-      System.out.println("SIZE Categories: " + npriceElements.size());
-      for (Element element : npriceElements) {
-
-        String product = element.text();
-        //System.out.println("CATEGORIa A: "+ product);
-        product = product.replace(",", "");
-        product = product.replace(" ", "-");
-        //System.out.println("CATEGORIa B: "+ product);
+        Elements categoryName = element.getElementsByTag("p");
+        String product = categoryName.text();
         String relUrl = element.getElementsByTag("a")
             .attr("abs:href");
-        Category tmp = new Category();
-        tmp.setName(product);
-        tmp.setUrl(relUrl);
-        tmp.setSubCategories(getListSubCategoriesByCategoryName(product));
-        res.add(tmp);
-      }
-    }
-
-    return res;
-  }
-
-  private List<SubCategory> getListSubCategoriesByCategoryName(String categoryName) {
-    List<SubCategory> res = new ArrayList<SubCategory>();
-
-    if (doc != null) {
-      Elements npriceElements = doc.body()
-          .getElementsByClass(
-              "menu-header-link");
-
-      System.out.println("SIZE subCategories: " + npriceElements.size());
-      for (Element element : npriceElements) {
-
-        String product = element.text();
-
-        String relUrl = element.getElementsByTag("a")
-            .attr("abs:href");
-
-        if (relUrl.contains("browse/" + categoryName)) {
-          SubCategory tmp = new SubCategory();
-          tmp.setName(product);
-          tmp.setUrl(relUrl);
-          res.add(tmp);
+        Category catTmp = new Category();
+        catTmp.setName(product);
+        //System.out.println("CATEGORY:[" + product + "]");
+        catTmp.setUrl(relUrl);
+        List<SubCategory> listSubtmp = new ArrayList<>();
+        Elements subCategoryName = element.getElementsByClass("col-md-2-4");
+        for (Element el : subCategoryName) {//subcategories
+          String nameSub = el.getElementsByTag("h4").text();
+          String urlSub = el.getElementsByTag("a")
+              .attr("abs:href");
+          //System.out.println("CSub:[" + nameSub + "]={" + urlSub + "}");
+          SubCategory subTmp = new SubCategory();
+          subTmp.setName(nameSub.toLowerCase());
+          subTmp.setUrl(urlSub);
+          int cont = 0;
+          List<SubSubCategory> listSubSubtmp = new ArrayList<>();
+          Elements aaa = el.getElementsByTag("li");
+          for (Element ela : aaa) { // subsubcategories
+            String nameSubSub = ela.text();
+            String urlSubSub = ela.getElementsByTag("a").attr("abs:href");
+            //System.out.println("SUBSUB_{" + nameSubSub + "}=[" + urlSubSub);
+            if (cont > 1) {
+              SubSubCategory subSubtmp = new SubSubCategory();
+              subSubtmp.setName(nameSubSub.toLowerCase());
+              subSubtmp.setUrl(urlSubSub);
+              listSubSubtmp.add(subSubtmp);
+            }
+            cont++;
+          }
+          subTmp.setSubSubCategories(listSubSubtmp);
+          listSubtmp.add(subTmp);
         }
+        catTmp.setSubCategories(listSubtmp);
+        res.add(catTmp);
       }
     }
 
     return res;
   }
-
-  private List<SubCategory> getListSubCategories() {
-    List<SubCategory> res = new ArrayList<SubCategory>();
-
-    if (doc != null) {
-      Elements npriceElements = doc.body()
-          .getElementsByClass(
-              "menu-header-link");//menu-header-link//bg-green white
-
-      System.out.println("SIZE subCategories: " + npriceElements.size());
-      for (Element element : npriceElements) {
-
-        String product = element.text();
-
-        String relUrl = element.getElementsByTag("a")
-            .attr("abs:href");
-
-        if (relUrl.contains("browse/")) {
-          //System.out.println("Sub:"+ product);
-          //System.out.println("hrefs:"+relUrl);
-          SubCategory tmp = new SubCategory();
-          tmp.setName(product);
-          tmp.setUrl(relUrl);
-          res.add(tmp);
-        }
-      }
-    }
-
-    return res;
-  }
-
 
   @Override
   public List<Category> getCategories() {
-    if (categories == null) {
-      categories = getListCategories();
-    }
+    this.categories = buildCategories();
     return this.categories;
   }
-
-
-  @Override
-  public List<SubCategory> getSubCategories() {
-    if (subCategories == null) {
-
-      subCategories = getListSubCategories();
-    }
-    return this.subCategories;
-  }
-
-  @Override
-  public List<SubSubCategory> getSubSubCategories() {
-    return this.subSubCategories;
-  }
-
-
 }
