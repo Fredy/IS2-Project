@@ -9,13 +9,13 @@ import org.springframework.data.repository.CrudRepository;
 public interface SubCategoryRepository extends CrudRepository<SubCategory, Long> {
 
   /**
-   * @return All Categories with name categoryName
+   * @return All SubCategories with name {@code subCategoryName}
    */
   @Query("SELECT s FROM SubCategory sc WHERE sc.name = ?1")
   Collection<SubCategory> getSubCategoriesByName(String subCategoryName);
 
   /**
-   * @return All SubSubCategories from a SubCategory
+   * @return All SubSubCategories from a SubCategory with name {@code subCategoryName}
    */
   @Query("SELECT sc FROM SubCategory sc INNER JOIN sc.subSubCategories WHERE sc.name = ?1")
   Collection<SubSubCategory> getSubSubCategories(String subCategoryName);

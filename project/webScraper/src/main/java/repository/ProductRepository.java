@@ -9,19 +9,20 @@ import org.springframework.data.repository.CrudRepository;
 public interface ProductRepository extends CrudRepository<Product, Long> {
 
   /**
-   * @return All Products with name {@Code brandName}
+   * @return All Products with name {@code brandName}
    */
   @Query("SELECT p FROM Product p WHERE p.brand = ?1")
   Collection<Product> getProductsByBrand(String brandName);
 
   /**
-   * @return All products with model {@Code modelName}
+   * @param modelName
+   * @return All products with model {@code modelName}
    */
   @Query("SELECT p FROM Product p WHERE p.model = ?1")
   Collection<Product> getProductsByModel(String modelName);
 
   /**
-   * @return All Products stored in date {@Code date}
+   * @return All Products stored in date {@code date}
    */
   @Query("SELECT p FROM Product p WHERE p.date = ?1")
   Collection<Product> getProductsByDate(Date date);
