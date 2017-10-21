@@ -13,7 +13,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public abstract class SagaCrawler extends Crawler {
+public class SagaCrawler extends Crawler {
 
   public SagaCrawler() {
     this.url = "http://www.falabella.com.pe/";
@@ -30,7 +30,7 @@ public abstract class SagaCrawler extends Crawler {
 
     Document doc = null;
     try {
-      doc = getHtmlFromURL(url);
+      doc = getHtmlFromURL(this.url);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -41,16 +41,15 @@ public abstract class SagaCrawler extends Crawler {
         .select(
             ".site-wrapper #header > .fb-masthead__nav .fb-masthead__primary-wrapper .fb-masthead__primary-links__item");
 
-    for (int c = 2 ; c < elements.size() ; c++)
-    {
-    Element element = elements.get(c);
+    for (int c = 2; c < elements.size(); c++) {
+      Element element = elements.get(c);
 
       List<SubCategory> subCategoryUrls = new ArrayList<SubCategory>();
 
       Category category = new Category();
 
       category.setName(element.select("h3").text());
-      category.setUrl(url);
+      category.setUrl(this.url);
 
       Elements elsc = element.select(
           ".fb-masthead__child-wrapper > .fb-masthead__child-wrapper-content li.fb-masthead__child-links__item ");
@@ -60,7 +59,7 @@ public abstract class SagaCrawler extends Crawler {
 
         SubCategory subCategory = new SubCategory();
         subCategory.setName(sc.select("a.fb-masthead__child-links__item__link h4").text());
-        subCategory.setUrl(url + sc.select("a.fb-masthead__child-links__item__link ").attr("href"));
+        subCategory.setUrl(sc.select("a.fb-masthead__child-links__item__link ").attr("abs:href"));
 
         Elements elssc = sc.select(".fb-masthead__grandchild-links li a");
 
@@ -71,7 +70,7 @@ public abstract class SagaCrawler extends Crawler {
 
           if (resultado == -1) {
             subSubCategory.setName(ssc.text());
-            subSubCategory.setUrl(url + ssc.attr("href"));
+            subSubCategory.setUrl(ssc.attr("abs:href"));
             subSubCategoryUrls.add(subSubCategory);
           }
 
