@@ -11,7 +11,7 @@ import domain.Product;
 import domain.Shop;
 import domain.SubCategory;
 import domain.SubSubCategory;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -93,7 +93,8 @@ public class Is2projectApplication {
     Shop shop = scraper.parseShop();
     //Create the categories tree.
     System.out.println("tienda " + shopName);
-    ArrayList<Category> categories = (ArrayList<Category>) crawler.getCategories();
+
+    List<Category> categories = crawler.getCategories();
     shop.setCategories(categories);
     shopRepository.save(shop);
     Scanner scanner = new Scanner(System.in);
@@ -119,14 +120,15 @@ public class Is2projectApplication {
     for (Category category : categories) {
       for (SubCategory subCategory : category.getSubCategories()) {
         for (SubSubCategory subSubCategory : subCategory.getSubSubCategories()) {
-          ArrayList<Product> products;
+          List<Product> products;
           if (subSubCategoryS == subSubCategory) {
-            products = (ArrayList<Product>) scraper.parseProducts(subSubCategory);
+            products = scraper.parseProducts(subSubCategory);
             subSubCategory.setProducts(products);
           }
         }
       }
     }
     categoryRepository.save(categories);
+
   }
 }
