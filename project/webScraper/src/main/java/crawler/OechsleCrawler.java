@@ -107,6 +107,14 @@ public class OechsleCrawler extends Crawler {
 
           subSubCatAux.add(subSubCategory);
         }
+
+        if (subSubCatAux.size() == 0) {
+          SubSubCategory subSubCategory = new SubSubCategory();
+          subSubCategory.setName(categories.get(contC).getSubCategories().get(contS).getName());
+          subSubCategory.setUrl(categories.get(contC).getSubCategories().get(contS).getUrl());
+          subSubCatAux.add(subSubCategory);
+        }
+
         categories.get(contC).getSubCategories().get(contS).setSubSubCategories(subSubCatAux);
         contS++;
       }
