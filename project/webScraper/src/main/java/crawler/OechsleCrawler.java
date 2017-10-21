@@ -23,17 +23,19 @@ public class OechsleCrawler extends Crawler {
   protected List<Category> buildCategories() {
     try {
       Document homePage = getHtmlFromUrl(this.url);
-      categories = crawlingCategories(homePage);
+
+      crawlingCategories(homePage);
       crawlingSubCategories(homePage);
       crawlingSubSubCategories(homePage);
+
     } catch (IOException e) {
-      System.out.println("We don't can to access to web page");
+      System.out.println("We can't access to web page");
       //e.printStackTrace();
     }
     return this.categories;
   }
 
-  private List<Category> crawlingCategories(Document doc) {
+  private void crawlingCategories(Document doc) {
     Vector<Category> categoriesAux = new Vector<>();
     Elements cats = doc.getElementsByAttributeValue("class", "wrap-hover");
     for (Element catElement : cats) {
@@ -47,10 +49,12 @@ public class OechsleCrawler extends Crawler {
       category.setUrl(urlCategory);
       categoriesAux.add(category);
     }
-    return categoriesAux.subList(0, categoriesAux.size() - 2);
+
+    this.categories = categoriesAux.subList(0, categoriesAux.size() - 2);
+
   }
 
-  private List<SubCategory> crawlingSubCategories(Document doc) {
+  private void crawlingSubCategories(Document doc) {
 
     Elements subCats = doc.getElementsByAttributeValue("class", "menu-preview wrap-hover");
     int cont = 0;
@@ -78,7 +82,6 @@ public class OechsleCrawler extends Crawler {
       cont++;
     }
 
-    return null;
   }
 
   private void crawlingSubSubCategories(Document doc) {
@@ -109,6 +112,7 @@ public class OechsleCrawler extends Crawler {
       }
       contC++;
     }
+
   }
 
   private Document getHtmlFromUrl(String url) throws IOException, HttpStatusException {
