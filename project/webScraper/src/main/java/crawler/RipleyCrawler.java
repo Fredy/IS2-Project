@@ -13,7 +13,7 @@ import org.jsoup.select.Elements;
 
 public class RipleyCrawler extends Crawler {
 
-  RipleyCrawler() {
+  public RipleyCrawler() {
     this.setUrl("http://simple.ripley.com.pe");
   }
 
