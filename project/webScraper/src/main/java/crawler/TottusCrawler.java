@@ -47,7 +47,7 @@ public class TottusCrawler extends Crawler {
         catTmp.setName(product);
         //System.out.println("CATEGORY:[" + product + "]");
         catTmp.setUrl(relUrl);
-        List<SubCategory> listSubtmp = new ArrayList<>();
+        List<SubCategory> listSubTmp = new ArrayList<>();
         Elements subCategoryName = element.getElementsByClass("col-md-2-4");
         for (Element el : subCategoryName) {//subcategories
           String nameSub = el.getElementsByTag("h4").text();
@@ -73,9 +73,9 @@ public class TottusCrawler extends Crawler {
             cont++;
           }
           subTmp.setSubSubCategories(listSubSubtmp);
-          listSubtmp.add(subTmp);
+          listSubTmp.add(subTmp);
         }
-        catTmp.setSubCategories(listSubtmp);
+        catTmp.setSubCategories(listSubTmp);
         res.add(catTmp);
       }
     }
