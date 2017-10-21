@@ -61,10 +61,10 @@ public class OechsleCrawler extends Crawler {
 
     for (Element catElementItems : subCats) {
       Vector<SubCategory> subCategoriesAux = new Vector<>();
-      String beforeSubCat = "";
-      String nameSubCategory = "";
-      String urlSubCategory = "";
+      String nameSubCategory;
+      String urlSubCategory;
       Elements catsElements = catElementItems.select("div[class^=item]");
+
       for (Element catItem : catsElements) {
         SubCategory subCategory = new SubCategory();
 
@@ -78,6 +78,7 @@ public class OechsleCrawler extends Crawler {
 
         subCategoriesAux.add(subCategory);
       }
+
       categories.get(cont).setSubCategories(subCategoriesAux);
       cont++;
     }
@@ -87,7 +88,9 @@ public class OechsleCrawler extends Crawler {
   private void crawlingSubSubCategories(Document doc) {
     Elements cats = doc.getElementsByAttributeValue("class", "menu-preview wrap-hover");
     int contC = 0;
-
+    int indexCatRemove = 0;
+    int indexSubCatRemove = 0;
+    boolean remove = false;
     for (Element catItem : cats) {
       int contS = 0;
       Elements catsElements = catItem.getElementsByAttributeValue("class", "info"); // categories
@@ -115,10 +118,23 @@ public class OechsleCrawler extends Crawler {
           subSubCatAux.add(subSubCategory);
         }
 
-        categories.get(contC).getSubCategories().get(contS).setSubSubCategories(subSubCatAux);
+        if (subCats.text().equals("-")) {
+          categories.get(contC).getSubCategories().get(contS - 1).getSubSubCategories()
+              .addAll(subSubCatAux);
+          indexCatRemove = contC;
+          indexSubCatRemove = contS;
+          remove = true;
+        } else {
+          categories.get(contC).getSubCategories().get(contS).setSubSubCategories(subSubCatAux);
+        }
+
         contS++;
       }
       contC++;
+    }
+
+    if (remove) {
+      categories.get(indexCatRemove).getSubCategories().remove(indexSubCatRemove);
     }
 
   }
