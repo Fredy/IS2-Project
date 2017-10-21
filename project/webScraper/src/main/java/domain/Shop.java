@@ -21,10 +21,10 @@ public class Shop {
   private String url;
   private String address;
 
-  private List<Product> products;
+  private List<Category> categories;
 
   public Shop() {
-    products = new Vector<>();
+    categories = new Vector<>();
   }
 
   @Id
@@ -39,12 +39,12 @@ public class Shop {
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "shop_id")
-  public List<Product> getProducts() {
-    return products;
+  public List<Category> getCategories() {
+    return categories;
   }
 
-  public void setProducts(List<Product> products) {
-    this.products = products;
+  public void setCategories(List<Category> categories) {
+    this.categories = categories;
   }
 
   public String getName() {
