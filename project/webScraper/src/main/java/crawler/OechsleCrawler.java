@@ -40,7 +40,7 @@ public class OechsleCrawler extends Crawler {
     Elements cats = doc.getElementsByAttributeValue("class", "wrap-hover");
     for (Element catElement : cats) {
       Category category = new Category();
-      String nameCategory = catElement.text();
+      String nameCategory = catElement.text().toLowerCase();
 
       Element aux = catElement.getElementsByTag("a").first();
       String urlCategory = this.url + aux.attr("href");
@@ -70,7 +70,7 @@ public class OechsleCrawler extends Crawler {
 
         Elements nameSubCats = catItem.getElementsByAttributeValue("class", "tit");
 
-        nameSubCategory = nameSubCats.text();
+        nameSubCategory = nameSubCats.text().toLowerCase();
         urlSubCategory = this.url + nameSubCats.select("a").first().attr("href");
 
         subCategory.setName(nameSubCategory);
@@ -99,7 +99,7 @@ public class OechsleCrawler extends Crawler {
         Elements subSubCats = catElement.select("a[class^=sub]"); // subsubcategories
         for (Element subSubCatElement : subSubCats) {
           SubSubCategory subSubCategory = new SubSubCategory();
-          String nameSubSubCat = subSubCatElement.text();
+          String nameSubSubCat = subSubCatElement.text().toLowerCase();
           String urlSubSubCat = this.url + subSubCatElement.attr("href");
 
           subSubCategory.setName(nameSubSubCat);
