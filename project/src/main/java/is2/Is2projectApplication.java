@@ -58,7 +58,7 @@ public class Is2projectApplication {
   public CommandLineRunner commandLineRunner(ApplicationContext applicationContext) {
     return args -> {
       if (args.length < 1) {
-        System.out.println("No shop");
+        System.out.println("No se ha colocado una tienda");
       } else {
         System.out.println(args[0]);
         processArgs(args[0]);
