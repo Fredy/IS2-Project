@@ -1,4 +1,5 @@
 language: java
+before_script: cd project
 jdk:
   - oraclejdk8
   - oraclejdk9
