@@ -10,8 +10,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TottusCrawler extends Crawler {
+
+  Logger logger = LoggerFactory.getLogger(this.getClass());
 
   private List<Category> categories;
 
@@ -30,7 +34,7 @@ public class TottusCrawler extends Crawler {
       this.categories = crawlingCategory(doc);
     } catch (IOException e) {
       //e.printStackTrace();
-      System.out.println("We can't access to web page");
+      logger.error(e.getMessage(),e);
     }
     return this.categories;
   }
@@ -39,7 +43,7 @@ public class TottusCrawler extends Crawler {
     List<Category> listCatTmp = new ArrayList<>();
     Elements categoryElements = doc.body()
         .getElementsByClass("small-nav-menu");
-    //System.out.println("SIZE Categories: " + categoryElements.size());
+    logger.info("SIZE Categories: " + categoryElements.size());
     for (Element element : categoryElements) {
 
       Elements categoryName = element.getElementsByTag("p");
@@ -49,6 +53,8 @@ public class TottusCrawler extends Crawler {
       Category catTmp = new Category();
       catTmp.setName(product);
       //System.out.println("CATEGORY:[" + product + "]");
+      logger.debug("CATEGORY:[" + product + "]");
+
       catTmp.setUrl(relUrl);
       catTmp.setSubCategories(crawlingSubCategory(element));
       listCatTmp.add(catTmp);
@@ -59,11 +65,13 @@ public class TottusCrawler extends Crawler {
   private List<SubCategory> crawlingSubCategory(Element category) {
     List<SubCategory> listSubTmp = new ArrayList<>();
     Elements subCategoryName = category.getElementsByClass("col-md-2-4");
+    logger.debug("SIZE subCategories: " + subCategoryName.size());
     for (Element el : subCategoryName) {
       String nameSub = el.getElementsByTag("h4").text();
       String urlSub = el.getElementsByTag("a")
           .attr("abs:href");
       //System.out.println("CSub:[" + nameSub + "]={" + urlSub + "}");
+
       SubCategory subTmp = new SubCategory();
       subTmp.setName(nameSub.toLowerCase());
       subTmp.setUrl(urlSub);
