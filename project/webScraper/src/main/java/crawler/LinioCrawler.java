@@ -127,7 +127,6 @@ public class LinioCrawler extends Crawler {
         subCategory.setUrl(url);
         subCategories.add(subCategory);
 
-
         logger.debug("-Subcategory: " + name + " : " + url);
       } else {
         SubSubCategory tmpSSC = new SubSubCategory();
