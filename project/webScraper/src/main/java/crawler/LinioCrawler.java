@@ -10,8 +10,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LinioCrawler extends Crawler {
+
+  private Logger logger = LoggerFactory.getLogger(this.getClass());
 
   private List<Category> categories;
 
@@ -42,7 +46,7 @@ public class LinioCrawler extends Crawler {
       }
 
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
     }
     return crawledCategories;
   }
@@ -55,12 +59,13 @@ public class LinioCrawler extends Crawler {
         .getElementsByClass("main-menu")
         .first().getElementsByClass("nav-item");
 
+    logger.debug("Crawling categories: ");
     for (Element category : categories) {
       Element data = category.getElementsByTag("a").first();
       String name = data.attr("title").toLowerCase().trim();
 
-      // "solo Hoy", "tiendas oficiales" and "supermercado" repeat products from others categories,
-      // so we don't consider them.
+      // "solo Hoy", "tiendas oficiales" and "supermercado" repeat products from
+      // others categories, so we don't consider them.
       if (name.contentEquals("solo hoy") ||
           name.contentEquals("tiendas oficiales") ||
           name.contentEquals("supermercado")) {
@@ -75,6 +80,8 @@ public class LinioCrawler extends Crawler {
       tmpCategory.setUrl(href);
       crawledCategories.add(tmpCategory);
       outDataIndex.add(index);
+
+      logger.debug("-Category: " + name + " : " + href);
     }
 
     return crawledCategories;
@@ -93,6 +100,8 @@ public class LinioCrawler extends Crawler {
       Elements tmpSubAndSS = sCatData.children();
       allSubAndSS.addAll(tmpSubAndSS);
     }
+
+    logger.debug("Crawling subcategories and sub-subcategories:");
 
     List<SubCategory> subCategories = new ArrayList<>();
     SubCategory subCategory = null;
@@ -117,11 +126,16 @@ public class LinioCrawler extends Crawler {
         subCategory.setName(name);
         subCategory.setUrl(url);
         subCategories.add(subCategory);
+
+
+        logger.debug("-Subcategory: " + name + " : " + url);
       } else {
         SubSubCategory tmpSSC = new SubSubCategory();
         tmpSSC.setName(name);
         tmpSSC.setUrl(url);
         subCategory.getSubSubCategories().add(tmpSSC);
+
+        logger.debug("-Sub-subcategory: " + name + " : " + url);
       }
     }
 
