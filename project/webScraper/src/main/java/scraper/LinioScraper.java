@@ -29,7 +29,7 @@ public class LinioScraper implements Scraper {
    * @param productDoc Jsoup document containing the html of a product
    * @return JSON object in a String
    */
-  private String extractJsonData(Document productDoc) {
+   String extractJsonData(Document productDoc) {
     if (productDoc == null) {
       return "";
     }
@@ -61,7 +61,7 @@ public class LinioScraper implements Scraper {
    * @param pageUrl sub-subcategory url
    * @return product's urls
    */
-  private Vector<String> getProductsURLs(String pageUrl) {
+  Vector<String> getProductsURLs(String pageUrl) {
     Vector<String> productsUrls = new Vector<>();
     try {
       Document pageDoc = this.getHtmlFromURL(pageUrl);
@@ -92,7 +92,7 @@ public class LinioScraper implements Scraper {
    * @param baseUrl sub-subcategory url
    * @return number of pages in the current sub-subcategory
    */
-  private int getMaxPages(String baseUrl) {
+  int getMaxPages(String baseUrl) {
     int lastPageNum = 0;
     try {
       Document pageDoc = this.getHtmlFromURL(baseUrl);
@@ -119,7 +119,7 @@ public class LinioScraper implements Scraper {
    * @param jsonData JSON object
    * @return builded product
    */
-  private Product jsonToObject(String jsonData) {
+  Product jsonToObject(String jsonData) {
     if (jsonData == null || jsonData.isEmpty()) {
       return null;
     }
@@ -140,7 +140,7 @@ public class LinioScraper implements Scraper {
     return product;
   }
 
-  private String getModel(Document productDoc) {
+  String getModel(Document productDoc) {
     String res = null;
     if (productDoc == null) {
       return null;
@@ -165,7 +165,7 @@ public class LinioScraper implements Scraper {
    * @param url sub-subcategory url
    * @return all the products in current sub-subcategory
    */
-  private Vector<Product> getProducts(String url) {
+  Vector<Product> getProducts(String url) {
     Vector<Product> productsVec = new Vector<>();
     int lastPageNum = this.getMaxPages(url);
 
