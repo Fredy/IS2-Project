@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 public class TottusCrawler extends Crawler {
 
-  Logger logger = LoggerFactory.getLogger(this.getClass());
+  private Logger logger = LoggerFactory.getLogger(this.getClass());
 
   private List<Category> categories;
 
@@ -33,8 +33,7 @@ public class TottusCrawler extends Crawler {
       doc = this.getHtmlFromURL(url);
       this.categories = crawlingCategory(doc);
     } catch (IOException e) {
-      //e.printStackTrace();
-      logger.error(e.getMessage(),e);
+      logger.error(e.getMessage(), e);
     }
     return this.categories;
   }
@@ -52,7 +51,6 @@ public class TottusCrawler extends Crawler {
           .attr("abs:href");
       Category catTmp = new Category();
       catTmp.setName(product);
-      //System.out.println("CATEGORY:[" + product + "]");
       logger.debug("CATEGORY:[" + product + "]");
 
       catTmp.setUrl(relUrl);
@@ -70,7 +68,7 @@ public class TottusCrawler extends Crawler {
       String nameSub = el.getElementsByTag("h4").text();
       String urlSub = el.getElementsByTag("a")
           .attr("abs:href");
-      //System.out.println("CSub:[" + nameSub + "]={" + urlSub + "}");
+      logger.debug("CSub:[" + nameSub + "]={" + urlSub + "}");
 
       SubCategory subTmp = new SubCategory();
       subTmp.setName(nameSub.toLowerCase());
@@ -88,7 +86,7 @@ public class TottusCrawler extends Crawler {
     for (Element ela : aaa) {
       String nameSubSub = ela.text();
       String urlSubSub = ela.getElementsByTag("a").attr("abs:href");
-      //System.out.println("SUBSUB_{" + nameSubSub + "}=[" + urlSubSub);
+      logger.debug("SUBSUB_{" + nameSubSub + "}=[" + urlSubSub);
       if (cont > 1) {
         SubSubCategory subSubTmp = new SubSubCategory();
         subSubTmp.setName(nameSubSub.toLowerCase());

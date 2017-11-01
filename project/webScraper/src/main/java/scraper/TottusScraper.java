@@ -12,14 +12,18 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TottusScraper implements Scraper {
+
+  Logger logger = LoggerFactory.getLogger(this.getClass());
 
   private Document getHtmlFromURL(String PageURL) throws IOException {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
   }
 
-  public String urlToJsonArray(String baseURL) {
+  private String urlToJsonArray(String baseURL) {
     String result = "";
     try {
       Document doc = this.getHtmlFromURL(baseURL);
@@ -40,41 +44,38 @@ public class TottusScraper implements Scraper {
 
         jsonData = jsonData.substring(jsonData.indexOf("[") + 1, jsonData.length());
 
-        if (jsonData != "") {
-          result += jsonData;
+        if (!jsonData.contentEquals("")) {
+          result = result.concat(jsonData);
         }
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
     }
     return result;
   }
 
-  public List<String> oneToVector(String inputJson) {
-    ArrayList<String> outputVector = new ArrayList<String>();
+  private List<String> oneToVector(String inputJson) {
+    ArrayList<String> outputVector = new ArrayList<>();
     while (inputJson.indexOf("},{") > 0) {
       outputVector.add(inputJson.substring(inputJson.indexOf("{"), inputJson.indexOf("},{") + 1));
       inputJson = inputJson.substring(inputJson.indexOf("},{") + 2, inputJson.length());
     }
     outputVector
         .add(inputJson.substring(inputJson.indexOf("{"), inputJson.length())); //last register
-    for (int i = 0; i < outputVector.size(); i++) {
-    }
     return outputVector;
   }
 
-  public List<Product> vectorStringsToProducts(List<String> vectorStringIn, String sscategoryUrl)
+  private List<Product> vectorStringsToProducts(List<String> vectorStringIn, String sscategoryUrl)
       throws JSONException {
-    List<Product> res = new ArrayList<Product>();
+    List<Product> res = new ArrayList<>();
     try {
       Document doc = this.getHtmlFromURL(sscategoryUrl);
-
       //List<List<String>> nulePrices = getPrices(doc);
 
       for (int i = 0; i < vectorStringIn.size(); i++) {
         JSONObject jsonObject = new JSONObject(vectorStringIn.get(i));
         String fullname = jsonObject.getString("name");
-        //System.out.println("FulName: "+ fullname);
+        logger.debug("FulName: " + fullname);
 
         String model = "";
         Boolean hasModel = false;
@@ -85,7 +86,7 @@ public class TottusScraper implements Scraper {
         }
         String sku = jsonObject.getString("id");
         String brand = jsonObject.getString("brand");
-        Double price= jsonObject.getDouble("price");
+        Double price = jsonObject.getDouble("price");
         /*Double normalPrice = null;
         Double webPrice = null;
         Double offerPrice = null;
@@ -106,7 +107,8 @@ public class TottusScraper implements Scraper {
 
         Product tmp = new Product();
         tmp.setName(fullname);
-        tmp.setOfferPrice(price);
+        logger.info("Scraping: " + fullname);
+        tmp.setWebPrice(price);
         /*if (normalPrice != null) {
           tmp.setNormalPrice(normalPrice);
         }
@@ -126,7 +128,7 @@ public class TottusScraper implements Scraper {
       }
 
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
     }
 
     return res;
@@ -142,8 +144,7 @@ public class TottusScraper implements Scraper {
 
   private List<List<String>> getPrices(Document productDoc) {
 
-
-    List<List<String>> res = new ArrayList<List<String>>();
+    List<List<String>> res = new ArrayList<>();
 
     if (productDoc == null) {
       return null;
@@ -152,7 +153,7 @@ public class TottusScraper implements Scraper {
     Elements npriceElements = productDoc.body()
         .getElementsByClass("caption-bottom-wrapper");
 
-     System.out.println("SIZE: " + npriceElements.size());
+    logger.debug("SIZE: " + npriceElements.size());
     for (Element element : npriceElements) {
 
       String product = element.text();
@@ -188,7 +189,7 @@ public class TottusScraper implements Scraper {
         } else {
           activePrice = prices;
         }
-        ArrayList<String> pricesPerProduct = new ArrayList<String>();
+        ArrayList<String> pricesPerProduct = new ArrayList<>();
 
         pricesPerProduct.add(activePrice);
         if (nulePrice != null) {
