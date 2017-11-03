@@ -1,4 +1,4 @@
-package is2;
+package cli;
 
 import crawler.Crawler;
 import crawler.LinioCrawler;
