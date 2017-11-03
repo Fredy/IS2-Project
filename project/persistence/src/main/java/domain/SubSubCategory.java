@@ -11,25 +11,25 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 @Entity
-public class SubCategory {
+public class SubSubCategory {
 
   private Long id;
   private String name;
   private String url;
-  private List<SubSubCategory> subSubCategories;
+  private List<Product> products;
 
-  public SubCategory() {
-    subSubCategories = new Vector<>();
-  }
-
-  public void setId(Long id) {
-    this.id = id;
+  public SubSubCategory() {
+    products = new Vector<>();
   }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   public Long getId() {
     return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getName() {
@@ -49,13 +49,12 @@ public class SubCategory {
   }
 
   @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "sub_category_id")
-  public List<SubSubCategory> getSubSubCategories() {
-    return subSubCategories;
+  @JoinColumn(name = "sub_sub_category_id")
+  public List<Product> getProducts() {
+    return products;
   }
 
-  public void setSubSubCategories(List<SubSubCategory> subSubCategories) {
-    this.subSubCategories = subSubCategories;
+  public void setProducts(List<Product> products) {
+    this.products = products;
   }
-
 }

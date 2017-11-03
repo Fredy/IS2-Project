@@ -10,9 +10,8 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>webScraper</artifactId>
+  <artifactId>persistence</artifactId>
   <packaging>jar</packaging>
-
 
   <dependencies>
 
@@ -27,24 +26,16 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Json in Java https://mvnrepository.com/artifact/org.json/json -->
+    <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
     <dependency>
-      <groupId>org.json</groupId>
-      <artifactId>json</artifactId>
-      <version>20170516</version>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
     </dependency>
 
-    <dependency>
-      <!-- jsoup HTML parser library @ https://jsoup.org/ -->
-      <groupId>org.jsoup</groupId>
-      <artifactId>jsoup</artifactId>
-      <version>1.10.3</version>
-    </dependency>
 
     <dependency>
-      <groupId>is2</groupId>
-      <artifactId>persistence</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
 
     <dependency>

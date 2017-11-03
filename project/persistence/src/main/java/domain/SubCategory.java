@@ -8,19 +8,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class SubSubCategory {
+public class SubCategory {
 
   private Long id;
   private String name;
   private String url;
-  private List<Product> products;
+  private List<SubSubCategory> subSubCategories;
 
-  public SubSubCategory() {
-    products = new Vector<>();
+  public SubCategory() {
+    subSubCategories = new Vector<>();
   }
 
   @Id
@@ -50,12 +49,13 @@ public class SubSubCategory {
   }
 
   @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "sub_sub_category_id")
-  public List<Product> getProducts() {
-    return products;
+  @JoinColumn(name = "sub_category_id")
+  public List<SubSubCategory> getSubSubCategories() {
+    return subSubCategories;
   }
 
-  public void setProducts(List<Product> products) {
-    this.products = products;
+  public void setSubSubCategories(List<SubSubCategory> subSubCategories) {
+    this.subSubCategories = subSubCategories;
   }
+
 }

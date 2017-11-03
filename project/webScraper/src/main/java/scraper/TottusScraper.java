@@ -85,7 +85,7 @@ public class TottusScraper implements Scraper {
         }
         String sku = jsonObject.getString("id");
         String brand = jsonObject.getString("brand");
-        Double price= jsonObject.getDouble("price");
+        Double price = jsonObject.getDouble("price");
         /*Double normalPrice = null;
         Double webPrice = null;
         Double offerPrice = null;
@@ -142,7 +142,6 @@ public class TottusScraper implements Scraper {
 
   private List<List<String>> getPrices(Document productDoc) {
 
-
     List<List<String>> res = new ArrayList<List<String>>();
 
     if (productDoc == null) {
@@ -152,7 +151,7 @@ public class TottusScraper implements Scraper {
     Elements npriceElements = productDoc.body()
         .getElementsByClass("caption-bottom-wrapper");
 
-     System.out.println("SIZE: " + npriceElements.size());
+    System.out.println("SIZE: " + npriceElements.size());
     for (Element element : npriceElements) {
 
       String product = element.text();
