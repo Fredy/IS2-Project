@@ -22,14 +22,14 @@ public class SubCategory {
     subSubCategories = new Vector<>();
   }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   public Long getId() {
     return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getName() {
