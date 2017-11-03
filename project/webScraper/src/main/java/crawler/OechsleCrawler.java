@@ -11,8 +11,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OechsleCrawler extends Crawler {
+
+  Logger logger = LoggerFactory.getLogger(this.getClass());
 
   public OechsleCrawler() {
     url = "http://www.oechsle.pe";
@@ -29,8 +33,7 @@ public class OechsleCrawler extends Crawler {
       crawlingSubSubCategories(homePage);
 
     } catch (IOException e) {
-      System.out.println("We can't access to web page");
-      //e.printStackTrace();
+      logger.error(e.getMessage(), e);
     }
     return this.categories;
   }
@@ -48,6 +51,8 @@ public class OechsleCrawler extends Crawler {
       category.setName(nameCategory);
       category.setUrl(urlCategory);
       categoriesAux.add(category);
+
+      logger.debug(" Name Category: {}", nameCategory);
     }
 
     this.categories = categoriesAux.subList(0, categoriesAux.size() - 2);
@@ -75,6 +80,8 @@ public class OechsleCrawler extends Crawler {
 
         subCategory.setName(nameSubCategory);
         subCategory.setUrl(urlSubCategory);
+
+        logger.debug(" Name SubCategory: {}", nameSubCategory);
 
         subCategoriesAux.add(subCategory);
       }
@@ -108,6 +115,8 @@ public class OechsleCrawler extends Crawler {
           subSubCategory.setName(nameSubSubCat);
           subSubCategory.setUrl(urlSubSubCat);
 
+          logger.debug(" Name SubSubCategory: {}", nameSubSubCat);
+
           subSubCatAux.add(subSubCategory);
         }
 
@@ -115,6 +124,7 @@ public class OechsleCrawler extends Crawler {
           SubSubCategory subSubCategory = new SubSubCategory();
           subSubCategory.setName(categories.get(contC).getSubCategories().get(contS).getName());
           subSubCategory.setUrl(categories.get(contC).getSubCategories().get(contS).getUrl());
+
           subSubCatAux.add(subSubCategory);
         }
 

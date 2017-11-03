@@ -12,10 +12,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OechsleScraper implements Scraper {
+
+  Logger logger = LoggerFactory.getLogger(this.getClass());
 
   @Override
   public List<Product> parseProducts(SubSubCategory subSubCategory) {
@@ -44,7 +48,7 @@ public class OechsleScraper implements Scraper {
         urls.add(href);
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
     }
     return urls;
   }
@@ -113,8 +117,15 @@ public class OechsleScraper implements Scraper {
       product.setNormalPrice(normal_price);
       product.setOfferPrice(offer_price);
 
+      logger.info(">Product: {}", nameProduct);
+      logger.info("  sku: {}", sku);
+      logger.info("  model: {}", model);
+      logger.info("  brand: {}", brand);
+      logger.info("  normalPrice: {}", normal_price);
+      logger.info("  offerPrice: {}", offer_price);
+
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
     }
     return product;
   }
@@ -127,7 +138,7 @@ public class OechsleScraper implements Scraper {
       product = getProduct(urlProduct);
       products.addElement(product);
     }
-
+    logger.debug("Number of Product Scraped: {}", products.size());
     return products;
   }
 
