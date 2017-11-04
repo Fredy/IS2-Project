@@ -3,6 +3,7 @@ package scraper;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import domain.Product;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,14 +85,61 @@ public class LinioScraperTest {
 
   @Test
   public void getMaxPages() throws Exception {
+    LinioScraper scraper = new LinioScraper();
+
+    File htmlFile = new File("src/test/resources/scraper/linioSubSubCategoryPage.html");
+    Document document = Jsoup.parse(htmlFile, "UTF-8", "https://www.linio.com.pe");
+
+    assertEquals(scraper.getMaxPages(document), 5);
   }
 
   @Test
   public void jsonToObject() throws Exception {
+    LinioScraper scraper = new LinioScraper();
+    String jsonData =
+        "{\"mobile_app_log\":0,\"is_linio_plus\":0,\"gender\":\"n\\/a\",\"nls\":null,"
+            + "\"experiment_id\":false,\"variation_id\":\"0\",\"category1\":\"computacion\","
+            + "\"category2\":\"portatiles\",\"category3\":\"laptops\",\"category_id\":13329,"
+            + "\"category_full\":\"computacion\\/portatiles\\/laptops\",\"categoryKey1\":"
+            + "\"portatiles\\/laptops\",\"categoryKey2\":\"computacion\",\"rsin\":\"null\","
+            + "\"sku_simple\":\"AS282EL01A3LALPE-4082101\",\"sku_config\":\"AS282EL01A3LALPE\","
+            + "\"price\":6499.99,\"msrpPrice\":6499.99,\"special_price\":5199,\"product_id\":"
+            + "\"3805120\",\"product_name\":\"ASUS 17.3\\\"  "
+            + "I7 7700HQ 16GB 1TB 256GB SSD 4GB DDR5 DVD GL753VE-DS74 \",\"is_international\":0,"
+            + "\"ean_code\":\"889349607626\",\"is_master\":0,\"brand\":\"Asus\","
+            + "\"large_image\":\"\\/\\/i2.linio.com\\/p\\/e6d12a9e5e8a727b3c6517013ea0b108-product.jpg\","
+            + "\"small_image\":\"\\/\\/i2.linio.com\\/p\\/5e5bfc05917af20048436c24887a4b13-product.jpg\","
+            + "\"new_user\":2,\"pageType\":\"product\",\"ecommerce\":{\"detail\":"
+            + "{\"products\":[{\"name\":\"ASUS 17.3\\\"  "
+            + "I7 7700HQ 16GB 1TB 256GB SSD 4GB DDR5 DVD GL753VE-DS74 \",\"id\":"
+            + "\"AS282EL01A3LALPE\",\"price\":6499.99,\"brand\":\"Asus\",\"category\":"
+            + "\"Laptops\",\"variant\":\"default\"}]}},\"mail_hash\":\"n\\/a\",\"customer\":"
+            + "{\"fastLaneEnabled\":false}}";
+
+    Product product = scraper.jsonToObject(jsonData);
+
+    String name = "ASUS 17.3\"  I7 7700HQ 16GB 1TB 256GB SSD 4GB DDR5 DVD GL753VE-DS74 ";
+    double webPrice = 6499.99;
+    double offerPrice = 5199.0;
+    String sku = "AS282EL01A3LALPE";
+    String brand = "Asus";
+
+    assertTrue(product.getName().contentEquals(name));
+    assertTrue(product.getWebPrice().equals(webPrice));
+    assertTrue(product.getOfferPrice().equals(offerPrice));
+    assertTrue(product.getSku().contentEquals(sku));
+    assertTrue(product.getBrand().contentEquals(brand));
   }
 
   @Test
   public void getModel() throws Exception {
+    LinioScraper scraper = new LinioScraper();
+
+    File htmlFile = new File("src/test/resources/scraper/linioProductPage.html");
+    Document document = Jsoup.parse(htmlFile, "UTF-8", "https://www.linio.com.pe");
+
+    String model = scraper.getModel(document);
+    assertTrue(model.contentEquals("GL753VE-DS74"));
   }
 
   @Test

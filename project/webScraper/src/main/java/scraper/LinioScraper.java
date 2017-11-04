@@ -79,27 +79,19 @@ public class LinioScraper implements Scraper {
    * Receives an url of a sub-subcategory page. Returns the number of pages on which the products
    * are, because a single page can't contain all the products.
    *
-   * @param baseUrl sub-subcategory url
+   * @param pageDoc sub-subcategory document
    * @return number of pages in the current sub-subcategory
    */
-  int getMaxPages(String baseUrl) {
-    int lastPageNum = 0;
-    try {
-      Document pageDoc = this.getHtmlFromURL(baseUrl);
+  int getMaxPages(Document pageDoc) {
+    String lastValidPage = pageDoc.body()
+        .getElementsByClass("page-item").last()
+        .getElementsByTag("a")
+        .attr("href");
 
-      String lastValidPage = pageDoc.body()
-          .getElementsByClass("page-item").last()
-          .getElementsByTag("a")
-          .attr("href");
-
-      // we got something like this:
-      // https://www.linio.com.pe/c/computacion/portatiles?page=9
-      // we just need the last number.
-      lastPageNum = Integer.parseInt(lastValidPage.split("=")[1]);
-
-    } catch (IOException e) {
-      logger.error(e.getMessage(), e);
-    }
+    // we got something like this:
+    // https://www.linio.com.pe/c/computacion/portatiles?page=9
+    // we just need the last number.
+    int lastPageNum = Integer.parseInt(lastValidPage.split("=")[1]);
     return lastPageNum;
   }
 
@@ -157,7 +149,14 @@ public class LinioScraper implements Scraper {
    */
   Vector<Product> getProducts(String url) {
     Vector<Product> productsVec = new Vector<>();
-    int lastPageNum = this.getMaxPages(url);
+
+    int lastPageNum = 0;
+    try {
+      Document subsubDoc = this.getHtmlFromURL(url);
+      lastPageNum = this.getMaxPages(subsubDoc);
+    } catch (IOException e) {
+      logger.warn(e.getMessage(), e);
+    }
 
     for (int i = 1; i <= lastPageNum; i++) {
       String pageUrl = url + "?page=" + Integer.toString(i);
