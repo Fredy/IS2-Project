@@ -10,8 +10,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SagaCrawler extends Crawler {
+
+  private Logger logger = LoggerFactory.getLogger(this.getClass());
 
   public SagaCrawler() {
     this.url = "http://www.falabella.com.pe/";
@@ -25,12 +29,13 @@ public class SagaCrawler extends Crawler {
   protected List<Category> buildCategories() {
 
     List<Category> categoryUrls = new ArrayList<>();
+    String name_, url_;
 
     Document document = null;
     try {
       document = getHtmlFromURL(this.url);
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
     }
 
     Elements elements = document != null ? document
@@ -43,11 +48,13 @@ public class SagaCrawler extends Crawler {
         Element element = elements.get(c);
 
         List<SubCategory> subCategoryUrls = new ArrayList<>();
-
         Category category = new Category();
+        name_ = element.select("h3").text().toLowerCase().trim();
 
-        category.setName(element.select("h3").text().toLowerCase().trim());
-        category.setUrl(this.url);
+        category.setName(name_);
+        url_ = this.url;
+        category.setUrl(url_);
+        logger.debug("CAT{" + name_ + "}=[" + url_);
 
         Elements elsc = element.select(
             ".fb-masthead__child-wrapper > .fb-masthead__child-wrapper-content li.fb-masthead__child-links__item ");
@@ -56,9 +63,12 @@ public class SagaCrawler extends Crawler {
           List<SubSubCategory> subSubCategoryUrls = new ArrayList<>();
 
           SubCategory subCategory = new SubCategory();
-          subCategory.setName(
-              sc.select("a.fb-masthead__child-links__item__link h4").text().toLowerCase().trim());
-          subCategory.setUrl(sc.select("a.fb-masthead__child-links__item__link ").attr("abs:href"));
+          name_ = sc.select("a.fb-masthead__child-links__item__link h4").text().toLowerCase()
+              .trim();
+          subCategory.setName(name_);
+          url_ = sc.select("a.fb-masthead__child-links__item__link ").attr("abs:href");
+          subCategory.setUrl(url_);
+          logger.debug("SUBCAT{" + name_ + "}=[" + url_);
 
           Elements elssc = sc.select(".fb-masthead__grandchild-links li a");
 
@@ -68,17 +78,17 @@ public class SagaCrawler extends Crawler {
             int resultado = ssc.text().toLowerCase().indexOf(cadena);
 
             if (resultado == -1) {
-              subSubCategory.setName(ssc.text().toLowerCase().trim());
-              subSubCategory.setUrl(ssc.attr("abs:href"));
+              name_ = ssc.text().toLowerCase().trim();
+              subSubCategory.setName(name_);
+              url_ = ssc.attr("abs:href");
+              subSubCategory.setUrl(url_);
+              logger.debug("SUBCAT{" + name_ + "}=[" + url_);
               subSubCategoryUrls.add(subSubCategory);
             }
-
           }
-
           subCategory.setSubSubCategories(subSubCategoryUrls);
           subCategoryUrls.add(subCategory);
         }
-
         category.setSubCategories(subCategoryUrls);
         categoryUrls.add(category);
       }
