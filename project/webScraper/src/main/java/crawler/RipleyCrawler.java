@@ -10,8 +10,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RipleyCrawler extends Crawler {
+
+  private Logger logger = LoggerFactory.getLogger(this.getClass());
 
   public RipleyCrawler() {
     this.setUrl("http://simple.ripley.com.pe");
@@ -36,7 +40,7 @@ public class RipleyCrawler extends Crawler {
     try {
       page = getHtmlFromUrl(url);
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
       return rCategories;
     }
     Elements elements = page.getElementsByClass("main-categories")
@@ -66,7 +70,7 @@ public class RipleyCrawler extends Crawler {
         if (name.equals("marcas")) {
           continue;
         }
-        //System.out.println("\t" + Name);
+        logger.debug("\t" + name);
         SubCategory subCategory = new SubCategory();
         subCategory.setName(name);
         subCategory.setUrl(realCategory.attr("abs:href"));
@@ -85,7 +89,7 @@ public class RipleyCrawler extends Crawler {
     for (Element element : elements) {
       String name = element.text();
       name = name.toLowerCase();
-      //System.out.println("\t\t"+Name);
+      logger.debug("\t\t" + name);
       SubSubCategory subSubCategory = new SubSubCategory();
       subSubCategory.setName(name);
       subSubCategory.setUrl(element.attr("abs:href"));
