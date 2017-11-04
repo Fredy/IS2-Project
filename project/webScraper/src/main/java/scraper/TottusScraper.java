@@ -17,13 +17,13 @@ import org.slf4j.LoggerFactory;
 
 public class TottusScraper implements Scraper {
 
-  Logger logger = LoggerFactory.getLogger(this.getClass());
+  private Logger logger = LoggerFactory.getLogger(this.getClass());
 
   private Document getHtmlFromURL(String PageURL) throws IOException {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
   }
 
-  private String urlToJsonArray(String baseURL) {
+  String urlToJsonArray(String baseURL) {
     String result = "";
     try {
       Document doc = this.getHtmlFromURL(baseURL);
@@ -54,7 +54,7 @@ public class TottusScraper implements Scraper {
     return result;
   }
 
-  private List<String> oneToVector(String inputJson) {
+  List<String> oneToVector(String inputJson) {
     ArrayList<String> outputVector = new ArrayList<>();
     while (inputJson.indexOf("},{") > 0) {
       outputVector.add(inputJson.substring(inputJson.indexOf("{"), inputJson.indexOf("},{") + 1));
@@ -65,7 +65,7 @@ public class TottusScraper implements Scraper {
     return outputVector;
   }
 
-  private List<Product> vectorStringsToProducts(List<String> vectorStringIn, String sscategoryUrl)
+  List<Product> vectorStringsToProducts(List<String> vectorStringIn, String sscategoryUrl)
       throws JSONException {
     List<Product> res = new ArrayList<>();
     try {
@@ -142,7 +142,7 @@ public class TottusScraper implements Scraper {
     return shop;
   }
 
-  private List<List<String>> getPrices(Document productDoc) {
+  List<List<String>> getPrices(Document productDoc) {
 
     List<List<String>> res = new ArrayList<>();
 
