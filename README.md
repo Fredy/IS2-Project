@@ -1,5 +1,10 @@
 # IS2-Project
 
+[![Build Status](https://travis-ci.org/Fredy/IS2-Project.svg?branch=develop)](https://travis-ci.org/Fredy/IS2-Project.svg?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/Fredy/IS2-Project/badge.svg?branch=develop)](https://coveralls.io/github/Fredy/IS2-Project?branch=develop)
+
+# How to use
+
 To run the application you have to set the follow file:
 
 `IS2-Project/project/cliApplication/src/main/resources/application.properties`  
