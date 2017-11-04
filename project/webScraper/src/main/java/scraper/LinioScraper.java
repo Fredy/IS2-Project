@@ -29,7 +29,7 @@ public class LinioScraper implements Scraper {
    * @param productDoc Jsoup document containing the html of a product
    * @return JSON object in a String
    */
-   String extractJsonData(Document productDoc) {
+  String extractJsonData(Document productDoc) {
     if (productDoc == null) {
       return "";
     }
@@ -58,29 +58,19 @@ public class LinioScraper implements Scraper {
    * Receives a page url that contains several products. Return a Vector<String> containing all the
    * products urls.
    *
-   * @param pageUrl sub-subcategory url
+   * @param pageDoc sub-subcategory document containing html of a page
    * @return product's urls
    */
-  Vector<String> getProductsURLs(String pageUrl) {
+  Vector<String> getProductsURLs(Document pageDoc) {
     Vector<String> productsUrls = new Vector<>();
-    try {
-      Document pageDoc = this.getHtmlFromURL(pageUrl);
+    Elements products = pageDoc.body()
+        .getElementById("catalogue-product-container")
+        .getElementsByClass("catalogue-product row");
 
-      Elements products = pageDoc.body()
-          .getElementById("catalogue-product-container")
-          .getElementsByClass("catalogue-product row");
-
-      for (Element element : products) {
-        String relUrl = element.getElementsByTag("a")
-            .attr("abs:href");
-        // NOTE: this if is used to just get laptops.
-        if (relUrl.contains("notebook") || relUrl.contains("laptop") || relUrl.contains("macbook")
-            || relUrl.contains("portatil")) {
-          productsUrls.add(relUrl);
-        }
-      }
-    } catch (IOException e) {
-      logger.error(e.getMessage(), e);
+    for (Element element : products) {
+      String relUrl = element.getElementsByTag("a")
+          .attr("abs:href");
+      productsUrls.add(relUrl);
     }
     return productsUrls;
   }
@@ -171,7 +161,15 @@ public class LinioScraper implements Scraper {
 
     for (int i = 1; i <= lastPageNum; i++) {
       String pageUrl = url + "?page=" + Integer.toString(i);
-      Vector<String> productsUrls = this.getProductsURLs(pageUrl);
+
+      List<String> productsUrls = new Vector<>();
+      try {
+        Document productsPageDoc = this.getHtmlFromURL(pageUrl);
+        productsUrls = this.getProductsURLs(productsPageDoc);
+      } catch (IOException e) {
+        logger.warn(e.getMessage(), e);
+      }
+
       for (String prodUrl : productsUrls) {
         Document pageDoc;
         try {
