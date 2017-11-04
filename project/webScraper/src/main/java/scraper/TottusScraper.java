@@ -152,7 +152,6 @@ public class TottusScraper implements Scraper {
 
     Elements npriceElements = productDoc.body()
         .getElementsByClass("caption-bottom-wrapper");
-
     logger.debug("SIZE: " + npriceElements.size());
     for (Element element : npriceElements) {
 

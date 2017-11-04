@@ -7,7 +7,7 @@
   <groupId>is2</groupId>
   <artifactId>is2project</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <packaging>pom</packaging>
 
   <name>is2project</name>
   <description>IS2 Project</description>
@@ -15,9 +15,15 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.5.6.RELEASE</version>
+    <version>1.5.8.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
+
+  <modules>
+    <module>webScraper</module>
+    <module>cliApplication</module>
+    <module>persistence</module>
+  </modules>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,105 +31,53 @@
     <java.version>1.8</java.version>
   </properties>
 
-  <dependencies>
+  <dependencyManagement>
+    <dependencies>
 
-    <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
-    <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-    </dependency>
 
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
+      <!-- https://mvnrepository.com/artifact/junit/junit -->
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.12</version>
+        <scope>test</scope>
+      </dependency>
 
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter</artifactId>
-    </dependency>
+    </dependencies>
+  </dependencyManagement>
 
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
 
-    <dependency>
-      <!-- jsoup HTML parser library @ https://jsoup.org/ -->
-      <groupId>org.jsoup</groupId>
-      <artifactId>jsoup</artifactId>
-      <version>1.10.3</version>
-    </dependency>
+  <!--<build>-->
 
-    <dependency>
-      <groupId>org.json</groupId>
-      <artifactId>json</artifactId>
-      <version>20170516</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-
-  <build>
-
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>3.0.0</version>
-        <executions>
-          <execution>
-            <id>add-source</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>add-source</goal>
-            </goals>
-            <configuration>
-              <sources>
-                <source>webScraper/src/main/java</source>
-                <source>src/java</source>
-              </sources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifest>
-              <mainClass>is2.Is2projectApplication</mainClass>
-            </manifest>
-          </archive>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-        </configuration>
-        <executions>
-          <execution>
-            <id>make-assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+  <!--<plugins>-->
+  <!--<plugin>-->
+  <!--<groupId>org.springframework.boot</groupId>-->
+  <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
+  <!--</plugin>-->
+  <!--<plugin>-->
+  <!--<artifactId>maven-assembly-plugin</artifactId>-->
+  <!--<configuration>-->
+  <!--<archive>-->
+  <!--<manifest>-->
+  <!--<mainClass>cli.Is2projectApplication</mainClass>-->
+  <!--</manifest>-->
+  <!--</archive>-->
+  <!--<descriptorRefs>-->
+  <!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
+  <!--</descriptorRefs>-->
+  <!--</configuration>-->
+  <!--<executions>-->
+  <!--<execution>-->
+  <!--<id>make-assembly</id>-->
+  <!--<phase>package</phase>-->
+  <!--<goals>-->
+  <!--<goal>single</goal>-->
+  <!--</goals>-->
+  <!--</execution>-->
+  <!--</executions>-->
+  <!--</plugin>-->
+  <!--</plugins>-->
+  <!--</build>-->
 
 
 </project>

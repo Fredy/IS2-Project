@@ -1,4 +1,4 @@
-package is2;
+package cli;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

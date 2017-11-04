@@ -17,7 +17,6 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
   Collection<Product> getProductsByBrand(String brandName);
 
   /**
-   * @param modelName
    * @return All products with model {@code modelName}
    */
   @Query("SELECT p FROM Product p WHERE p.model = ?1")
