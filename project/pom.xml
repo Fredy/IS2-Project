@@ -29,7 +29,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
-    <jacoco.reportPath>${project.basedir}/../target/jacoco.exec</jacoco.reportPath>
   </properties>
 
   <dependencyManagement>
@@ -52,9 +51,6 @@
       <plugin>
         <groupId>org.eluder.coveralls</groupId>
         <artifactId>coveralls-maven-plugin</artifactId>
-        <configuration>
-          <jacocoReports>${jacoco.reportPath}</jacocoReports>
-        </configuration>
         <version>4.3.0</version>
       </plugin>
 
@@ -68,10 +64,6 @@
             <goals>
               <goal>prepare-agent</goal>
             </goals>
-            <configuration>
-              <append>true</append>
-              <destFile>${jacoco.reportPath}</destFile>
-            </configuration>
           </execution>
         </executions>
       </plugin>
