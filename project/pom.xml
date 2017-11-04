@@ -52,6 +52,9 @@
       <plugin>
         <groupId>org.eluder.coveralls</groupId>
         <artifactId>coveralls-maven-plugin</artifactId>
+        <configuration>
+          <jacocoReports>${jacoco.reportPath}</jacocoReports>
+        </configuration>
         <version>4.3.0</version>
       </plugin>
 
