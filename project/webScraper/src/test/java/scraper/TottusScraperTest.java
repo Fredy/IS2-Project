@@ -48,12 +48,16 @@ public class TottusScraperTest {
     List<String> dataScraped = tottusScraper.oneToVector(listOfProducts);
     List<Product> productScraped = tottusScraper.vectorStringsToProducts(dataScraped,
         "http://www.tottus.com.pe/tottus/browse/Abarrotes-y-Despensa-Arroz-Arroz-Integral/_/N-7nn7of");
-    Product exampleProduct = new Product();
-    exampleProduct.setName("Arroz Extra Integral");
-    exampleProduct.setWebPrice(3.25);
-    exampleProduct.setSku("40737788");
-    exampleProduct.setBrand("TOTTUS");
-    assertEquals(exampleProduct, productScraped.get(1));
+    String expectedname = "Arroz Extra Integral";
+    Double expectedWebPrice = 3.25;
+    String expectedSku = "40737788";
+    String expectedBrand = "TOTTUS";
+
+    assertTrue(productScraped.get(1).getBrand().contentEquals(expectedBrand));
+    assertTrue(productScraped.get(1).getName().contentEquals(expectedname));
+    assertTrue(productScraped.get(1).getSku().contentEquals(expectedSku));
+    assertTrue(productScraped.get(1).getWebPrice().equals(expectedWebPrice));
+
   }
 
   @Test
