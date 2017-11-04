@@ -29,7 +29,7 @@ public class LinioScraper implements Scraper {
    * @param productDoc Jsoup document containing the html of a product
    * @return JSON object in a String
    */
-  private String extractJsonData(Document productDoc) {
+  String extractJsonData(Document productDoc) {
     if (productDoc == null) {
       return "";
     }
@@ -58,29 +58,19 @@ public class LinioScraper implements Scraper {
    * Receives a page url that contains several products. Return a Vector<String> containing all the
    * products urls.
    *
-   * @param pageUrl sub-subcategory url
+   * @param pageDoc sub-subcategory document containing html of a page
    * @return product's urls
    */
-  private Vector<String> getProductsURLs(String pageUrl) {
+  Vector<String> getProductsURLs(Document pageDoc) {
     Vector<String> productsUrls = new Vector<>();
-    try {
-      Document pageDoc = this.getHtmlFromURL(pageUrl);
+    Elements products = pageDoc.body()
+        .getElementById("catalogue-product-container")
+        .getElementsByClass("catalogue-product row");
 
-      Elements products = pageDoc.body()
-          .getElementById("catalogue-product-container")
-          .getElementsByClass("catalogue-product row");
-
-      for (Element element : products) {
-        String relUrl = element.getElementsByTag("a")
-            .attr("abs:href");
-        // NOTE: this if is used to just get laptops.
-        if (relUrl.contains("notebook") || relUrl.contains("laptop") || relUrl.contains("macbook")
-            || relUrl.contains("portatil")) {
-          productsUrls.add(relUrl);
-        }
-      }
-    } catch (IOException e) {
-      logger.error(e.getMessage(), e);
+    for (Element element : products) {
+      String relUrl = element.getElementsByTag("a")
+          .attr("abs:href");
+      productsUrls.add(relUrl);
     }
     return productsUrls;
   }
@@ -89,27 +79,19 @@ public class LinioScraper implements Scraper {
    * Receives an url of a sub-subcategory page. Returns the number of pages on which the products
    * are, because a single page can't contain all the products.
    *
-   * @param baseUrl sub-subcategory url
+   * @param pageDoc sub-subcategory document
    * @return number of pages in the current sub-subcategory
    */
-  private int getMaxPages(String baseUrl) {
-    int lastPageNum = 0;
-    try {
-      Document pageDoc = this.getHtmlFromURL(baseUrl);
+  int getMaxPages(Document pageDoc) {
+    String lastValidPage = pageDoc.body()
+        .getElementsByClass("page-item").last()
+        .getElementsByTag("a")
+        .attr("href");
 
-      String lastValidPage = pageDoc.body()
-          .getElementsByClass("page-item").last()
-          .getElementsByTag("a")
-          .attr("href");
-
-      // we got something like this:
-      // https://www.linio.com.pe/c/computacion/portatiles?page=9
-      // we just need the last number.
-      lastPageNum = Integer.parseInt(lastValidPage.split("=")[1]);
-
-    } catch (IOException e) {
-      logger.error(e.getMessage(), e);
-    }
+    // we got something like this:
+    // https://www.linio.com.pe/c/computacion/portatiles?page=9
+    // we just need the last number.
+    int lastPageNum = Integer.parseInt(lastValidPage.split("=")[1]);
     return lastPageNum;
   }
 
@@ -119,7 +101,7 @@ public class LinioScraper implements Scraper {
    * @param jsonData JSON object
    * @return builded product
    */
-  private Product jsonToObject(String jsonData) {
+  Product jsonToObject(String jsonData) {
     if (jsonData == null || jsonData.isEmpty()) {
       return null;
     }
@@ -140,7 +122,7 @@ public class LinioScraper implements Scraper {
     return product;
   }
 
-  private String getModel(Document productDoc) {
+  String getModel(Document productDoc) {
     String res = null;
     if (productDoc == null) {
       return null;
@@ -165,13 +147,28 @@ public class LinioScraper implements Scraper {
    * @param url sub-subcategory url
    * @return all the products in current sub-subcategory
    */
-  private Vector<Product> getProducts(String url) {
+  Vector<Product> getProducts(String url) {
     Vector<Product> productsVec = new Vector<>();
-    int lastPageNum = this.getMaxPages(url);
+
+    int lastPageNum = 0;
+    try {
+      Document subsubDoc = this.getHtmlFromURL(url);
+      lastPageNum = this.getMaxPages(subsubDoc);
+    } catch (IOException e) {
+      logger.warn(e.getMessage(), e);
+    }
 
     for (int i = 1; i <= lastPageNum; i++) {
       String pageUrl = url + "?page=" + Integer.toString(i);
-      Vector<String> productsUrls = this.getProductsURLs(pageUrl);
+
+      List<String> productsUrls = new Vector<>();
+      try {
+        Document productsPageDoc = this.getHtmlFromURL(pageUrl);
+        productsUrls = this.getProductsURLs(productsPageDoc);
+      } catch (IOException e) {
+        logger.warn(e.getMessage(), e);
+      }
+
       for (String prodUrl : productsUrls) {
         Document pageDoc;
         try {
