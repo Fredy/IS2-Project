@@ -34,7 +34,7 @@ public class TottusCrawler extends Crawler {
       this.categories = crawlingCategory(doc);
     } catch (IOException e) {
       //e.printStackTrace();
-      logger.error(e.getMessage(),e);
+      logger.error(e.getMessage(), e);
     }
     return this.categories;
   }
