@@ -38,7 +38,7 @@ public class TottusCrawler extends Crawler {
     return this.categories;
   }
 
-  private List<Category> crawlingCategory(Document doc) {
+  List<Category> crawlingCategory(Document doc) {
     List<Category> listCatTmp = new ArrayList<>();
     Elements categoryElements = doc.body()
         .getElementsByClass("small-nav-menu");
@@ -60,7 +60,7 @@ public class TottusCrawler extends Crawler {
     return listCatTmp;
   }
 
-  private List<SubCategory> crawlingSubCategory(Element category) {
+  List<SubCategory> crawlingSubCategory(Element category) {
     List<SubCategory> listSubTmp = new ArrayList<>();
     Elements subCategoryName = category.getElementsByClass("col-md-2-4");
     logger.debug("SIZE subCategories: " + subCategoryName.size());
@@ -79,7 +79,7 @@ public class TottusCrawler extends Crawler {
     return listSubTmp;
   }
 
-  private List<SubSubCategory> crawlingSubSubCategory(Element subcategory) {
+  List<SubSubCategory> crawlingSubSubCategory(Element subcategory) {
     int cont = 0;
     List<SubSubCategory> listSubSubTmp = new ArrayList<>();
     Elements aaa = subcategory.getElementsByTag("li");
