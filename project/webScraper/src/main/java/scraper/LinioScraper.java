@@ -11,8 +11,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LinioScraper implements Scraper {
+
+  private Logger logger = LoggerFactory.getLogger(this.getClass());
 
   private Document getHtmlFromURL(String PageURL) throws IOException {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
@@ -76,7 +80,7 @@ public class LinioScraper implements Scraper {
         }
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
     }
     return productsUrls;
   }
@@ -104,7 +108,7 @@ public class LinioScraper implements Scraper {
       lastPageNum = Integer.parseInt(lastValidPage.split("=")[1]);
 
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
     }
     return lastPageNum;
   }
@@ -173,6 +177,7 @@ public class LinioScraper implements Scraper {
         try {
           pageDoc = this.getHtmlFromURL(prodUrl);
         } catch (IOException e) {
+          logger.warn(e.getMessage(), e);
           pageDoc = null;
         }
         String jsonData = this.extractJsonData(pageDoc);
