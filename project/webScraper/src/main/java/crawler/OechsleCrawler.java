@@ -20,7 +20,8 @@ public class OechsleCrawler extends Crawler {
 
   public OechsleCrawler() {
     url = "http://www.oechsle.pe";
-    categories = new Vector<>();
+    //categories = new Vector<>();
+    categories = null;
   }
 
   @Override
@@ -28,7 +29,7 @@ public class OechsleCrawler extends Crawler {
     try {
       Document homePage = getHtmlFromUrl(this.url);
 
-      crawlingCategories(homePage);
+      categories = crawlingCategories(homePage);
       crawlingSubCategories(homePage);
       crawlingSubSubCategories(homePage);
 
@@ -38,7 +39,7 @@ public class OechsleCrawler extends Crawler {
     return this.categories;
   }
 
-  private void crawlingCategories(Document doc) {
+  public List<Category> crawlingCategories(Document doc) {
     Vector<Category> categoriesAux = new Vector<>();
     Elements cats = doc.getElementsByAttributeValue("class", "wrap-hover");
     for (Element catElement : cats) {
@@ -55,11 +56,11 @@ public class OechsleCrawler extends Crawler {
       logger.debug(" Name Category: {}", nameCategory);
     }
 
-    this.categories = categoriesAux.subList(0, categoriesAux.size() - 2);
-
+    //this.categories = categoriesAux.subList(0, categoriesAux.size() - 2);
+    return categoriesAux.subList(0, categoriesAux.size() - 2);
   }
 
-  private void crawlingSubCategories(Document doc) {
+  public void crawlingSubCategories(Document doc) {
 
     Elements subCats = doc.getElementsByAttributeValue("class", "menu-preview wrap-hover");
     int cont = 0;
@@ -92,7 +93,7 @@ public class OechsleCrawler extends Crawler {
 
   }
 
-  private void crawlingSubSubCategories(Document doc) {
+  public void crawlingSubSubCategories(Document doc) {
     Elements cats = doc.getElementsByAttributeValue("class", "menu-preview wrap-hover");
     int contC = 0;
     int indexCatRemove = 0;
