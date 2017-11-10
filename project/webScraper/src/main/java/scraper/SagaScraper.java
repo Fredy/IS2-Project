@@ -42,7 +42,7 @@ public class SagaScraper implements Scraper {
       /*Price*/
       try {
         product.setNormalPrice(getPrice(documentIn));
-      } catch (IOException e) {
+      } catch (IndexOutOfBoundsException e) {
         logger.error(e.getMessage(), e);
         product.setNormalPrice(null);
       }
@@ -132,6 +132,7 @@ public class SagaScraper implements Scraper {
   }
 
   private Double getPrice(Document docIn) throws IOException {
+    try {
     Element content = docIn.body().getElementsByAttributeValue("type", "text/javascript").get(0);
     String price = content.data();
     String stringPrice[] = price.split("originalPrice");
@@ -143,6 +144,10 @@ public class SagaScraper implements Scraper {
     logger.debug("PRICE{" + stringP + "}");
 
     return Double.parseDouble(stringP);
+    } catch (ArrayIndexOutOfBoundsException e ) {
+      logger.error(e.getMessage(), e);
+      return null;
+    }
   }
 
   @Override
