@@ -31,15 +31,15 @@ public class RipleyScraperTest {
   public void getProductUtil() throws Exception {
     RipleyScraper ripleyScraper = new RipleyScraper();
     ArrayList<String> dataRaw = new ArrayList<>();
-    dataRaw.add("CLOUDBREAK CASACA HOOLDRAGAN PARA HOMBRE");
+    dataRaw.add("CLOUDBREAK CASACA HOODRAGLAN PARA HOMBRE");
     dataRaw.add("189");
-    dataRaw.add("13230");
+    dataRaw.add("132.30");
     dataRaw.add("");
     dataRaw.add("2016182582218");
     dataRaw.add("Cloudbreak");
     dataRaw.add("Hoodraglan");
     Product product = ripleyScraper.getProductUtil(dataRaw);
-    assertEquals(product.getName(), "CLOUDBREAK CASACA HOOLDRAGLAN PARA HOMBRE");
+    assertEquals(product.getName(), "CLOUDBREAK CASACA HOODRAGLAN PARA HOMBRE");
     assertEquals(product.getNormalPrice(), 189, 0.0);
     assertEquals(product.getWebPrice(), 132.30, 0.0);
     assertEquals(product.getOfferPrice(), null);
