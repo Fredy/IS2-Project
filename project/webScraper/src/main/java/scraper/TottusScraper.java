@@ -23,33 +23,27 @@ public class TottusScraper implements Scraper {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
   }
 
-  String urlToJsonArray(String baseURL) {
+  String urlToJsonArray(Document doc) {
     String result = "";
-    try {
-      Document doc = this.getHtmlFromURL(baseURL);
+    Elements scriptElements = doc.getElementsByTag("script");
 
-      Elements scriptElements = doc.getElementsByTag("script");
+    for (Element element : scriptElements) {
 
-      for (Element element : scriptElements) {
-
-        String jsonData = element.data();
-        if (!jsonData.contains("dataLayer")) { //To discard other scripts
-          jsonData = "";
-        }
-
-        if (!jsonData.contains("brand")) { // To discard empty functions
-          jsonData = "";
-        }
-        jsonData = jsonData.split("]}}}'")[0];
-
-        jsonData = jsonData.substring(jsonData.indexOf("[") + 1, jsonData.length());
-
-        if (!jsonData.contentEquals("")) {
-          result = result.concat(jsonData);
-        }
+      String jsonData = element.data();
+      if (!jsonData.contains("dataLayer")) { //To discard other scripts
+        jsonData = "";
       }
-    } catch (IOException e) {
-      logger.error(e.getMessage(), e);
+
+      if (!jsonData.contains("brand")) { // To discard empty functions
+        jsonData = "";
+      }
+      jsonData = jsonData.split("]}}}'")[0];
+
+      jsonData = jsonData.substring(jsonData.indexOf("[") + 1, jsonData.length());
+
+      if (!jsonData.contentEquals("")) {
+        result = result.concat(jsonData);
+      }
     }
     return result;
   }
@@ -65,28 +59,25 @@ public class TottusScraper implements Scraper {
     return outputVector;
   }
 
-  List<Product> vectorStringsToProducts(List<String> vectorStringIn, String sscategoryUrl)
+  List<Product> vectorStringsToProducts(List<String> vectorStringIn, Document doc)
       throws JSONException {
     List<Product> res = new ArrayList<>();
-    try {
-      Document doc = this.getHtmlFromURL(sscategoryUrl);
-      //List<List<String>> nulePrices = getPrices(doc);
+    //List<List<String>> nulePrices = getPrices(doc);
+    for (int i = 0; i < vectorStringIn.size(); i++) {
+      JSONObject jsonObject = new JSONObject(vectorStringIn.get(i));
+      String fullname = jsonObject.getString("name");
+      logger.debug("FulName: " + fullname);
 
-      for (int i = 0; i < vectorStringIn.size(); i++) {
-        JSONObject jsonObject = new JSONObject(vectorStringIn.get(i));
-        String fullname = jsonObject.getString("name");
-        logger.debug("FulName: " + fullname);
+      String model = "";
+      Boolean hasModel = false;
 
-        String model = "";
-        Boolean hasModel = false;
-
-        if (fullname.contains("Mod.")) {
-          hasModel = true;
-          model = fullname.substring(fullname.indexOf("Mod."), fullname.length()); //quitar el Mod.
-        }
-        String sku = jsonObject.getString("id");
-        String brand = jsonObject.getString("brand");
-        Double price = jsonObject.getDouble("price");
+      if (fullname.contains("Mod.")) {
+        hasModel = true;
+        model = fullname.substring(fullname.indexOf("Mod."), fullname.length()); //quitar el Mod.
+      }
+      String sku = jsonObject.getString("id");
+      String brand = jsonObject.getString("brand");
+      Double price = jsonObject.getDouble("price");
         /*Double normalPrice = null;
         Double webPrice = null;
         Double offerPrice = null;
@@ -105,10 +96,10 @@ public class TottusScraper implements Scraper {
           webPrice = Double.parseDouble(nulePrices.get(i).get(0).replaceAll(",", ""));
         }*/
 
-        Product tmp = new Product();
-        tmp.setName(fullname);
-        logger.info("Scraping: " + fullname);
-        tmp.setWebPrice(price);
+      Product tmp = new Product();
+      tmp.setName(fullname);
+      logger.info("Scraping: " + fullname);
+      tmp.setWebPrice(price);
         /*if (normalPrice != null) {
           tmp.setNormalPrice(normalPrice);
         }
@@ -119,18 +110,13 @@ public class TottusScraper implements Scraper {
           tmp.setOfferPrice(offerPrice);
         }*/
 
-        tmp.setSku(sku);
-        if (hasModel) {
-          tmp.setModel(model);
-        }
-        tmp.setBrand(brand);
-        res.add(tmp);
+      tmp.setSku(sku);
+      if (hasModel) {
+        tmp.setModel(model);
       }
-
-    } catch (IOException e) {
-      logger.error(e.getMessage(), e);
+      tmp.setBrand(brand);
+      res.add(tmp);
     }
-
     return res;
   }
 
@@ -210,10 +196,18 @@ public class TottusScraper implements Scraper {
   @Override
   public List<Product> parseProducts(SubSubCategory subSubCategory) {
 
+    List<Product> resList = new ArrayList<>();
     String sscategoryUrl = subSubCategory.getUrl();
-    String res1 = this.urlToJsonArray(sscategoryUrl);
-    List<String> res2 = this.oneToVector(res1);
-    return this.vectorStringsToProducts(res2, sscategoryUrl);
+    try {
+      Document doc = this.getHtmlFromURL(sscategoryUrl);
+      String res1 = this.urlToJsonArray(doc);
+      List<String> res2 = this.oneToVector(res1);
+      resList = this.vectorStringsToProducts(res2, doc);
+    } catch (IOException e) {
+      logger.error(e.getMessage(), e);
+    }
+    return resList;
+
   }
 
   @Override
