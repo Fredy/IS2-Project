@@ -1,10 +1,8 @@
 package scraper;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import domain.Product;
-import domain.SubSubCategory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,26 +62,6 @@ public class TottusScraperTest {
     assertEquals(productScraped.get(1).getName(), expectedname);
     assertEquals(productScraped.get(1).getSku(), expectedSku);
     assertEquals(productScraped.get(1).getWebPrice(), expectedWebPrice);
-  }
-
-  @Test
-  public void parseProducts() throws Exception {
-    TottusScraper tottusScraper = new TottusScraper();
-
-    SubSubCategory crawledSubSubCategory = new SubSubCategory();
-    crawledSubSubCategory.setUrl(
-        "http://www.tottus.com.pe/tottus/browse/Abarrotes-y-Despensa-Arroz-Arroz-Integral/_/N-7nn7of");
-    List<Product> crawledProducts = tottusScraper.parseProducts(crawledSubSubCategory);
-
-    String expectedname = "Arroz Integral ";
-    Double expectedWebPrice = 3.35;
-    String expectedSku = "40360383";
-    String expectedBrand = "COSTENO";
-
-    assertTrue(crawledProducts.get(1).getBrand().contentEquals(expectedBrand));
-    assertTrue(crawledProducts.get(1).getName().contentEquals(expectedname));
-    assertTrue(crawledProducts.get(1).getSku().contentEquals(expectedSku));
-    assertTrue(crawledProducts.get(1).getWebPrice().equals(expectedWebPrice));
   }
 
 }
