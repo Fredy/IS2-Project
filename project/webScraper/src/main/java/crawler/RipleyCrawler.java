@@ -58,7 +58,7 @@ public class RipleyCrawler extends Crawler {
     return rCategories;
   }
 
-  private ArrayList<SubCategory> buildSubCategories(Element categoryEl, Category category) {
+  ArrayList<SubCategory> buildSubCategories(Element categoryEl, Category category) {
     ArrayList<SubCategory> rSubCategories = new ArrayList<>();
     Elements elements = categoryEl.select("[class^=child-categories second-column]")
         .select("[class=child-category]");
@@ -82,7 +82,7 @@ public class RipleyCrawler extends Crawler {
     return rSubCategories;
   }
 
-  private ArrayList<SubSubCategory> buildSubSubCategories(Element subCategoryEl,
+  ArrayList<SubSubCategory> buildSubSubCategories(Element subCategoryEl,
       SubCategory subCategory) {
     ArrayList<SubSubCategory> rSubSubCategories = new ArrayList<>();
     Elements elements = subCategoryEl.select("[href~=^/[\\-a-z]+/[\\-a-z]+/[\\-a-z]+$]");
