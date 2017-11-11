@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, user-scalable=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge"><script type="text/javascript">(window.NREUM||(NREUM={})).loader_config={xpid:"UwICVF5ACQIFVllRBAM="};window.NREUM||(NREUM={}),__nr_require=function(t,n,e){function r(e){if(!n[e]){var o=n[e]={exports:{}};t[e][0].call(o.exports,function(n){var o=t[e][1][n];return r(o||n)},o,o.exports)}return n[e].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<e.length;o++)r(e[o]);return r}({1:[function(t,n,e){function r(t){try{s.console&&console.log(t)}catch(n){}}var o,i=t("ee"),a=t(15),s={};try{o=localStorage.getItem("__nr_flags").split(","),console&&"function"==typeof console.log&&(s.console=!0,o.indexOf("dev")!==-1&&(s.dev=!0),o.indexOf("nr_dev")!==-1&&(s.nrDev=!0))}catch(c){}s.nrDev&&i.on("internal-error",function(t){r(t.stack)}),s.dev&&i.on("fn-err",function(t,n,e){r(e.stack)}),s.dev&&(r("NR AGENT IN DEVELOPMENT MODE"),r("flags: "+a(s,function(t,n){return t}).join(", ")))},{}],2:[function(t,n,e){function r(t,n,e,r,o){try{d?d-=1:i("err",[o||new UncaughtException(t,n,e)])}catch(s){try{i("ierr",[s,c.now(),!0])}catch(u){}}return"function"==typeof f&&f.apply(this,a(arguments))}function UncaughtException(t,n,e){this.message=t||"Uncaught error with no additional information",this.sourceURL=n,this.line=e}function o(t){i("err",[t,c.now()])}var i=t("handle"),a=t(16),s=t("ee"),c=t("loader"),f=window.onerror,u=!1,d=0;c.features.err=!0,t(1),window.onerror=r;try{throw new Error}catch(l){"stack"in l&&(t(8),t(7),"addEventListener"in window&&t(5),c.xhrWrappable&&t(9),u=!0)}s.on("fn-start",function(t,n,e){u&&(d+=1)}),s.on("fn-err",function(t,n,e){u&&(this.thrown=!0,o(e))}),s.on("fn-end",function(){u&&!this.thrown&&d>0&&(d-=1)}),s.on("internal-error",function(t){i("ierr",[t,c.now(),!0])})},{}],3:[function(t,n,e){t("loader").features.ins=!0},{}],4:[function(t,n,e){function r(t){}if(window.performance&&window.performance.timing&&window.performance.getEntriesByType){var o=t("ee"),i=t("handle"),a=t(8),s=t(7),c="learResourceTimings",f="addEventListener",u="resourcetimingbufferfull",d="bstResource",l="resource",p="-start",h="-end",m="fn"+p,w="fn"+h,v="bstTimer",y="pushState",g=t("loader");g.features.stn=!0,t(6);var b=NREUM.o.EV;o.on(m,function(t,n){var e=t[0];e instanceof b&&(this.bstStart=g.now())}),o.on(w,function(t,n){var e=t[0];e instanceof b&&i("bst",[e,n,this.bstStart,g.now()])}),a.on(m,function(t,n,e){this.bstStart=g.now(),this.bstType=e}),a.on(w,function(t,n){i(v,[n,this.bstStart,g.now(),this.bstType])}),s.on(m,function(){this.bstStart=g.now()}),s.on(w,function(t,n){i(v,[n,this.bstStart,g.now(),"requestAnimationFrame"])}),o.on(y+p,function(t){this.time=g.now(),this.startPath=location.pathname+location.hash}),o.on(y+h,function(t){i("bstHist",[location.pathname+location.hash,this.startPath,this.time])}),f in window.performance&&(window.performance["c"+c]?window.performance[f](u,function(t){i(d,[window.performance.getEntriesByType(l)]),window.performance["c"+c]()},!1):window.performance[f]("webkit"+u,function(t){i(d,[window.performance.getEntriesByType(l)]),window.performance["webkitC"+c]()},!1)),document[f]("scroll",r,{passive:!0}),document[f]("keypress",r,!1),document[f]("click",r,!1)}},{}],5:[function(t,n,e){function r(t){for(var n=t;n&&!n.hasOwnProperty(u);)n=Object.getPrototypeOf(n);n&&o(n)}function o(t){s.inPlace(t,[u,d],"-",i)}function i(t,n){return t[1]}var a=t("ee").get("events"),s=t(18)(a,!0),c=t("gos"),f=XMLHttpRequest,u="addEventListener",d="removeEventListener";n.exports=a,"getPrototypeOf"in Object?(r(document),r(window),r(f.prototype)):f.prototype.hasOwnProperty(u)&&(o(window),o(f.prototype)),a.on(u+"-start",function(t,n){var e=t[1],r=c(e,"nr@wrapped",function(){function t(){if("function"==typeof e.handleEvent)return e.handleEvent.apply(e,arguments)}var n={object:t,"function":e}[typeof e];return n?s(n,"fn-",null,n.name||"anonymous"):e});this.wrapped=t[1]=r}),a.on(d+"-start",function(t){t[1]=this.wrapped||t[1]})},{}],6:[function(t,n,e){var r=t("ee").get("history"),o=t(18)(r);n.exports=r,o.inPlace(window.history,["pushState","replaceState"],"-")},{}],7:[function(t,n,e){var r=t("ee").get("raf"),o=t(18)(r),i="equestAnimationFrame";n.exports=r,o.inPlace(window,["r"+i,"mozR"+i,"webkitR"+i,"msR"+i],"raf-"),r.on("raf-start",function(t){t[0]=o(t[0],"fn-")})},{}],8:[function(t,n,e){function r(t,n,e){t[0]=a(t[0],"fn-",null,e)}function o(t,n,e){this.method=e,this.timerDuration=isNaN(t[1])?0:+t[1],t[0]=a(t[0],"fn-",this,e)}var i=t("ee").get("timer"),a=t(18)(i),s="setTimeout",c="setInterval",f="clearTimeout",u="-start",d="-";n.exports=i,a.inPlace(window,[s,"setImmediate"],s+d),a.inPlace(window,[c],c+d),a.inPlace(window,[f,"clearImmediate"],f+d),i.on(c+u,r),i.on(s+u,o)},{}],9:[function(t,n,e){function r(t,n){d.inPlace(n,["onreadystatechange"],"fn-",s)}function o(){var t=this,n=u.context(t);t.readyState>3&&!n.resolved&&(n.resolved=!0,u.emit("xhr-resolved",[],t)),d.inPlace(t,y,"fn-",s)}function i(t){g.push(t),h&&(x?x.then(a):w?w(a):(E=-E,O.data=E))}function a(){for(var t=0;t<g.length;t++)r([],g[t]);g.length&&(g=[])}function s(t,n){return n}function c(t,n){for(var e in t)n[e]=t[e];return n}t(5);var f=t("ee"),u=f.get("xhr"),d=t(18)(u),l=NREUM.o,p=l.XHR,h=l.MO,m=l.PR,w=l.SI,v="readystatechange",y=["onload","onerror","onabort","onloadstart","onloadend","onprogress","ontimeout"],g=[];n.exports=u;var b=window.XMLHttpRequest=function(t){var n=new p(t);try{u.emit("new-xhr",[n],n),n.addEventListener(v,o,!1)}catch(e){try{u.emit("internal-error",[e])}catch(r){}}return n};if(c(p,b),b.prototype=p.prototype,d.inPlace(b.prototype,["open","send"],"-xhr-",s),u.on("send-xhr-start",function(t,n){r(t,n),i(n)}),u.on("open-xhr-start",r),h){var x=m&&m.resolve();if(!w&&!m){var E=1,O=document.createTextNode(E);new h(a).observe(O,{characterData:!0})}}else f.on("fn-end",function(t){t[0]&&t[0].type===v||a()})},{}],10:[function(t,n,e){function r(t){var n=this.params,e=this.metrics;if(!this.ended){this.ended=!0;for(var r=0;r<d;r++)t.removeEventListener(u[r],this.listener,!1);if(!n.aborted){if(e.duration=a.now()-this.startTime,4===t.readyState){n.status=t.status;var i=o(t,this.lastSize);if(i&&(e.rxSize=i),this.sameOrigin){var c=t.getResponseHeader("X-NewRelic-App-Data");c&&(n.cat=c.split(", ").pop())}}else n.status=0;e.cbTime=this.cbTime,f.emit("xhr-done",[t],t),s("xhr",[n,e,this.startTime])}}}function o(t,n){var e=t.responseType;if("json"===e&&null!==n)return n;var r="arraybuffer"===e||"blob"===e||"json"===e?t.response:t.responseText;return h(r)}function i(t,n){var e=c(n),r=t.params;r.host=e.hostname+":"+e.port,r.pathname=e.pathname,t.sameOrigin=e.sameOrigin}var a=t("loader");if(a.xhrWrappable){var s=t("handle"),c=t(11),f=t("ee"),u=["load","error","abort","timeout"],d=u.length,l=t("id"),p=t(14),h=t(13),m=window.XMLHttpRequest;a.features.xhr=!0,t(9),f.on("new-xhr",function(t){var n=this;n.totalCbs=0,n.called=0,n.cbTime=0,n.end=r,n.ended=!1,n.xhrGuids={},n.lastSize=null,p&&(p>34||p<10)||window.opera||t.addEventListener("progress",function(t){n.lastSize=t.loaded},!1)}),f.on("open-xhr-start",function(t){this.params={method:t[0]},i(this,t[1]),this.metrics={}}),f.on("open-xhr-end",function(t,n){"loader_config"in NREUM&&"xpid"in NREUM.loader_config&&this.sameOrigin&&n.setRequestHeader("X-NewRelic-ID",NREUM.loader_config.xpid)}),f.on("send-xhr-start",function(t,n){var e=this.metrics,r=t[0],o=this;if(e&&r){var i=h(r);i&&(e.txSize=i)}this.startTime=a.now(),this.listener=function(t){try{"abort"===t.type&&(o.params.aborted=!0),("load"!==t.type||o.called===o.totalCbs&&(o.onloadCalled||"function"!=typeof n.onload))&&o.end(n)}catch(e){try{f.emit("internal-error",[e])}catch(r){}}};for(var s=0;s<d;s++)n.addEventListener(u[s],this.listener,!1)}),f.on("xhr-cb-time",function(t,n,e){this.cbTime+=t,n?this.onloadCalled=!0:this.called+=1,this.called!==this.totalCbs||!this.onloadCalled&&"function"==typeof e.onload||this.end(e)}),f.on("xhr-load-added",function(t,n){var e=""+l(t)+!!n;this.xhrGuids&&!this.xhrGuids[e]&&(this.xhrGuids[e]=!0,this.totalCbs+=1)}),f.on("xhr-load-removed",function(t,n){var e=""+l(t)+!!n;this.xhrGuids&&this.xhrGuids[e]&&(delete this.xhrGuids[e],this.totalCbs-=1)}),f.on("addEventListener-end",function(t,n){n instanceof m&&"load"===t[0]&&f.emit("xhr-load-added",[t[1],t[2]],n)}),f.on("removeEventListener-end",function(t,n){n instanceof m&&"load"===t[0]&&f.emit("xhr-load-removed",[t[1],t[2]],n)}),f.on("fn-start",function(t,n,e){n instanceof m&&("onload"===e&&(this.onload=!0),("load"===(t[0]&&t[0].type)||this.onload)&&(this.xhrCbStart=a.now()))}),f.on("fn-end",function(t,n){this.xhrCbStart&&f.emit("xhr-cb-time",[a.now()-this.xhrCbStart,this.onload,n],n)})}},{}],11:[function(t,n,e){n.exports=function(t){var n=document.createElement("a"),e=window.location,r={};n.href=t,r.port=n.port;var o=n.href.split("://");!r.port&&o[1]&&(r.port=o[1].split("/")[0].split("@").pop().split(":")[1]),r.port&&"0"!==r.port||(r.port="https"===o[0]?"443":"80"),r.hostname=n.hostname||e.hostname,r.pathname=n.pathname,r.protocol=o[0],"/"!==r.pathname.charAt(0)&&(r.pathname="/"+r.pathname);var i=!n.protocol||":"===n.protocol||n.protocol===e.protocol,a=n.hostname===document.domain&&n.port===e.port;return r.sameOrigin=i&&(!n.hostname||a),r}},{}],12:[function(t,n,e){function r(){}function o(t,n,e){return function(){return i(t,[f.now()].concat(s(arguments)),n?null:this,e),n?void 0:this}}var i=t("handle"),a=t(15),s=t(16),c=t("ee").get("tracer"),f=t("loader"),u=NREUM;"undefined"==typeof window.newrelic&&(newrelic=u);var d=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit","addRelease"],l="api-",p=l+"ixn-";a(d,function(t,n){u[n]=o(l+n,!0,"api")}),u.addPageAction=o(l+"addPageAction",!0),u.setCurrentRouteName=o(l+"routeName",!0),n.exports=newrelic,u.interaction=function(){return(new r).get()};var h=r.prototype={createTracer:function(t,n){var e={},r=this,o="function"==typeof n;return i(p+"tracer",[f.now(),t,e],r),function(){if(c.emit((o?"":"no-")+"fn-start",[f.now(),r,o],e),o)try{return n.apply(this,arguments)}finally{c.emit("fn-end",[f.now()],e)}}}};a("setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(t,n){h[n]=o(p+n)}),newrelic.noticeError=function(t){"string"==typeof t&&(t=new Error(t)),i("err",[t,f.now()])}},{}],13:[function(t,n,e){n.exports=function(t){if("string"==typeof t&&t.length)return t.length;if("object"==typeof t){if("undefined"!=typeof ArrayBuffer&&t instanceof ArrayBuffer&&t.byteLength)return t.byteLength;if("undefined"!=typeof Blob&&t instanceof Blob&&t.size)return t.size;if(!("undefined"!=typeof FormData&&t instanceof FormData))try{return JSON.stringify(t).length}catch(n){return}}}},{}],14:[function(t,n,e){var r=0,o=navigator.userAgent.match(/Firefox[\/\s](\d+\.\d+)/);o&&(r=+o[1]),n.exports=r},{}],15:[function(t,n,e){function r(t,n){var e=[],r="",i=0;for(r in t)o.call(t,r)&&(e[i]=n(r,t[r]),i+=1);return e}var o=Object.prototype.hasOwnProperty;n.exports=r},{}],16:[function(t,n,e){function r(t,n,e){n||(n=0),"undefined"==typeof e&&(e=t?t.length:0);for(var r=-1,o=e-n||0,i=Array(o<0?0:o);++r<o;)i[r]=t[n+r];return i}n.exports=r},{}],17:[function(t,n,e){n.exports={exists:"undefined"!=typeof window.performance&&window.performance.timing&&"undefined"!=typeof window.performance.timing.navigationStart}},{}],18:[function(t,n,e){function r(t){return!(t&&t instanceof Function&&t.apply&&!t[a])}var o=t("ee"),i=t(16),a="nr@original",s=Object.prototype.hasOwnProperty,c=!1;n.exports=function(t,n){function e(t,n,e,o){function nrWrapper(){var r,a,s,c;try{a=this,r=i(arguments),s="function"==typeof e?e(r,a):e||{}}catch(f){l([f,"",[r,a,o],s])}u(n+"start",[r,a,o],s);try{return c=t.apply(a,r)}catch(d){throw u(n+"err",[r,a,d],s),d}finally{u(n+"end",[r,a,c],s)}}return r(t)?t:(n||(n=""),nrWrapper[a]=t,d(t,nrWrapper),nrWrapper)}function f(t,n,o,i){o||(o="");var a,s,c,f="-"===o.charAt(0);for(c=0;c<n.length;c++)s=n[c],a=t[s],r(a)||(t[s]=e(a,f?s+o:o,i,s))}function u(e,r,o){if(!c||n){var i=c;c=!0;try{t.emit(e,r,o,n)}catch(a){l([a,e,r,o])}c=i}}function d(t,n){if(Object.defineProperty&&Object.keys)try{var e=Object.keys(t);return e.forEach(function(e){Object.defineProperty(n,e,{get:function(){return t[e]},set:function(n){return t[e]=n,n}})}),n}catch(r){l([r])}for(var o in t)s.call(t,o)&&(n[o]=t[o]);return n}function l(n){try{t.emit("internal-error",n)}catch(e){}}return t||(t=o),e.inPlace=f,e.flag=a,e}},{}],ee:[function(t,n,e){function r(){}function o(t){function n(t){return t&&t instanceof r?t:t?c(t,s,i):i()}function e(e,r,o,i){if(!l.aborted||i){t&&t(e,r,o);for(var a=n(o),s=h(e),c=s.length,f=0;f<c;f++)s[f].apply(a,r);var d=u[y[e]];return d&&d.push([g,e,r,a]),a}}function p(t,n){v[t]=h(t).concat(n)}function h(t){return v[t]||[]}function m(t){return d[t]=d[t]||o(e)}function w(t,n){f(t,function(t,e){n=n||"feature",y[e]=n,n in u||(u[n]=[])})}var v={},y={},g={on:p,emit:e,get:m,listeners:h,context:n,buffer:w,abort:a,aborted:!1};return g}function i(){return new r}function a(){(u.api||u.feature)&&(l.aborted=!0,u=l.backlog={})}var s="nr@context",c=t("gos"),f=t(15),u={},d={},l=n.exports=o();l.backlog=u},{}],gos:[function(t,n,e){function r(t,n,e){if(o.call(t,n))return t[n];var r=e();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(t,n,{value:r,writable:!0,enumerable:!1}),r}catch(i){}return t[n]=r,r}var o=Object.prototype.hasOwnProperty;n.exports=r},{}],handle:[function(t,n,e){function r(t,n,e,r){o.buffer([t],r),o.emit(t,n,e)}var o=t("ee").get("handle");n.exports=r,r.ee=o},{}],id:[function(t,n,e){function r(t){var n=typeof t;return!t||"object"!==n&&"function"!==n?-1:t===window?0:a(t,i,function(){return o++})}var o=1,i="nr@id",a=t("gos");n.exports=r},{}],loader:[function(t,n,e){function r(){if(!x++){var t=b.info=NREUM.info,n=l.getElementsByTagName("script")[0];if(setTimeout(u.abort,3e4),!(t&&t.licenseKey&&t.applicationID&&n))return u.abort();f(y,function(n,e){t[n]||(t[n]=e)}),c("mark",["onload",a()+b.offset],null,"api");var e=l.createElement("script");e.src="https://"+t.agent,n.parentNode.insertBefore(e,n)}}function o(){"complete"===l.readyState&&i()}function i(){c("mark",["domContent",a()+b.offset],null,"api")}function a(){return E.exists&&performance.now?Math.round(performance.now()):(s=Math.max((new Date).getTime(),s))-b.offset}var s=(new Date).getTime(),c=t("handle"),f=t(15),u=t("ee"),d=window,l=d.document,p="addEventListener",h="attachEvent",m=d.XMLHttpRequest,w=m&&m.prototype;NREUM.o={ST:setTimeout,SI:d.setImmediate,CT:clearTimeout,XHR:m,REQ:d.Request,EV:d.Event,PR:d.Promise,MO:d.MutationObserver};var v=""+location,y={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-1044.min.js"},g=m&&w&&w[p]&&!/CriOS/.test(navigator.userAgent),b=n.exports={offset:s,now:a,origin:v,features:{},xhrWrappable:g};t(12),l[p]?(l[p]("DOMContentLoaded",i,!1),d[p]("load",r,!1)):(l[h]("onreadystatechange",o),d[h]("onload",r)),c("mark",["firstbyte",s],null,"api");var x=0,E=t(17)},{}]},{},["loader",2,10,4,3]);</script>
+    <meta http-equiv="content-language" content="es-PE">
+    <meta property="fb:app_id" content="147631768769163">
+    <meta name="keywords" content="">
+    <meta name="format-detection" content="telephone=no">
+
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+
+          <meta name="google-site-verification" content="2u9XBV3sIgN7ZThT9Xm3NYchFHFOAfJ-MA8zfheW37A">
+    
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "name" : "Linio",
+      "url": "https://www.linio.com.pe",
+      "logo": "https://www.linio.com.pe/logo.png",
+      "sameAs": [
+        "https://www.facebook.com/LinioPeru/",
+        "https://twitter.com/LinioPeru/",
+        "https://www.youtube.com/channel/UCeILO0qSGn4HdEf3AZK08-A",
+        "https://es.wikipedia.org/wiki/Linio.com",
+        "https://plus.google.com/+Linio"
+      ],
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.linio.com.pe/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+                        
+    
+          
+              <title>Compra Online los mejores productos al mejor precio | Linio Perú</title>
+        <meta property="og:title" content="Compra Online los mejores productos al mejor precio | Linio Perú">
+      
+              <meta name="Description" content="COMPRA en línea a MESES SIN INTERESES y con ENVÍO A TODO PERÚ: Electrónica, Computadoras y Electrodomésticos, en la mejor y más grande TIENDA ONLINE">
+        <meta property="og:description" content="COMPRA en línea a MESES SIN INTERESES y con ENVÍO A TODO PERÚ: Electrónica, Computadoras y Electrodomésticos, en la mejor y más grande TIENDA ONLINE">
+          
+    <meta name="apple-itunes-app" content="app-id=885989000">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="twitter:card" content="app">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.linio.com.pe/">
+    <meta property="og:image" content="https://www.linio.com.pehttps://assets.linio.com/images/logo.png">
+    <meta property="og:site_name" content="Linio Perú">
+
+      <link hreflang="es-AR" rel="alternate" href="https://www.linio.com.ar/" />
+  <link hreflang="es-CL" rel="alternate" href="https://www.linio.cl/" />
+  <link hreflang="es-CO" rel="alternate" href="https://www.linio.com.co/" />
+  <link hreflang="es-EC" rel="alternate" href="https://www.linio.com.ec/" />
+  <link hreflang="es-MX" rel="alternate" href="https://www.linio.com.mx/" />
+  <link hreflang="es-PA" rel="alternate" href="https://www.linio.com.pa/" />
+  <link hreflang="es-PE" rel="alternate" href="https://www.linio.com.pe/" />
+  <link hreflang="es-VE" rel="alternate" href="https://www.linio.com.ve/" />
+
+          <meta name="robots" content="INDEX, FOLLOW">
+      <link rel="canonical" href="https://www.linio.com.pe/" itemprop="url">
+    
+          <link rel="stylesheet" href="https://assets.linio.com/css/alice-dark-1509759575.css">
+    
+    <script type="text/javascript">
+var lsfConfig = {
+  fbId: "144721632392407",
+  gplusId: "859207094519-qkck9gjv05fulq8c7jiptrd5i92a6old.apps.googleusercontent.com",
+  gplusApiKey: "AIzaSyBXPBdvtvBRAGROzzb0Tm6LZinrWcEA7Bw",
+  moneyCurrencyPrefix: "S/ ",
+  moneyDecimalPrecision: 2,
+  moneyDecimalPoint: ".",
+  moneyThousandsSeparator: ",",
+  moneyCurrencySuffix: "",
+  pointsCurrencyPrefix: "PTS",
+  pointsDecimalPrecision: 0,
+  pointsDecimalPoint: "",
+  pointsThousandsSeparator: "",
+  pointsCurrencySuffix: "",
+  debug: 0,
+  shippingOptionsEnabled: 1,
+  suggesterUrl: "https://seer.use.datajet.io/1.1/suggest/",
+  suggesterKey: "Z7564390Jgi6Hk8a6K9jooNrtqwGf5n9iovZNMLK",
+  feedUrl: "https://feed.use.datajet.io/1.1/",
+  feedKey: "SxervpHn11JAvn2tWhsaoqUzS1f9VHb",
+  feedMerchandisingFields: ["id","title","brand","price","group_id","skus","categories","url","images","payload"],
+  metricsUrl: "https://metrics.datajet.io/2.0/",
+  metricsKey: "Z7564390Jgi6Hk8a6K9jooNrtqwGf5n9iovZNMLK",
+  similarProductsPath: "morelikethis",
+  topSearchesPath: "top-searches",
+  recommendationsUrl: "https://placement.use.datajet.io/1.1/",
+  manualFeedOnHomepageEnabled: 1,
+  searchUrl: "/search",
+  catalogFeedBlacklistedCategories: ["bienestar-sexual","blacklisted_category_url_key"],
+  storeCards: 1,
+  storeZipcode: "0",
+  displayDiscounts: 1,
+  displayMixedPrice: 0,
+  mixedPriceFrom: "ó desde",
+  fastCheckoutEnabled: 1,
+  rewardPointsEnabled: 0,
+  hashableBins: [],
+  country: "pe",
+  thirdPartyModules: ["\/\/cdn.dynamicyield.com\/api\/8767678\/api_static.js","\/\/cdn.dynamicyield.com\/api\/8767678\/api_dynamic.js","\/\/www.googletagmanager.com\/gtm.js?id=GTM-B4QK"],
+  showPriceForUnavailableProducts: 0,
+  productSoldOut: "Agotado",
+  displayClickToCall: 1,
+  tokenizationEnabled: 1,
+  tokenizationExcluded: [],
+};
+</script>
+    <script type="text/javascript">
+var lsfTranslations = {
+  ctcCalling: "Te estamos marcando, gracias por contactarnos.",
+  ctcSuccess: "LLamada en curso, uno de nuestros agentes te atiende ahora mismo.",
+  ctcNoAnswer: "No pudimos comunicarnos contigo. <br> Si lo deseas podemos marcarte de nuevo Haz click en \"Contactarme\".",
+  ctcWrongNumber: "El número que ingresaste es incorrecto. <br> Por favor revisa que el numero de tu telefono celular sea correcto.",
+  reviewShippingInformation: "Tu tarjeta ha sido agregada, por favor verifica tu dirección y tipo de envío y agrega tu CVV, antes de finalizar tu compra",
+  cheapestOption: "Envío más barato",
+  cheapestShippingOption: "El costo de envío será el menor. Sin embargo, el tiempo de entrega puede variar dependiendo del origen del producto.",
+  fastestOption: "Envío más rápido",
+  fastestShippingOption: "Tu producto llegará en un tiempo menor al establecido al pagar un monto extra en el costo de envío.",
+  fastLaneSave: "Guardar Configuración",
+  fastLaneEnabled: "Activar \"Click y Compra\"",
+  fastLaneFreeShipping: "Envío Gratis",
+  successFastLaneMessage: "Tus configuraciones de \"Click y Compra\" se guardaron correctamente. Puedes revisar tus preferencias en esta página y editarlas cuando quieras.",
+  disableFastLaneMessage: "Tu configuracion fue desactivada exitosamente.",
+}
+</script>
+
+          </head>
+  <body>          <header class="container-fluid">
+  
+  <nav id="navbar" class="navbar navbar-light navbar-fixed-top bg-medium-body navbar-linio">
+    <div class="container-fluid container-semi-fluid header-container">
+      <div class="col-lg-1 col-sm-1 col-xs-2">
+        <button class="navbar-toggler" type="button" id="open-left-menu">
+          <div class="icon icon-margin">&#xE04B;</div>
+          <div class="navbar-title hidden-md-down">Categorías</div>
+        </button>
+      </div>
+
+      
+                    
+      <div class="col-lg-9 col-md-8 col-sm-6 col-xs-4 primary-logo">
+        <div class="header-logo">
+          <a title="Linio" href="/" class="navbar-brand"></a>
+        </div>
+
+        
+        <div class="search" data-search-suggestions data-suggestion-limit="8" data-suggested-queries="Búsquedas populares" data-suggested-categories="Categorías" data-suggested-brands="Marcas" data-suggested-products="Productos populares">
+          <form action="/search" method="get">
+            <div class="input-group hidden-sm-down input-group-search">
+              <input type="search" name="q" placeholder="Busca productos" value="" autocomplete="off" class="form-control" autofocus>
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit" tabindex="-1"><span aria-hidden="true" class="icon icon-inverse">&#xE038;</span></button>
+              </span>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-md-3 col-sm-5 col-xs-6 header-icons-row">
+        <a href="#" data-offcanvas-menu="search-menu" data-effect="is-open-top" data-no-resize data-autofocus class="col-sm-3 col-xs-4 quantity-icon-wrapper hidden-md-up">
+          <span class="icon icon-padding">&#xE038;</span>
+        </a>
+        <a href="/account/order/list" class="col-md-4 col-sm-3 col-xs-4 quantity-icon-wrapper">
+          <span class="icon icon-padding">&#xE020;</span>
+        </a>
+        <a href="/account" class="col-md-4 col-sm-3 hidden-xs-down quantity-icon-wrapper" data-dropdown-menu="user-menu" data-prevent-action="true">
+          <span class="icon icon-padding">&#xE04A;</span>
+        </a>
+                  <a href="/cart" class="col-md-4 col-sm-3 col-xs-4 quantity-icon-wrapper">
+            <span class="icon icon-padding">&#xE011;</span>
+            <span class="quantity-icon-placeholder" id="cart-counter"></span>
+          </a>
+              </div>
+
+      <div class="row hide" id="main-menu">
+        
+<nav class="col-md-3 main-menu" itemscope itemtype="http://www.schema.org/SiteNavigationElement">
+  <ul class="nav nav-pills nav-stacked menu">
+          <li class="nav-item" itemprop="name">
+        <a itemprop="url" class="nav-link active" data-toggle-menu-content="1" title="Solo Hoy" href="/cm/ofertas-solo-hoy"><span class="icon icon-sm">&#xE015;</span> Solo Hoy</a>
+      </li>
+          <li class="nav-item" itemprop="name">
+        <a itemprop="url" class="nav-link" data-toggle-menu-content="2" title="Celulares y Tablets" href="/c/celulares-y-tablets"><span class="icon icon-sm">&#xE06A;</span> Celulares y Tablets</a>
+      </li>
+          <li class="nav-item" itemprop="name">
+        <a itemprop="url" class="nav-link" data-toggle-menu-content="5" title="Computación" href="/c/computacion"><span class="icon icon-sm">&#xE06C;</span> Computación</a>
+      </li>
+          <li class="nav-item" itemprop="name">
+        <a itemprop="url" class="nav-link" data-toggle-menu-content="6" title="Hogar" href="/c/hogar"><span class="icon icon-sm">&#xE06E;</span> Hogar</a>
+      </li>
+          <li class="nav-item" itemprop="name">
+        <a itemprop="url" class="nav-link" data-toggle-menu-content="14" title="Tiendas Oficiales" href="/sp/tiendas-oficiales"><span class="icon icon-sm">&#xE057;</span> Tiendas Oficiales</a>
+      </li>
+
+      </ul>
+</nav>
+
+        <div data-lazy-menu="/ng/main-menu"></div>
+      </div>
+
+      <div class="mobile-search offcanvas-top hidden-md-up" id="search-menu">
+        <div data-search-suggestions data-suggestion-limit="8" data-suggested-queries="Búsquedas populares" data-suggested-categories="Categorías" data-suggested-brands="Marcas" data-suggested-products="Productos populares">
+          <form action="/search" method="get">
+            <div class="row">
+              <div class="col-xs-1 search-control-left">
+                <span class="icon icon-md">&#xE038;</span>
+              </div>
+              <div class="col-xs-8">
+                <input type="search" name="q" placeholder="Busca productos" value="" autocomplete="off" class="form-control">
+              </div>
+              <div class="col-xs-2 search-control-right">
+                <a class="link" href="#" data-dismiss="menu">Cancelar</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-semi-fluid container-fluid header-menus hidden-sm-down">
+      <div class="header-menu hide" id="user-menu">
+        <ul class="icon-menu">
+                      <li>
+              <a href="/account/login">
+                <span class="icon">&#xE04A;</span>Iniciar sesión
+              </a>
+            </li>
+                                <li>
+              <a href="/account/reviews">
+                <span class="icon">&#xE053;</span>Mis reseñas
+              </a>
+            </li>
+                    <li>
+            <a href="/account/order/list">
+              <span class="icon">&#xE020;</span>Mis pedidos
+            </a>
+          </li>
+                                <li>
+              <a href="/account/coupons">
+                <span class="icon">&#xE016;</span>Mis cupones
+              </a>
+            </li>
+                                <li>
+              <a href="/account/plus">
+                <span class="icon">&#xE089;</span>Linio Plus
+              </a>
+            </li>
+                                <li>
+              <a href="/account/notifications">
+                <span class="icon">&#xE07B;</span>Mis suscripciones
+              </a>
+            </li>
+                            </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="mobile-menu offcanvas-left" id="left-menu">
+  <div class="mobile-menu-container">
+          <div class="user-not-logged row">
+        <div class="col-xs-6">
+          <a href="/account/login" class="btn btn-primary btn-xsm col-xs-12">Iniciar Sesión</a>
+        </div>
+        <div class="col-xs-6">
+          <a href="/account/create" class="btn btn-default btn-xsm col-xs-12">Crear Cuenta</a>
+        </div>
+      </div>
+    
+    <div class="item-section">
+      <a class="item-submenu" href="/">volver al inicio</a>
+      <a class="item-submenu last-item" href="#" data-offcanvas-menu="categories-menu">Categorías</a>
+      <a class="item-link" href="/account">Mi cuenta</a>
+      <a class="item-link" href="/account/order/list">Mis pedidos</a>
+        <a class="item-link" href="/cm/ofertas-solo-hoy"><span>Solo hoy</span></a>
+  <a class="item-link" href="/sp/tienda-app"><span>Linio App</span></a>
+  <a class="item-link" href="/sp/vender-por-internet-linio"><span>Vende con nosotros</span></a>
+  <a class="item-link" href="/cm/envio-gratis"><span>Envío Gratis</span></a>
+  <a class="item-link" href="/sp/preguntas-frecuentes"><span>Ayuda</span></a>
+  <a class="item-link" href="/account/order/list"><span>Pedidos</span></a>
+  <a class="item-link" href="/sp/tiendas-oficiales"><span>Tiendas Oficiales</span></a>
+
+
+          </div>
+
+    <a href="/sp/tienda-app" class="app-banner row">
+      <div class="col-xs-9">
+        <span class="app-banner-text">COMPRA DESDE NUESTRA APP Y RECIBE GRANDES BENEFICIOS</span>
+      </div>
+      <div class="col-xs-3">
+        <span class="icon icon-lg sprite-get-the-app"></span>
+      </div>
+    </a>
+  </div>
+</div>
+
+<div data-lazy-menu="/ng/mobile-menu"></div>
+</header>
+    
+          <div class="loading-overlay hide" id="loader"></div>
+      <div class="dark-backdrop hide" id="backdrop"></div>
+      <div class="wrapper container-fluid">        <nav id="subheader-navbar" class="subheader-navbar hidden-lg-down">
+  <div class="container-fluid container-semi-fluid">
+    <div class="subheader-links-set">
+        <a href="/cm/ofertas-solo-hoy">Solo hoy</a>
+  <a href="/sp/tienda-app">Linio App</a>
+  <a href="/sp/vender-por-internet-linio">Vende con nosotros</a>
+  <a href="/cm/envio-gratis">Envío Gratis</a>
+  <a href="/sp/preguntas-frecuentes">Ayuda</a>
+  <a href="/account/order/list">Pedidos</a>
+  <a href="/sp/tiendas-oficiales">Tiendas Oficiales</a>
+
+    </div>
+      </div>
+</nav>
+        <main class="container-fluid container-semi-fluid">
+                      <div class="home-top-banners">
+  
+  <div class="banner-layout-7">
+      <div class="item col-xs-12">
+      <a class="canvas" href="/cm/cierra-puertas-online?skus=8TBQE3N2P3M1887276218830,FO442FA0HB1HOLPE,WE266EL50ATDPEAMZ,7KJ6E6A21554190198072078,LE060EL64RPBPEAMZ,HP016HP1G445ALPE,OS049HL0Q9MZILPE,PA020EL119SNILPE">
+  <div class="resizer">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//fms.linio.com/bba30624-ba9b-11e7-8c46-12a405c381d5.jpeg" alt="Cierra Puertas" title="Cierra Puertas" />
+  </div>
+</a>
+    </div>
+  </div>
+
+  
+  <div class="banner-layout-10">
+      <div class="item col-xs-12">
+      <a class="canvas" href="/cm/lanzamiento-iphone?skus=HT976B6T7B38190198451569,HT97B29723D7190198450845,HT977H2B507E190198451200,HT984T7X4427190198453754,HT986S706E4F190198454508,HT9837195D49190198454140,HT98294VT4X6190198453068,HT98S933Z3W3190198452702">
+  <div class="resizer">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//fms.linio.com/32d98490-c0b7-11e7-9b5e-064694a8f003.jpeg" alt="Iphone 8 La nueva era" title="Iphone 8 La nueva era" />
+  </div>
+</a>
+    </div>
+  </div>
+
+  
+  <div class="banner-layout-6">
+      <div class="item col-xs-12 col-md-6">
+      <a class="canvas" href="/cm/remate">
+  <div class="resizer">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//fms.linio.com/c97cc092-be8c-11e7-82a1-12a405c381d5.jpeg" alt="Cashback Cafetera" title="Cashback Cafetera" />
+  </div>
+</a>
+    </div>
+      <div class="item col-xs-12 col-md-6">
+      <a class="canvas" href="/cm/fin-temporada-fashion?skus=SK975FA1MW596LPE,AD484FA0VLGESLPE,DU971FA04VXNYLPE,DU971FA1DL6WWLPE,XO936FA0148BQLPE,PU486FA125H32LPE,RO470FA0RRI1MLPE,DV759FA10HKIYLPE">
+  <div class="resizer">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//fms.linio.com/c8d730e6-be8c-11e7-bdda-12a405c381d5.jpeg" alt="Moda a menos de S/ 200" title="Moda a menos de S/ 200" />
+  </div>
+</a>
+    </div>
+  </div>
+
+  
+  <div class="banner-layout-4">
+      <div class="item col-xs-12 col-sm-6 col-md-3">
+      <a class="canvas" href="/cm/ofertas-solo-hoy">
+  <div class="resizer">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//fms.linio.com/b51ff448-511d-11e7-9383-064694a8f003.jpeg" alt="SOLO HOY" title="SOLO HOY" />
+  </div>
+</a>
+    </div>
+      <div class="item col-xs-12 col-sm-6 col-md-3">
+      <a class="canvas" href="/cm/especial-de-computacion?skus=LE060EL75RGYPEAMZ,LE060EL33SQGPEAMZ,HP016EL0CUHK6LPE,AS282EL1IOLGULPE,8JPQ65W7M4424712900588729,6YQX4Z7Z3Q3G889349737965,LE060EL0BJGNQLAPE,HP016EL06FXEMLPE">
+  <div class="resizer">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//fms.linio.com/8da0b164-be8c-11e7-bdb0-12a405c381d5.jpeg" alt="Lenovo Core i3" title="Lenovo Core i3" />
+  </div>
+</a>
+    </div>
+      <div class="item col-xs-12 col-sm-6 col-md-3">
+      <a class="canvas" href="/cm/campana-exclusiva-hogar?skus=826AP6K613Z43456665432,IN015EL13VAOPEAMZ,MA019HL05I9ZILAPE,MA019HL0JCZDQLPE,MA019HL0N85PYLAPE,MA019HL0HEY32LAPE,MA019EL57HTYPEAMZ">
+  <div class="resizer">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//fms.linio.com/a020186e-ba9c-11e7-a4ae-12a405c381d5.jpeg" alt="Lavadora" title="Lavadora" />
+  </div>
+</a>
+    </div>
+      <div class="item col-xs-12 col-sm-6 col-md-3">
+      <a class="canvas" href="/cm/promo-cel?skus=77XE6P6K446H6901443189366,98XY650454056947681541849,BZG54N4P5J798806088917771,VE126EL0YHCDOLPE,LG018EL15ALM6LPE,SA026EL0Y46M4LPE,98YKY56472K4853699525435,5AXW2F3963680723755011632">
+  <div class="resizer">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//fms.linio.com/a0c8dbfc-ba9c-11e7-b1b6-12a405c381d5.jpeg" alt="Huawei Y5" title="Huawei Y5" />
+  </div>
+</a>
+    </div>
+  </div>
+
+</div>
+
+  <div class="popular-searches">
+    <div class="row">
+      <div class="filters-list col-xl-8 col-lg-7 col-md-6 col-xs-12" data-popular-searches>
+        <h2 class="title">Búsquedas populares</h2>
+      </div>
+      <div class="client-protection col-xl-4 col-lg-5 col-md-6 col-xs-12">
+                  <div class="client-protection-icon">
+            <span class="icon icon-lg">&#xE023;</span>
+          </div>
+          <div class="client-protection-text">
+            <a class="client-text-style" href="https://www.linio.com.pe/sp/proteccion-al-cliente" title="Compras 100% Seguras">
+              <h2 class="title">Compras 100% Seguras</h2>
+            </a>
+            <ul>
+<li>Paga seguro online o al recibir tu producto</li>
+<li>Envíos a todo el Perú</li>
+<li>Devoluciones fáciles y sin costo</li>
+</ul>
+
+          </div>
+              </div>
+    </div>
+  </div>
+
+  <div data-recently-viewed data-title="Productos que has visto recientemente"></div>
+  <div id="feed-manual-1">
+  <div class="manual-feed-swiper product-highlights swiper-container">
+          <h2 class="block-title">
+        LO MEJOR EN CELULARES
+        <a href="" class="link-important"></a>
+      </h2>
+        <div class="swiper-wrapper">
+                    <a class="product-card swiper-slide" href="/p/samsung-galaxy-s8-64gb-midnight-black-ju97wv">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/4fff89be6cca5cf00afe8062a54796fa-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/4fff89be6cca5cf00afe8062a54796fa-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/4fff89be6cca5cf00afe8062a54796fa-card.jpg" alt="Samsung Galaxy S8 64GB-Midnight Black" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Samsung Galaxy S8 64GB-Midnight Black</div>
+						              <div class="original-price">S/ 3,999.00</div>
+              								<div class="discount">-40%</div>
+                                      <div class="price-secondary">S/ 2,389.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/huawei-p10-lite-dual-sim-32gb-3gb-ram-libre-de-fa-brica-sin-logos-negro-s0bt6j">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/aadf6ece4fcb93264dd3a495476eeaf2-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/aadf6ece4fcb93264dd3a495476eeaf2-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/aadf6ece4fcb93264dd3a495476eeaf2-card.jpg" alt="Huawei P10 Lite Dual Sim 32GB 3GB RAM Libre De Fábrica SIN LOGOS - Negro" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Huawei P10 Lite Dual Sim 32GB 3GB RAM Libre De Fábrica SIN LOGOS - Negro</div>
+						              <div class="original-price">S/ 1,699.00</div>
+              								<div class="discount">-29%</div>
+                                      <div class="price-secondary">S/ 1,199.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/smartphone-sony-xperia-xa-16gb-negro-grafito-jovs5d">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/1b37cccc6b5c9728e6972293a3b00266-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/1b37cccc6b5c9728e6972293a3b00266-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/1b37cccc6b5c9728e6972293a3b00266-card.jpg" alt="Smartphone Sony Xperia XA 16GB  – Negro Grafito" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Smartphone Sony Xperia XA 16GB  – Negro Grafito</div>
+						              <div class="original-price">S/ 1,500.00</div>
+              								<div class="discount">-48%</div>
+                                      <div class="price-secondary">S/ 779.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/motorola-moto-c-8gb-1gb-ram-4g-lte-negro-n2b827">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/2862b87be595dd39c66528fbd9b07a4e-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/2862b87be595dd39c66528fbd9b07a4e-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/2862b87be595dd39c66528fbd9b07a4e-card.jpg" alt="Motorola Moto C 8GB 1GB RAM 4G LTE - Negro" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Motorola Moto C 8GB 1GB RAM 4G LTE - Negro</div>
+						              <div class="original-price">S/ 800.00</div>
+              								<div class="discount">-57%</div>
+                                      <div class="price-secondary">S/ 337.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/samsung-galaxy-j7-prime-con-huella-dactilar-4g-lte-13mp-negro-vezq6p">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/1c59182a9d5e4c92fc5fe398315255bb-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/1c59182a9d5e4c92fc5fe398315255bb-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/1c59182a9d5e4c92fc5fe398315255bb-card.jpg" alt="Samsung Galaxy J7 Prime Con Huella Dactilar 4G LTE 13MP - Negro" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Samsung Galaxy J7 Prime Con Huella Dactilar 4G LTE 13MP - Negro</div>
+						              <div class="original-price">S/ 1,399.00</div>
+              								<div class="discount">-38%</div>
+                                      <div class="price-secondary">S/ 860.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/apple-iphone-5s-16gb-desbloqueado-smartphone-dorado-letlbn">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/73aa6d9793ad5d3b2d35aecc6c8d548c-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/73aa6d9793ad5d3b2d35aecc6c8d548c-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/73aa6d9793ad5d3b2d35aecc6c8d548c-card.jpg" alt="Apple IPhone 5s 16GB Desbloqueado Smartphone -Dorado" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Apple IPhone 5s 16GB Desbloqueado Smartphone -Dorado</div>
+						              <div class="original-price">S/ 1,112.86</div>
+              								<div class="discount">-34%</div>
+                                      <div class="price-secondary">S/ 734.02</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/samsung-galaxy-j7-2016-2gb-ram-55-pulgadas-16gb-negro-rylgjn">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/e0612cf80140b3e874b83478e2fa0be2-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/e0612cf80140b3e874b83478e2fa0be2-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/e0612cf80140b3e874b83478e2fa0be2-card.jpg" alt="Samsung Galaxy J7 2016 2gb ram 5.5 pulgadas 16GB - NEGRO" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Samsung Galaxy J7 2016 2gb ram 5.5 pulgadas 16GB - NEGRO</div>
+						              <div class="original-price">S/ 1,400.00</div>
+              								<div class="discount">-44%</div>
+                                      <div class="price-secondary">S/ 779.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/samsung-galaxy-s8-64gb-midnight-black-x1d4nt">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/dc07a58a58499a07c71631487f965b4e-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/dc07a58a58499a07c71631487f965b4e-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/dc07a58a58499a07c71631487f965b4e-card.jpg" alt="Samsung Galaxy S8+ 64GB-Midnight Black" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Samsung Galaxy S8+ 64GB-Midnight Black</div>
+						              <div class="original-price">S/ 2,750.00</div>
+              								<div class="discount">-2%</div>
+                                      <div class="price-secondary">S/ 2,690.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/samsung-galaxy-j5-prime-con-huella-dactilar-4g-lte-13mp-16gb-negro-vdtfro">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/e67c16f722508a10bf35533323756031-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/e67c16f722508a10bf35533323756031-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/e67c16f722508a10bf35533323756031-card.jpg" alt="Samsung Galaxy J5 Prime Con Huella Dactilar 4G LTE 13MP 16GB - Negro" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Samsung Galaxy J5 Prime Con Huella Dactilar 4G LTE 13MP 16GB - Negro</div>
+						              <div class="original-price">S/ 1,300.00</div>
+              								<div class="discount">-44%</div>
+                                      <div class="price-secondary">S/ 719.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/apple-iphone-7-32gb-negro-mate-lfeupk">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/d3da7599f6433dece22aff66ed80def3-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/d3da7599f6433dece22aff66ed80def3-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/d3da7599f6433dece22aff66ed80def3-card.jpg" alt="Apple iPhone 7 32GB-Negro Mate." />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Apple iPhone 7 32GB-Negro Mate.</div>
+						              <div class="original-price">S/ 4,000.00</div>
+              								<div class="discount">-45%</div>
+                                      <div class="price-secondary">S/ 2,178.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/samsung-galaxy-j7-prime-huella-dactilar-4g-lte-13mp-blanco-con-dorado-s24n8r">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/df74d35f2ecfdf1094e804f09ed47684-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/df74d35f2ecfdf1094e804f09ed47684-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/df74d35f2ecfdf1094e804f09ed47684-card.jpg" alt="Samsung Galaxy J7 Prime Huella Dactilar 4G LTE 13MP - Blanco Con Dorado" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Samsung Galaxy J7 Prime Huella Dactilar 4G LTE 13MP - Blanco Con Dorado</div>
+						              <div class="original-price">S/ 1,999.00</div>
+              								<div class="discount">-56%</div>
+                                      <div class="price-secondary">S/ 865.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/celular-lg-k10-2017-2gb-ram-13mpx-16gb-4g-nuevo-sellado-color-negro--tmq6c2">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/6de2917894561fadd40c0605c4acf818-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/6de2917894561fadd40c0605c4acf818-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/6de2917894561fadd40c0605c4acf818-card.jpg" alt="Celular LG K10 2017 2GB RAM 13MPX 16GB 4G NUEVO SELLADO COLOR NEGRO " />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Celular LG K10 2017 2GB RAM 13MPX 16GB 4G NUEVO SELLADO COLOR NEGRO </div>
+						              <div class="original-price">S/ 999.00</div>
+              								<div class="discount">-30%</div>
+                                      <div class="price-secondary">S/ 699.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/samsung-galaxy-s7-g930f-lte-32gb-negro-orrez2">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/d9e9b46ec5cf0452ce2ee81fb00f9666-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/d9e9b46ec5cf0452ce2ee81fb00f9666-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/d9e9b46ec5cf0452ce2ee81fb00f9666-card.jpg" alt="Samsung Galaxy S7 G930F LTE 32GB Negro" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Samsung Galaxy S7 G930F LTE 32GB Negro</div>
+						              <div class="original-price">S/ 3,488.00</div>
+              								<div class="discount">-50%</div>
+                                      <div class="price-secondary">S/ 1,729.00</div>
+
+            					</div>
+        </a>
+          </div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+  </div>
+</div>
+
+  <div id="feed-manual-2">
+  <div class="manual-feed-swiper product-highlights swiper-container">
+          <h2 class="block-title">
+        LO MEJOR EN MODA Y ACCESORIOS
+        <a href="" class="link-important"></a>
+      </h2>
+        <div class="swiper-wrapper">
+                    <a class="product-card swiper-slide" href="/p/passarela-zapatillas-urbanas-nike-para-caballero-lcypvl">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/5ad9a92162df808e503af316b7d776cc-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/5ad9a92162df808e503af316b7d776cc-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/5ad9a92162df808e503af316b7d776cc-card.jpg" alt="Passarela-Zapatillas Urbanas Nike Para Caballero" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Passarela-Zapatillas Urbanas Nike Para Caballero</div>
+						            <div class="price-secondary">S/ 319.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/passarela-zapatillas-deportivas-adidas-para-dama-jpfe6z">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/e70b17ad0329e0980571e939fa5dfb5e-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/e70b17ad0329e0980571e939fa5dfb5e-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/e70b17ad0329e0980571e939fa5dfb5e-card.jpg" alt="Passarela-Zapatillas Deportivas Adidas Para Dama" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Passarela-Zapatillas Deportivas Adidas Para Dama</div>
+						            <div class="price-secondary">S/ 249.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/swatch-reloj-analo-gico-full-blooded-silver-svck4038g-para-hombre-oruvzr">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/cb384ab1b62c37ba112b354278ada4e7-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/cb384ab1b62c37ba112b354278ada4e7-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/cb384ab1b62c37ba112b354278ada4e7-card.jpg" alt="Swatch - Reloj Analógico Full Blooded Silver SVCK4038G Para Hombre" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Swatch - Reloj Analógico Full Blooded Silver SVCK4038G Para Hombre</div>
+						              <div class="original-price">S/ 1,029.00</div>
+              								<div class="discount">-50%</div>
+                                      <div class="price-secondary">S/ 514.50</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/casio-reloj-analo-gico-y-digital-hombre-edifice-efr-536d-1a4-negro-y-plateado-x2qied">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/92c3a9d7cdf78847e0c950c8a5f040ff-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/92c3a9d7cdf78847e0c950c8a5f040ff-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/92c3a9d7cdf78847e0c950c8a5f040ff-card.jpg" alt="Casio - Reloj Analógico Y Digital Hombre Edifice EFR-536D-1A4 - Negro Y Plateado" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Casio - Reloj Analógico Y Digital Hombre Edifice EFR-536D-1A4 - Negro Y Plateado</div>
+						              <div class="original-price">S/ 1,019.00</div>
+              								<div class="discount">-40%</div>
+                                      <div class="price-secondary">S/ 611.40</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/passarela-zapatillas-deportivas-adidas-para-dama-wx4qjf">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/2c2c47332499b77ff8b922b6a6feca58-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/2c2c47332499b77ff8b922b6a6feca58-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/2c2c47332499b77ff8b922b6a6feca58-card.jpg" alt="Passarela-Zapatillas Deportivas Adidas Para Dama" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Passarela-Zapatillas Deportivas Adidas Para Dama</div>
+						            <div class="price-secondary">S/ 279.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/zapatilla-converse-m7652-chuck-taylo-ox-jqn0e5">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/aa17a762378c384fb02a1d83756b9347-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/aa17a762378c384fb02a1d83756b9347-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/aa17a762378c384fb02a1d83756b9347-card.jpg" alt="Zapatilla Converse M7652 Chuck Taylo Ox" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Zapatilla Converse M7652 Chuck Taylo Ox</div>
+						              <div class="original-price">S/ 239.00</div>
+              								<div class="discount">-16%</div>
+                                      <div class="price-secondary">S/ 199.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/zapatillas-urbanas-new-balance-wl574cb-mujer-rosa-qfr6ih">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/d541fb3958e20fdda74cce91775be480-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/d541fb3958e20fdda74cce91775be480-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/d541fb3958e20fdda74cce91775be480-card.jpg" alt="Zapatillas Urbanas NEW BALANCE WL574CB Mujer - ROSA" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Zapatillas Urbanas NEW BALANCE WL574CB Mujer - ROSA</div>
+						              <div class="original-price">S/ 229.00</div>
+              								<div class="discount">-10%</div>
+                                      <div class="price-secondary">S/ 206.10</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/zapatillas-urbanas-new-balance-ml373bro-mujer-marron-n13vwj">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/829012a584f981c8556074a3bf0bf962-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/829012a584f981c8556074a3bf0bf962-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/829012a584f981c8556074a3bf0bf962-card.jpg" alt="Zapatillas Urbanas NEW BALANCE ML373BRO Mujer - MARRON." />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Zapatillas Urbanas NEW BALANCE ML373BRO Mujer - MARRON.</div>
+						              <div class="original-price">S/ 189.00</div>
+              								<div class="discount">-10%</div>
+                                      <div class="price-secondary">S/ 170.10</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/guess-cartera-mujer-abelia-logo-rojo-qcd1vy">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/75867b7c8bc1e4b26bfb9c7cfbfa04e1-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/75867b7c8bc1e4b26bfb9c7cfbfa04e1-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/75867b7c8bc1e4b26bfb9c7cfbfa04e1-card.jpg" alt="Guess - Cartera Mujer Abelia Logo - Rojo" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Guess - Cartera Mujer Abelia Logo - Rojo</div>
+						              <div class="original-price">S/ 879.00</div>
+              								<div class="discount">-54%</div>
+                                      <div class="price-secondary">S/ 399.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/casaca-te-rmica-de-pluma-nuptse-jacket-the-north-face-negro-rzs106">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/3b597b5ffb8f9ba3c940e8c15e5deeb3-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/3b597b5ffb8f9ba3c940e8c15e5deeb3-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/3b597b5ffb8f9ba3c940e8c15e5deeb3-card.jpg" alt="CASACA TÉRMICA DE PLUMA NUPTSE JACKET The North Face NEGRO" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">CASACA TÉRMICA DE PLUMA NUPTSE JACKET The North Face NEGRO</div>
+						              <div class="original-price">S/ 899.00</div>
+              								<div class="discount">-20%</div>
+                                      <div class="price-secondary">S/ 719.20</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/casaca-te-rmica-sinte-tica-thermoball-hybrid-hoodie-the-north-face-verde-yn4a6u">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/5e1ac5f7325c688fef9c2309cfdbff18-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/5e1ac5f7325c688fef9c2309cfdbff18-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/5e1ac5f7325c688fef9c2309cfdbff18-card.jpg" alt="CASACA TÉRMICA SINTÉTICA THERMOBALL HYBRID HOODIE The North Face VERDE" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">CASACA TÉRMICA SINTÉTICA THERMOBALL HYBRID HOODIE The North Face VERDE</div>
+						              <div class="original-price">S/ 679.00</div>
+              								<div class="discount">-19%</div>
+                                      <div class="price-secondary">S/ 543.20</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/zapatilla-converse-540265-ct-as-plataforma-ox-tquqd9">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/8ffb87b30080dc566cc3038df8f92b6c-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/8ffb87b30080dc566cc3038df8f92b6c-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/8ffb87b30080dc566cc3038df8f92b6c-card.jpg" alt="Zapatilla Converse 540265 Ct As Plataforma Ox" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Zapatilla Converse 540265 Ct As Plataforma Ox</div>
+						              <div class="original-price">S/ 269.00</div>
+              								<div class="discount">-10%</div>
+                                      <div class="price-secondary">S/ 239.99</div>
+
+            					</div>
+        </a>
+          </div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+  </div>
+</div>
+
+  <div id="feed-manual-3">
+  <div class="manual-feed-swiper product-highlights swiper-container">
+          <h2 class="block-title">
+        LO MEJOR EN COMPUTO
+        <a href="" class="link-important"></a>
+      </h2>
+        <div class="swiper-wrapper">
+                    <a class="product-card swiper-slide" href="/p/laptop-14-lenovo-ideapad-300-intel-celeron-n3050-ram-4gb-dd-500gb-w10-mochila-lenovo-wx6slm">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/993e48b67948592c5ac919d18f6f5f06-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/993e48b67948592c5ac919d18f6f5f06-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/993e48b67948592c5ac919d18f6f5f06-card.jpg" alt="Laptop 14&quot; Lenovo Ideapad 300 Intel Celeron N3050 RAM 4GB / DD 500GB W10 + Mochila Lenovo" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Laptop 14&quot; Lenovo Ideapad 300 Intel Celeron N3050 RAM 4GB / DD 500GB W10 + Mochila Lenovo</div>
+						              <div class="original-price">S/ 1,099.00</div>
+              								<div class="discount">-18%</div>
+                                      <div class="price-secondary">S/ 899.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/laptop-lenovo-v310-14sk-core-i3-ram-4gb-dd-500gb-freedos-s2x1mo">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/c906d0b84d9eb5f9c565053b4ad65da5-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/c906d0b84d9eb5f9c565053b4ad65da5-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/c906d0b84d9eb5f9c565053b4ad65da5-card.jpg" alt="Laptop Lenovo V310-14SK Core I3 Ram 4GB DD 500GB Freedos" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Laptop Lenovo V310-14SK Core I3 Ram 4GB DD 500GB Freedos</div>
+						              <div class="original-price">S/ 1,399.00</div>
+              								<div class="discount">-28%</div>
+                                      <div class="price-secondary">S/ 999.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/laptop-lenovo-156-ip310-core-i3-ram-4gb-dd-1tb-w10-mochila-lenovo-opgyme">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/9543810028d37eded2fce3ee49c26c32-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/9543810028d37eded2fce3ee49c26c32-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/9543810028d37eded2fce3ee49c26c32-card.jpg" alt="Laptop Lenovo 15.6&quot; IP310 Core I3 RAM 4GB DD 1TB W10 + Mochila Lenovo" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Laptop Lenovo 15.6&quot; IP310 Core I3 RAM 4GB DD 1TB W10 + Mochila Lenovo</div>
+						              <div class="original-price">S/ 1,599.00</div>
+              								<div class="discount">-18%</div>
+                                      <div class="price-secondary">S/ 1,299.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/multifuncional-hp-deskjet-ink-advantage-2135-imprime-copia-scanea-ju9db5">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/ccbcd5701093f68e0ad8f4e5741aaa0b-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/ccbcd5701093f68e0ad8f4e5741aaa0b-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/ccbcd5701093f68e0ad8f4e5741aaa0b-card.jpg" alt="Multifuncional HP Deskjet Ink Advantage 2135 Imprime-Copia-Scanea" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Multifuncional HP Deskjet Ink Advantage 2135 Imprime-Copia-Scanea</div>
+						              <div class="original-price">S/ 198.00</div>
+              								<div class="discount">-40%</div>
+                                      <div class="price-secondary">S/ 117.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/audi-fonos-hp-150-parlante-mini-hp-300-n4q1u9">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/b5e0df9f7e3bc8f5120c2bb1c98418fe-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/b5e0df9f7e3bc8f5120c2bb1c98418fe-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/b5e0df9f7e3bc8f5120c2bb1c98418fe-card.jpg" alt="Audífonos HP 150 + Parlante Mini HP 300" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Audífonos HP 150 + Parlante Mini HP 300</div>
+						              <div class="original-price">S/ 89.00</div>
+              								<div class="discount">-55%</div>
+                                      <div class="price-secondary">S/ 39.90</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/kit-mouse-inala-mbrico-hp-audifonos-hp-in-ear-x1d66a">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/97f75b4bdbbbaebd6d38c9698a283567-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/97f75b4bdbbbaebd6d38c9698a283567-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/97f75b4bdbbbaebd6d38c9698a283567-card.jpg" alt="Kit Mouse Inalámbrico HP  + Audifonos HP In Ear" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Kit Mouse Inalámbrico HP  + Audifonos HP In Ear</div>
+						              <div class="original-price">S/ 69.90</div>
+              								<div class="discount">-21%</div>
+                                      <div class="price-secondary">S/ 54.90</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/audi-fonos-hp-interno-h2310-coral-lh7dap">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/5437ffaa714d12432c71dc4e97feceb0-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/5437ffaa714d12432c71dc4e97feceb0-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/5437ffaa714d12432c71dc4e97feceb0-card.jpg" alt="Audífonos HP Interno H2310 Coral" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Audífonos HP Interno H2310 Coral</div>
+						              <div class="original-price">S/ 49.90</div>
+              								<div class="discount">-50%</div>
+                                      <div class="price-secondary">S/ 24.90</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/combo-gamer-mouse-gamer-camaleo-nico-intense-multicolor-6-botones-teclado-kit-retroiluminado-3-leds-graduables-ldo3gz">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/bd426bc620f1721d32a81850ebd5b20b-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/bd426bc620f1721d32a81850ebd5b20b-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/bd426bc620f1721d32a81850ebd5b20b-card.jpg" alt="Combo Gamer Mouse Gamer Camaleónico Intense multicolor 6 botones + Teclado kit Retroiluminado 3 leds Graduables" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Combo Gamer Mouse Gamer Camaleónico Intense multicolor 6 botones + Teclado kit Retroiluminado 3 leds Graduables</div>
+						              <div class="original-price">S/ 160.00</div>
+              								<div class="discount">-53%</div>
+                                      <div class="price-secondary">S/ 75.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/mouse-hp-inala-mbrico-x3000-blanco-tm4fyk">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/becba9fd4838ca1eb974f57b1c2d416b-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/becba9fd4838ca1eb974f57b1c2d416b-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/becba9fd4838ca1eb974f57b1c2d416b-card.jpg" alt="Mouse HP Inalámbrico X3000 - Blanco" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Mouse HP Inalámbrico X3000 - Blanco</div>
+						              <div class="original-price">S/ 55.90</div>
+              								<div class="discount">-28%</div>
+                                      <div class="price-secondary">S/ 39.90</div>
+
+            					</div>
+        </a>
+          </div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+  </div>
+</div>
+
+  <div id="feed-manual-4">
+  <div class="manual-feed-swiper product-highlights swiper-container">
+          <h2 class="block-title">
+        LO MEJOR EN ELECTROHOGAR
+        <a href="" class="link-important"></a>
+      </h2>
+        <div class="swiper-wrapper">
+                    <a class="product-card swiper-slide" href="/p/pentacombo-licuadora-2-vel-arrocera-18lts-con-vaporera-hervidor-17lts-plancha-seca-vapor-sandwichera-contiental-blanco-jph6y7">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/265fd7c649de93637892644a2ce2a7b0-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/265fd7c649de93637892644a2ce2a7b0-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/265fd7c649de93637892644a2ce2a7b0-card.jpg" alt="PentaCombo Licuadora 2 Vel.+ Arrocera 1.8lts Con Vaporera+ Hervidor 1.7lts + Plancha Seca/vapor + Sandwichera Contiental - Blanco" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">PentaCombo Licuadora 2 Vel.+ Arrocera 1.8lts Con Vaporera+ Hervidor 1.7lts + Plancha Seca/vapor + Sandwichera Contiental - Blanco</div>
+						              <div class="original-price">S/ 399.00</div>
+              								<div class="discount">-42%</div>
+                                      <div class="price-secondary">S/ 229.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/samsung-lavadora-13kg-wa13j5730ls-plateado-vdtlyp">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/265460e81d52f61cd69f333ced7c3744-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/265460e81d52f61cd69f333ced7c3744-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/265460e81d52f61cd69f333ced7c3744-card.jpg" alt="Samsung - Lavadora 13kg WA13J5730LS - Plateado" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Samsung - Lavadora 13kg WA13J5730LS - Plateado</div>
+						              <div class="original-price">S/ 1,549.00</div>
+              								<div class="discount">-29%</div>
+                                      <div class="price-secondary">S/ 1,089.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/licuadora-oster-4655-600w-3-velocidades-plateado-oqkdlj">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/58c3167bbb69681f63b56309a36411f6-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/58c3167bbb69681f63b56309a36411f6-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/58c3167bbb69681f63b56309a36411f6-card.jpg" alt="Licuadora Oster 4655 600W 3 Velocidades - Plateado" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Licuadora Oster 4655 600W 3 Velocidades - Plateado</div>
+						              <div class="original-price">S/ 399.00</div>
+              								<div class="discount">-37%</div>
+                                      <div class="price-secondary">S/ 249.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/hervidor-ele-ctrico-oster-bvstkt3177bk-17-lts-negro-n3jgnd">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/9f4ab85767d77ebb87e6b698b96a91c5-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/9f4ab85767d77ebb87e6b698b96a91c5-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/9f4ab85767d77ebb87e6b698b96a91c5-card.jpg" alt="Hervidor Eléctrico Oster BVSTKT3177BK   1.7 Lts.   - Negro" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Hervidor Eléctrico Oster BVSTKT3177BK   1.7 Lts.   - Negro</div>
+						            <div class="price-secondary">S/ 99.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/refrigeradora-mabe-rml230yjpss-gris-ykqukc">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/c2bed1c6dcd61ab1be72f77734f9fca9-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/c2bed1c6dcd61ab1be72f77734f9fca9-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/c2bed1c6dcd61ab1be72f77734f9fca9-card.jpg" alt="Refrigeradora Mabe RML230YJPSS-Gris" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Refrigeradora Mabe RML230YJPSS-Gris</div>
+						              <div class="original-price">S/ 1,389.00</div>
+              								<div class="discount">-28%</div>
+                                      <div class="price-secondary">S/ 999.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/oster-mini-olla-arrocera-multiusos-4722-06lt-gris-lhdsrx">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/88a076de6a3bdf501955a8088a4ffb10-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/88a076de6a3bdf501955a8088a4ffb10-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/88a076de6a3bdf501955a8088a4ffb10-card.jpg" alt="Oster - Mini Olla Arrocera Multiusos 4722 0.6Lt. - Gris" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Oster - Mini Olla Arrocera Multiusos 4722 0.6Lt. - Gris</div>
+						              <div class="original-price">S/ 109.00</div>
+              								<div class="discount">-27%</div>
+                                      <div class="price-secondary">S/ 79.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/horno-practika-horizon-20-gris-negro-n31zrm">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/ff4b9e9d671614994167424ca7873136-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/ff4b9e9d671614994167424ca7873136-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/ff4b9e9d671614994167424ca7873136-card.jpg" alt="Horno Practika Horizon 20 - Gris/Negro" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Horno Practika Horizon 20 - Gris/Negro</div>
+						              <div class="original-price">S/ 229.90</div>
+              								<div class="discount">-30%</div>
+                                      <div class="price-secondary">S/ 159.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/combo-licuadora-oster-4126-olla-arrocera-ckstrc6129r-rojo-lcf4nh">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/efe77caa1a09e81eb6848bd8d712cb39-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/efe77caa1a09e81eb6848bd8d712cb39-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/efe77caa1a09e81eb6848bd8d712cb39-card.jpg" alt="Combo Licuadora Oster 4126 + Olla Arrocera CKSTRC6129R - Rojo" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Combo Licuadora Oster 4126 + Olla Arrocera CKSTRC6129R - Rojo</div>
+						              <div class="original-price">S/ 588.00</div>
+              								<div class="discount">-32%</div>
+                                      <div class="price-secondary">S/ 399.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/sandwichera-taurus-tfg-negro-rojo-osttoo">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/e5dd38a34d0d5e348a7db8e710650801-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/e5dd38a34d0d5e348a7db8e710650801-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/e5dd38a34d0d5e348a7db8e710650801-card.jpg" alt="Sandwichera Taurus TFG - Negro / Rojo" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Sandwichera Taurus TFG - Negro / Rojo</div>
+						              <div class="original-price">S/ 99.90</div>
+              								<div class="discount">-40%</div>
+                                      <div class="price-secondary">S/ 59.90</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/tostadora-taurus-alpha-blanco-gris-yn7hwi">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/58da7321ea1c3b384a89c750aebe2290-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/58da7321ea1c3b384a89c750aebe2290-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/58da7321ea1c3b384a89c750aebe2290-card.jpg" alt="Tostadora Taurus Alpha - Blanco/Gris" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Tostadora Taurus Alpha - Blanco/Gris</div>
+						              <div class="original-price">S/ 79.90</div>
+              								<div class="discount">-37%</div>
+                                      <div class="price-secondary">S/ 49.90</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/hervidor-ele-ctrico-belia-plomo-or36a4">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/6fff9c46a906200867731bff0654129c-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/6fff9c46a906200867731bff0654129c-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/6fff9c46a906200867731bff0654129c-card.jpg" alt="Hervidor Eléctrico Belia - Plomo" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Hervidor Eléctrico Belia - Plomo</div>
+						              <div class="original-price">S/ 99.00</div>
+              								<div class="discount">-40%</div>
+                                      <div class="price-secondary">S/ 59.00</div>
+
+            					</div>
+        </a>
+              <a class="product-card swiper-slide" href="/p/exprimidor-de-citricos-oster-fpstju407w-blanco-ost3fz">
+          <div class="product-image">
+            <picture>
+              <source data-lazy="//i2.linio.com/p/13e4eca08defe89f1d5ddbdfc73fb532-card.webp" type="image/webp">
+              <source data-lazy="//i2.linio.com/p/13e4eca08defe89f1d5ddbdfc73fb532-card.jpg" type="image/jpeg">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" data-lazy="//i2.linio.com/p/13e4eca08defe89f1d5ddbdfc73fb532-card.jpg" alt="Exprimidor De Citricos Oster FPSTJU407W - Blanco" />
+            </picture>
+          </div>
+          <div class="product-info ">
+            <div class="name">Exprimidor De Citricos Oster FPSTJU407W - Blanco</div>
+						              <div class="original-price">S/ 159.00</div>
+              								<div class="discount">-50%</div>
+                                      <div class="price-secondary">S/ 79.00</div>
+
+            					</div>
+        </a>
+          </div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+  </div>
+</div>
+
+  
+
+<div class="row">
+  <div class="usp-home-container">
+          
+    <a href="https://www.linio.com.pe/sp/proteccion-al-cliente" class="usp usp-home-important">
+      <span class="icon">&#xE023;</span>
+      <span class="usp-home-text">Protección al comprador</span>
+    </a>
+          
+    <a href="https://www.linio.com.pe/sp/preguntas-frecuentes/formas-de-pago-y-precio#s2-p4" class="usp usp-home">
+      <span class="icon">&#xE01E;</span>
+      <span class="">Paga al Recibir</span>
+    </a>
+          
+    <a href="https://www.linio.com.pe/sp/preguntas-frecuentes/formas-de-pago-y-precio#s2-p2" class="usp usp-home">
+      <span class="icon">&#xE01F;</span>
+      <span class="">Paga en Agente o Banco</span>
+    </a>
+          
+    <a href="https://www.linio.com.pe/sp/contactenos" class="usp usp-home">
+      <span class="icon">&#xE022;</span>
+      <span class="">Compra por teléfono</span>
+    </a>
+          
+    <a href="https://www.linio.com.pe/sp/tienda-app" class="usp usp-home">
+      <span class="icon">&#xE07A;</span>
+      <span class="">Compra en la app</span>
+    </a>
+  </div>
+
+</div>
+
+
+
+
+<div class="seo-text col-xs-12"><p>Linio es la Tienda Online más grande de Latinoamérica, donde puedes encontrar una extensa variedad de productos y artículos de todo tipo, desde una consola de <a href="https://www.linio.com.pe/c/consolas-y-videojuegos"><strong>videojuegos</strong></a> hasta el nuevo smartphone de tu marca preferida. Comprar en Linio es la manera más rápida, fácil y segura de adquirir los artículos necesarios para tu vida diaria a un precio increíble. Y es que, al hacer compras por internet, no sólo ahorras tiempo y dinero sino que, hasta de las filas te salvas.</p>
+
+<p>Además contamos con facilidades de pago exclusivas de Linio Perú con las cuales, ya no hay excusa para no comprar por internet eso que tanto has querido estrenar. Olvídate de dar tus datos bancarios si no lo quieres hacer, con Linio incluso puedes pagar en la comodidad de tu hogar, con tarjetas o en efectivo, justo al momento de recibir tus productos. El compromiso con nuestros clientes, la extensa variedad de productos y los increíbles descuentos, son tan sólo algunas de las características que nos han posicionado como uno de los e-Commerce más grandes de toda América Latina. Estamos presentes en <a href="https://www.linio.com.mx"><strong>México</strong></a>, <a href="https://www.linio.com.co/"><strong>Colombia</strong></a>, <a href="https://www.linio.com.pe/"><strong>Perú</strong></a>, <a href="https://www.linio.cl/"><strong>Chile</strong></a>, <a href="https://www.linio.com.ar/"><strong>Argentina</strong></a> y <a href="https://www.linio.com.ve/"><strong>Venezuela</strong></a>. Linio ha reinventado la forma de comprar y vender en internet, ya que, más que tus productos al mejor precio, te ofrecemos una experiencia única de hacer tus compras online en Perú. Cuando de comprar por internet se trata, en Linio somos todas en una, pues, en cada uno de nuestros departamentos, encontrarás artículos de la mejor calidad y de las marcas más conocidas para que adquieras exactamente lo que estás buscando, sin siquiera salir de tu casa. Para los amantes de la tecnología, no se pueden perder nuestra sección de <a href="https://www.linio.com.pe/c/computacion"><strong>Computación</strong></a>, <a href="https://www.linio.com.pe/c/consolas-y-videojuegos"><strong>Videojuegos</strong></a>, <a href="https://www.linio.com.pe/c/celulares-y-tablets"><strong>Celulares y Tablets</strong></a>, así como sus <a href="https://www.linio.com.pe/c/celulares-y-tablets/accesorios-para-tablets"><strong>accesorios</strong></a> para cada uno, ya que los encontrarás a un precio impresionante. También contamos con los gadgets de última generación como las <a href="https://www.linio.com.pe/c/camaras-y-lentes"><strong>Cámaras</strong></a> que todo profesional quiere o el equipo de sonido más sofisticado. Relojes, zapatillas y la mejor variedad de artículos de <a href="https://www.linio.com.pe/c/moda"><strong>Moda</strong></a> y ropa online, también lo tenemos para toda la familia. Haz de tu <a href="https://www.linio.com.pe/c/hogar"><strong>Hogar</strong></a> tu lugar favorito con muebles, decoraciones e incluso <a href="https://www.linio.com.pe/c/electrodomesticos"><strong>Electrodomésticos</strong></a> que se adecuen a tu estilo de vida. Equipa tu oficina, arma tu biblioteca personal, o tu propio cine en casa. Encuentra tus <a href="https://www.linio.com.pe/c/libros-y-peliculas"><strong>Libros, Películas</strong></a> y música, favoritos dentro de nuestro enorme catálogo. Para los deportistas y apasionados del fitness, tenemos la sección de <a href="https://www.linio.com.pe/c/deportes"><strong>deportes</strong></a>. Para los más pequeños del hogar, en la sección de <a href="https://www.linio.com.pe/c/juguetes-ninos-y-bebes"><strong>Juguetes, Niños y Bebés</strong></a> encontrarás el más amplio catálogo de ropa online, accesorios y todo tipo de artículos para bebés, sin importar su edad, para cuidar y consentir a los tuyos. En Linio, la tienda online de Perú, encontrarás de todo al precio más bajo. Aprovecha las constantes ofertas y los precios bajos que los cupones de Linio te garantizarán, y que el costo, ni los envíos sean lo que determine tu compra. Recuerda que en las ventas especiales los precios son aún más bajos que de costumbre. Compra ya y disfruta de la mejor experiencia al hacer tus compras online. Descarga nuestra App de Linio, compra en internet y únete a la comunidad de Linio Perú.</p>
+</div>
+
+      <div class="col-xs-12 google-ad-exchange-home-container">
+  <div class="col-md-12 col-lg-4">
+    <div class="google-ad-exchange-home" data-ad-exchange-banner data-id="div-gpt-ad-1487206413458-3" data-account-id="20810597801" data-sizes="[300, 250]" data-ad-btf="true"></div>
+  </div>
+  <div class="col-md-12 col-lg-4">
+    <div class="google-ad-exchange-home" data-ad-exchange-banner data-id="div-gpt-ad-1487206413458-1" data-account-id="20810597801" data-sizes="[300, 250]" data-ad-btf="true"></div>
+  </div>
+  <div class="col-md-12 col-lg-4">
+    <div class="google-ad-exchange-home" data-ad-exchange-banner data-id="div-gpt-ad-1487206413458-2" data-account-id="20810597801"data-sizes="[300, 250]" data-ad-btf="true"></div>
+  </div>
+</div>
+  
+          </main>
+      </div>
+    
+          <footer>
+  <div class="container-fluid container-semi-fluid footer-extra-content">
+    <div class="glossary-container row"><p>GLOSARIO <a href="https://www.linio.com.pe/sp/glosario-a">A</a> <a href="https://www.linio.com.pe/sp/glosario-b">B</a> <a href="https://www.linio.com.pe/sp/glosario-c">C</a> <a href="https://www.linio.com.pe/sp/glosario-d">D</a> <a href="https://www.linio.com.pe/sp/glosario-e">E</a> <a href="https://www.linio.com.pe/sp/glosario-f">F</a> <a href="https://www.linio.com.pe/sp/glosario-g">G</a> <a href="https://www.linio.com.pe/sp/glosario-h">H</a> <a href="https://www.linio.com.pe/sp/glosario-i">I</a> <a href="https://www.linio.com.pe/sp/glosario-j">J</a> <a href="https://www.linio.com.pe/sp/glosario-k">K</a> <a href="https://www.linio.com.pe/sp/glosario-l">L</a> <a href="https://www.linio.com.pe/sp/glosario-m">M</a> <a href="https://www.linio.com.pe/sp/glosario-n">N</a> <a href="https://www.linio.com.pe/sp/glosario-o">O</a> <a href="https://www.linio.com.pe/sp/glosario-p">P</a> <a href="https://www.linio.com.pe/sp/glosario-q">Q</a> <a href="https://www.linio.com.pe/sp/glosario-r">R</a> <a href="https://www.linio.com.pe/sp/glosario-s">S</a> <a href="https://www.linio.com.pe/sp/glosario-t">T</a> <a href="https://www.linio.com.pe/sp/glosario-u">U</a> <a href="https://www.linio.com.pe/sp/glosario-v">V</a> <a href="https://www.linio.com.pe/sp/glosario-w">W</a> <a href="https://www.linio.com.pe/sp/glosario-x">X</a> <a href="https://www.linio.com.pe/sp/glosario-y">Y</a> <a href="https://www.linio.com.pe/sp/glosario-z">Z</a></p>
+
+</div>
+    <div class="footer-banner">
+      
+    </div>
+  </div>
+
+  <div class="main-footer">
+    <div class="container-fluid container-semi-fluid footer-container">
+
+                        <div class="footer-subscribe-row row">
+            <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12">
+              <div class="subscribe-title">¡SUSCRÍBETE A NUESTRO NEWSLETTER!</div>
+            </div>
+            <form class="col-lg-9 col-md-6 col-sm-12 col-xs-12" action="/newsletter/subscribe" method="POST" data-newsletter>
+              <div class="row">
+                <div class="col-lg-6 col-xs-12">
+                  <input type="email" name="promotional_newsletter_form[email]" placeholder="Suscríbete con tu email" class="row form-control form-control-sm" />
+                  <div class="checkbox">
+                    <label>
+                      <input id="terms" type="checkbox">Acepto los
+                      <a href="/sp/terminos-y-condiciones" target="_blank">Términos y condiciones</a>
+                    </label>
+                  </div>
+                  <input type="hidden" name="promotional_newsletter_form[gender]" />
+                </div>
+                <div class="col-lg-3 col-md-6 col-xs-12">
+                  <button type="submit" class="btn btn-default btn-sm col-xs-12" data-gender="male">Ofertas para hombre</button>
+                </div>
+                <div class="col-lg-3 col-md-6 col-xs-12">
+                  <button type="submit" class="btn btn-default btn-sm col-xs-12" data-gender="female">Ofertas para mujer</button>
+                </div>
+              </div>
+            </form>
+          </div>
+              
+            <div class="footer-payment-methods-container row" id="payment-methods">
+        <ul class="footer-payment-methods-list">
+                      <li class="payment-method">
+              <div class="col-xl-12 col-lg-4 hidden-md-down"><span class="icon">&#xE01E;</span></div>
+              <div class="col-xl-12 col-lg-8">Pago ContraEntrega: Efectivo</div>
+            </li>
+                      <li class="payment-method">
+              <div class="col-xl-12 col-lg-4 hidden-md-down"><span class="icon">&#xE084;</span></div>
+              <div class="col-xl-12 col-lg-8">Visa</div>
+            </li>
+                      <li class="payment-method">
+              <div class="col-xl-12 col-lg-4 hidden-md-down"><span class="icon">&#xE085;</span></div>
+              <div class="col-xl-12 col-lg-8">MasterCard</div>
+            </li>
+                      <li class="payment-method">
+              <div class="col-xl-12 col-lg-4 hidden-md-down"><span class="icon">&#xE083;</span></div>
+              <div class="col-xl-12 col-lg-8">American Express</div>
+            </li>
+                      <li class="payment-method">
+              <div class="col-xl-12 col-lg-4 hidden-md-down"><span class="icon">&#xE097;</span></div>
+              <div class="col-xl-12 col-lg-8">Diners Club</div>
+            </li>
+                      <li class="payment-method">
+              <div class="col-xl-12 col-lg-4 hidden-md-down"><span class="icon">&#xE040;</span></div>
+              <div class="col-xl-12 col-lg-8">Depósito online o en agencia</div>
+            </li>
+                  </ul>
+      </div>
+      
+      <div class="footer-nav-follow-us-row row">
+                  <div class="col-md-9 col-sm-12 footer-nav">
+            <div class="col-md-3 col-sm-12 footer-nav-block" data-collapse="#about-linio-footer-menu">
+              <div class="footer-nav-title">Acerca de Linio</div>
+              <span class="icon icon-sm footer-nav-caret hidden-md-up"></span>
+
+              <dl id="about-linio-footer-menu" class="description-list">
+                                  <dd>
+                    <a href="/sp/acercadenosotros">Historia</a>
+                  </dd>
+                                  <dd>
+                    <a href="/sp/contactenos">Ayuda</a>
+                  </dd>
+                                  <dd>
+                    <a href="/sp/terminos-y-condiciones">Nuevos Términos de Uso y Condiciones de Entrega</a>
+                  </dd>
+                                  <dd>
+                    <a href="/sp/propiedad-intelectual">Protección de Propiedad Intelectual</a>
+                  </dd>
+                                  <dd>
+                    <a href="/sp/loyaltyprograms">Programas de Lealtad</a>
+                  </dd>
+                                  <dd>
+                    <a href="/sp/afiliados">Vuélvete un Afiliado</a>
+                  </dd>
+                                  <dd>
+                    <a href="http://linio.applytojob.com/">Trabaja con nosotros</a>
+                  </dd>
+                                  <dd>
+                    <a href="/directorio">Directorio</a>
+                  </dd>
+                                  <dd>
+                    <a href="/sp/glosario-a">Glosario</a>
+                  </dd>
+                                  <dd>
+                    <a href="/account/login">Login</a>
+                  </dd>
+                                  <dd>
+                    <a href="/sp/legales">Legales</a>
+                  </dd>
+                                  <dd>
+                    <a href="/sp/linioplus">Linio Plus</a>
+                  </dd>
+                              </dl>
+            </div>
+
+            <div class="col-md-3 col-sm-12 footer-nav-block" data-collapse="#customer-service-footer-menu">
+              <div class="footer-nav-title">Servicio al cliente</div>
+              <span class="icon icon-sm footer-nav-caret hidden-md-up"></span>
+
+              <dl id="customer-service-footer-menu" class="description-list">
+                                  <dd>
+                    <a href="https://www.linio.com.pe/sp/preguntas-frecuentes">Preguntas Frecuentes</a>
+                  </dd>
+                                  <dd>
+                    <a href="https://www.linio.com.pe/sp/contactenos">Contacto</a>
+                  </dd>
+                                  <dd>
+                    <a href="https://www.linio.com.pe/sp/preguntas-frecuentes/formas-de-pago-y-precio">Formas de Pago</a>
+                  </dd>
+                                  <dd>
+                    <a href="https://www.linio.com.pe/sp/politica-devoluciones">Política de Garantía y Devoluciones</a>
+                  </dd>
+                                  <dd>
+                    <a href="https://www.linio.com.pe/sp/privacidad">Aviso de Privacidad</a>
+                  </dd>
+                                  <dd>
+                    <a href="https://www.linio.com.pe/sp/politicas-productos-internacionales">Política de venta de productos internacionales</a>
+                  </dd>
+                                  <dd>
+                    <a href="https://www.linio.com.pe/sp/legales">Promociones/Cupones</a>
+                  </dd>
+                              </dl>
+            </div>
+
+            <div class="col-md-3 col-sm-12 footer-nav-block" data-collapse="#countries-footer-menu">
+              <div class="footer-nav-title">Linio latinoamérica</div>
+              <span class="icon icon-sm footer-nav-caret hidden-md-up"></span>
+
+              
+                              
+                <div id="countries-footer-menu" class="list-container">
+                  <dl class="col-md-6 col-sm-12 description-list footer-countries-list">
+                                          <dd>
+                        <a href="https://www.linio.com.ar/">Argentina</a>
+                      </dd>
+                                          <dd>
+                        <a href="https://www.linio.com.co/">Colombia</a>
+                      </dd>
+                                          <dd>
+                        <a href="https://www.linio.cl/">Chile</a>
+                      </dd>
+                                          <dd>
+                        <a href="https://www.linio.com.mx/">México</a>
+                      </dd>
+                                      </dl>
+
+                  <dl class="col-md-6 col-sm-12 description-list">
+                                          <dd>
+                        <a href="https://www.linio.com.pe/">Perú</a>
+                      </dd>
+                                          <dd>
+                        <a href="https://www.linio.com.ve/">Venezuela</a>
+                      </dd>
+                                          <dd>
+                        <a href="https://www.linio.com.ec">Ecuador</a>
+                      </dd>
+                                          <dd>
+                        <a href="https://www.linio.com.pa">Panamá</a>
+                      </dd>
+                                      </dl>
+                </div>
+                          </div>
+
+            <div class="col-md-3 col-sm-12 footer-nav-block" data-collapse="#news-footer-menu">
+                <div class="footer-nav-title">Novedades</div>
+                <span class="icon icon-sm footer-nav-caret hidden-md-up"></span>
+                <dl id="news-footer-menu" class="description-list">
+                                      <dd>
+                      <a href="/cm/black-friday">Black Friday</a>
+                    </dd>
+                                      <dd>
+                      <a href="/cm/cyber-monday-linio">Cyber Monday</a>
+                    </dd>
+                                      <dd>
+                      <a href="/cm/cierra-puertas-online">Cierra Puertas</a>
+                    </dd>
+                                      <dd>
+                      <a href="/cm/dias-naranja">Días Naranja</a>
+                    </dd>
+                                      <dd>
+                      <a href="http://blog.linio.com.pe">Blog Linio</a>
+                    </dd>
+                                      <dd>
+                      <a href="/sp/dias-festivos-peru">Calendario Días Festivos</a>
+                    </dd>
+                                  </dl>
+              </div>
+          </div>
+        
+                  <div class="col-md-3 col-sm-12 footer-follow-us-block footer-left-border">
+            <div class="col-lg-12 col-md-12 col-sm-4 col-xs-12 footer-follow-us-icons-wrapper">
+              <div class="footer-nav-title pull-xs-left">Síguenos</div>
+              <div class="pull-xs-left footer-social-icons-row">
+                <a href="https://www.facebook.com/LinioPeru/" target="_blank" title="Sigue Linio Perú on Facebook" class="icon icon-md">&#xE05C;</a>
+                <a href="https://twitter.com/LinioPeru/" target="_blank" title="Sigue Linio Perú on Twitter" class="icon icon-md">&#xE061;</a>
+                <a href="https://www.youtube.com/channel/UCeILO0qSGn4HdEf3AZK08-A" target="_blank" title="Sigue Linio Perú on YouTube" class="icon icon-md">&#xE062;</a>
+              </div>
+            </div>
+
+            <div class="apps-icons-container-wrapper">
+              <a href="/sp/tienda-app" class="col-lg-6 col-md-12 col-sm-2 col-xs-6 icon-app-wrapper">
+                <i class="sprite sprite-googleplay"></i>
+              </a>
+
+              <a href="/sp/tienda-app"  class="col-lg-6 col-md-12 col-sm-2 col-xs-6 icon-app-wrapper">
+                <i class="sprite sprite-appstore"></i>
+              </a>
+            </div>
+
+                          <a target="_blank"href="/claims-book" class="col-lg-12 col-md-12 col-sm-2 col-xs-12">
+                <i class="sprite sprite-complaintbook"></i>
+              </a>
+            
+            <div class="col-xs-12 text text-sans-serif text-light-sans-serif footer-copyright">&copy; 2017 Linio Perú | Todos los derechos reservados. </div>
+          </div>
+              </div>
+    </div>
+  </div>
+
+    
+</footer>
+    
+    <script type="text/javascript">
+      window.addEventListener('load', function () {
+        var css = document.createElement('link');
+        css.rel = 'stylesheet';
+        css.href = 'https://assets.linio.com/css/alice-dark.lazy-1509759575.css';
+        document.getElementsByTagName('head')[0].appendChild(css);
+      });
+    </script>
+
+            <script type="text/javascript" src="https://assets.linio.com/js/core-1509759575.js" defer></script>
+    
+    <script type="text/javascript" defer>
+    window.DY = window.DY || {};
+    DY.recommendationContext = {type: "HOMEPAGE"};
+  </script>
+    
+    
+
+            <script type="text/javascript" defer>
+    var dataLayer = [{"mobile_app_log":0,"is_linio_plus":0,"gender":"n\/a","nls":null,"experiment_id":false,"variation_id":"0","new_user":2,"pageType":"home","mail_hash":"n\/a"}];
+  </script>
+  <noscript>
+    <iframe src="//www.googletagmanager.com/ns.html?id=GTM-B4QK" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript>
+      <script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","licenseKey":"6cb2da0bc6","applicationID":"11528332","transactionName":"ZQcHZhBSWBBQUEQNXVxNJkcRR1kOHlVCC1xGBwtWTFdTBVBGXBAcWwwBVxo=","queueTime":0,"applicationTime":55,"atts":"SUAQEFhIS08TUhJeSU8f","errorBeacon":"bam.nr-data.net","agent":""}</script></body>
+</html>
