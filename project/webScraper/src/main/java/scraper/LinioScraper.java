@@ -63,25 +63,6 @@ public class LinioScraper implements Scraper {
    */
   Vector<String> getProductsURLs(Document pageDoc) {
     Vector<String> productsUrls = new Vector<>();
-    try {
-      Document pageDoc = this.getHtmlFromURL(pageUrl);
-
-      Elements products = pageDoc.body()
-          .getElementById("catalogue-product-container")
-          .getElementsByClass("catalogue-product row");
-
-      for (Element element : products) {
-        String relUrl = element.getElementsByTag("a")
-            .attr("abs:href");
-        // NOTE: this if is used to just get laptops.
-        if (relUrl.contains("notebook") || relUrl.contains("laptop") || relUrl.contains("macbook")
-            || relUrl.contains("portatil")) {
-          productsUrls.add(relUrl);
-        }
-      }
-    } catch (IOException e) {
-      logger.error(e.getMessage(), e);
-
     Elements products = pageDoc.body()
         .getElementById("catalogue-product-container")
         .getElementsByClass("catalogue-product row");
@@ -90,7 +71,6 @@ public class LinioScraper implements Scraper {
       String relUrl = element.getElementsByTag("a")
           .attr("abs:href");
       productsUrls.add(relUrl);
-
     }
     return productsUrls;
   }
@@ -102,26 +82,6 @@ public class LinioScraper implements Scraper {
    * @param pageDoc sub-subcategory document
    * @return number of pages in the current sub-subcategory
    */
-
-  private int getMaxPages(String baseUrl) {
-    int lastPageNum = 0;
-    try {
-      Document pageDoc = this.getHtmlFromURL(baseUrl);
-
-      String lastValidPage = pageDoc.body()
-          .getElementsByClass("page-item").last()
-          .getElementsByTag("a")
-          .attr("href");
-
-      // we got something like this:
-      // https://www.linio.com.pe/c/computacion/portatiles?page=9
-      // we just need the last number.
-      lastPageNum = Integer.parseInt(lastValidPage.split("=")[1]);
-
-    } catch (IOException e) {
-      logger.error(e.getMessage(), e);
-    }
-
   int getMaxPages(Document pageDoc) {
     String lastValidPage = pageDoc.body()
         .getElementsByClass("page-item").last()
@@ -132,7 +92,6 @@ public class LinioScraper implements Scraper {
     // https://www.linio.com.pe/c/computacion/portatiles?page=9
     // we just need the last number.
     int lastPageNum = Integer.parseInt(lastValidPage.split("=")[1]);
-
     return lastPageNum;
   }
 
