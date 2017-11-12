@@ -25,18 +25,9 @@ public class SagaCrawler extends Crawler {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
   }
 
-  @Override
-  protected List<Category> buildCategories() {
-
-    List<Category> categoryUrls = new ArrayList<>();
+  public List<Category> category(Document document) {
     String name_, url_;
-
-    Document document = null;
-    try {
-      document = getHtmlFromURL(this.url);
-    } catch (IOException e) {
-      logger.error(e.getMessage(), e);
-    }
+    List<Category> categoryUrls = new ArrayList<>();
 
     Elements elements = document != null ? document
         .select(
@@ -93,6 +84,22 @@ public class SagaCrawler extends Crawler {
         categoryUrls.add(category);
       }
     }
+    return categoryUrls;
+
+  }
+
+  @Override
+  protected List<Category> buildCategories() {
+
+    List<Category> categoryUrls = new ArrayList<>();
+
+    Document document = null;
+    try {
+      document = getHtmlFromURL(this.url);
+    } catch (IOException e) {
+      logger.error(e.getMessage(), e);
+    }
+    categoryUrls = category(document);
 
     return categoryUrls;
 
