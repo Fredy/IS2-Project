@@ -10,9 +10,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class SagaScraper implements Scraper {
+
+  private Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
   private Document getHtmlFromURL(String PageURL) throws IOException {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
@@ -38,7 +43,7 @@ public class SagaScraper implements Scraper {
       try {
         product.setNormalPrice(getPrice(documentIn));
       } catch (IOException e) {
-        e.printStackTrace();
+        logger.error(e.getMessage(), e);
         product.setNormalPrice(null);
       }
 
@@ -59,7 +64,7 @@ public class SagaScraper implements Scraper {
       try {
         product.setBrand(getBrand(relUrlIn));
       } catch (IOException e) {
-        e.printStackTrace();
+        logger.error(e.getMessage(), e);
         product.setBrand(null);
       }
 
@@ -67,7 +72,7 @@ public class SagaScraper implements Scraper {
       try {
         product.setModel(getModel(relUrlIn));
       } catch (IOException e) {
-        e.printStackTrace();
+        logger.error(e.getMessage(), e);
         product.setModel(null);
       }
 
@@ -80,7 +85,8 @@ public class SagaScraper implements Scraper {
       relUrlIn = elementIn.text();
       String stringArray[] = relUrlIn.split(":");
       String stringProd[] = stringArray[1].split(" ");
-      //System.out.println("sku " + stringProd[0]);
+      logger.debug("SKU{" + stringProd[0] + "}");
+
       product.setSku(stringProd[0]);
 
       /*Name*/
@@ -88,9 +94,10 @@ public class SagaScraper implements Scraper {
       for (int j = 1; j < stringProd.length; j++) {
         name += stringProd[j] + " ";
       }
-      //System.out.println("name:  " + name);
-      product.setName(name);
 
+      logger.debug("NAME{" + name + "}");
+
+      product.setName(name);
       product.setWebPrice(null);
       product.setOfferPrice(null);
 
@@ -105,7 +112,7 @@ public class SagaScraper implements Scraper {
     try {
       String stringModelP[] = relUrlIn.split("Modelo:");
       String stringModel[] = stringModelP[1].split(" ");
-      //System.out.println("model  " + stringModel[1]);
+      logger.debug("MODEL{" + stringModel[1] + "}");
       return stringModel[1];
     } catch (ArrayIndexOutOfBoundsException excepcion) {
       return null;
@@ -117,7 +124,7 @@ public class SagaScraper implements Scraper {
     try {
       String stringBandP[] = relUrlIn.split("Marca:");
       String stringBand[] = stringBandP[1].split(" ");
-      //System.out.println("band  " + stringBand[1]);
+      logger.debug("BRAND{" + stringBand[1] + "}");
       return stringBand[1];
     } catch (ArrayIndexOutOfBoundsException excepcion) {
       return null;
@@ -133,6 +140,8 @@ public class SagaScraper implements Scraper {
     stringP = stringP.substring(3, stringP.length() - 1);
     stringP = stringP.replace(",", "");
     //System.out.println("price  " + stringP);
+    logger.debug("PRICE{" + stringP + "}");
+
     return Double.parseDouble(stringP);
   }
 
@@ -142,7 +151,8 @@ public class SagaScraper implements Scraper {
       String url = subSubCategory.getUrl();
       return this.parse(url);
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
+
     }
     return null;
   }

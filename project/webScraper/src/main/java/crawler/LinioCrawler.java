@@ -24,7 +24,7 @@ public class LinioCrawler extends Crawler {
     this.categories = null;
   }
 
-  public Document getHtmlFromURL(String pageURL) throws IOException {
+  private Document getHtmlFromURL(String pageURL) throws IOException {
     return Jsoup.connect(pageURL).userAgent("Mozilla").get();
   }
 
@@ -51,7 +51,7 @@ public class LinioCrawler extends Crawler {
     return crawledCategories;
   }
 
-  private List<Category> crawlCategories(Document homePage, List<Integer> outDataIndex) {
+  List<Category> crawlCategories(Document homePage, List<Integer> outDataIndex) {
     List<Category> crawledCategories = new ArrayList<>();
 
     Elements categories = homePage.body().getElementById("navbar")
@@ -87,7 +87,7 @@ public class LinioCrawler extends Crawler {
     return crawledCategories;
   }
 
-  private List<SubCategory> crawlSubsAndSubSubs(Document pageHtml, Integer categoryIndex) {
+  List<SubCategory> crawlSubsAndSubSubs(Document pageHtml, Integer categoryIndex) {
     // This function should receive the Document from https://www.linio.com.pe/ng/main-menu
 
     String selector = String.format("[data-menu='%s']", categoryIndex.toString());

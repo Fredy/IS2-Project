@@ -10,8 +10,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RipleyScraper implements Scraper {
+
+  private Logger logger = LoggerFactory.getLogger(this.getClass());
 
   private String mainUrl;
 
@@ -134,6 +138,7 @@ public class RipleyScraper implements Scraper {
         page = getHtmlFromURL(url + "?page=" + String.valueOf(i));
         links.addAll(getAllLinks(page));
       } catch (Exception e) {
+        //I use the try catch tool for another goals
         break;
       }
     }
@@ -165,8 +170,9 @@ public class RipleyScraper implements Scraper {
     try {
       products = this.getProductFromPage();
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
     }
+    logger.debug("Productos scrapeados: " + Integer.toString(products.size()));
     subSubCategory.setProducts(products);
     return products;
   }
@@ -176,7 +182,7 @@ public class RipleyScraper implements Scraper {
     try {
       return this.getShopObject();
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
     }
     return null;
   }

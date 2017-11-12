@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 public class TottusCrawler extends Crawler {
 
-  Logger logger = LoggerFactory.getLogger(this.getClass());
+  private Logger logger = LoggerFactory.getLogger(this.getClass());
 
   private List<Category> categories;
 
@@ -33,13 +33,12 @@ public class TottusCrawler extends Crawler {
       doc = this.getHtmlFromURL(url);
       this.categories = crawlingCategory(doc);
     } catch (IOException e) {
-      //e.printStackTrace();
       logger.error(e.getMessage(), e);
     }
     return this.categories;
   }
 
-  private List<Category> crawlingCategory(Document doc) {
+  List<Category> crawlingCategory(Document doc) {
     List<Category> listCatTmp = new ArrayList<>();
     Elements categoryElements = doc.body()
         .getElementsByClass("small-nav-menu");
@@ -52,7 +51,6 @@ public class TottusCrawler extends Crawler {
           .attr("abs:href");
       Category catTmp = new Category();
       catTmp.setName(product);
-      //System.out.println("CATEGORY:[" + product + "]");
       logger.debug("CATEGORY:[" + product + "]");
 
       catTmp.setUrl(relUrl);
@@ -62,7 +60,7 @@ public class TottusCrawler extends Crawler {
     return listCatTmp;
   }
 
-  private List<SubCategory> crawlingSubCategory(Element category) {
+  List<SubCategory> crawlingSubCategory(Element category) {
     List<SubCategory> listSubTmp = new ArrayList<>();
     Elements subCategoryName = category.getElementsByClass("col-md-2-4");
     logger.debug("SIZE subCategories: " + subCategoryName.size());
@@ -70,7 +68,7 @@ public class TottusCrawler extends Crawler {
       String nameSub = el.getElementsByTag("h4").text();
       String urlSub = el.getElementsByTag("a")
           .attr("abs:href");
-      //System.out.println("CSub:[" + nameSub + "]={" + urlSub + "}");
+      logger.debug("CSub:[" + nameSub + "]={" + urlSub + "}");
 
       SubCategory subTmp = new SubCategory();
       subTmp.setName(nameSub.toLowerCase());
@@ -81,14 +79,14 @@ public class TottusCrawler extends Crawler {
     return listSubTmp;
   }
 
-  private List<SubSubCategory> crawlingSubSubCategory(Element subcategory) {
+  List<SubSubCategory> crawlingSubSubCategory(Element subcategory) {
     int cont = 0;
     List<SubSubCategory> listSubSubTmp = new ArrayList<>();
     Elements aaa = subcategory.getElementsByTag("li");
     for (Element ela : aaa) {
       String nameSubSub = ela.text();
       String urlSubSub = ela.getElementsByTag("a").attr("abs:href");
-      //System.out.println("SUBSUB_{" + nameSubSub + "}=[" + urlSubSub);
+      logger.debug("SUBSUB_{" + nameSubSub + "}=[" + urlSubSub);
       if (cont > 1) {
         SubSubCategory subSubTmp = new SubSubCategory();
         subSubTmp.setName(nameSubSub.toLowerCase());
