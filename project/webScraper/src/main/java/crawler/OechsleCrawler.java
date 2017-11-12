@@ -5,6 +5,7 @@ import domain.SubCategory;
 import domain.SubSubCategory;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Vector;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
@@ -18,6 +19,8 @@ public class OechsleCrawler extends Crawler {
 
   Logger logger = LoggerFactory.getLogger(this.getClass());
 
+  private List<Category> categories;
+
   public OechsleCrawler() {
     url = "http://www.oechsle.pe";
     //categories = new Vector<>();
@@ -30,8 +33,8 @@ public class OechsleCrawler extends Crawler {
       Document homePage = getHtmlFromUrl(this.url);
 
       categories = crawlingCategories(homePage);
-      crawlingSubCategories(homePage);
-      crawlingSubSubCategories(homePage);
+      crawlingSubCategories(homePage, categories);
+      crawlingSubSubCategories(homePage, categories);
 
     } catch (IOException e) {
       logger.error(e.getMessage(), e);
@@ -51,16 +54,19 @@ public class OechsleCrawler extends Crawler {
 
       category.setName(nameCategory);
       category.setUrl(urlCategory);
-      categoriesAux.add(category);
 
-      logger.debug(" Name Category: {}", nameCategory);
+      if (!nameCategory.equals("")) {
+        categoriesAux.add(category);
+
+        logger.debug(" Name Category: {}", nameCategory);
+        logger.debug(" Url: {}", urlCategory);
+      }
     }
 
-    //this.categories = categoriesAux.subList(0, categoriesAux.size() - 2);
     return categoriesAux.subList(0, categoriesAux.size() - 2);
   }
 
-  public void crawlingSubCategories(Document doc) {
+  public void crawlingSubCategories(Document doc, List<Category> categories) {
 
     Elements subCats = doc.getElementsByAttributeValue("class", "menu-preview wrap-hover");
     int cont = 0;
@@ -93,7 +99,7 @@ public class OechsleCrawler extends Crawler {
 
   }
 
-  public void crawlingSubSubCategories(Document doc) {
+  public void crawlingSubSubCategories(Document doc, List<Category> categories) {
     Elements cats = doc.getElementsByAttributeValue("class", "menu-preview wrap-hover");
     int contC = 0;
     int indexCatRemove = 0;
