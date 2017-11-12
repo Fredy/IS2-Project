@@ -119,7 +119,7 @@ public class SagaScraper implements Scraper {
 
   }
 
-  private String getBrand(String relUrlIn) throws IOException {
+  public String getBrand(String relUrlIn) throws IOException {
     try {
       String stringBandP[] = relUrlIn.split("Marca:");
       String stringBand[] = stringBandP[1].split(" ");
