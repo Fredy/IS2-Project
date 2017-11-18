@@ -18,26 +18,7 @@ import org.jsoup.select.Elements;
 import org.junit.Test;
 
 public class TottusCrawlerTest {
-
-  @Test
-  public void buildCategories() throws Exception {
-    TottusCrawler tottusCrawler = new TottusCrawler();
-
-    ArrayList<String> nameCategoriesExpected = new ArrayList<>();
-    String expected[] = {"OFERTAS", "Abarrotes y Despensa",
-        "Bebidas y Licores", "Frutas y Verduras",
-        "Carnes, Pollos y Pescados", "Embutidos y Lácteos",
-        "Congelados y Panadería", "Perfumería, Aseo y Limpieza",
-        "Mascotas y Hogar", "Electrohogar"};
-    Collections.addAll(nameCategoriesExpected, expected);
-    ArrayList<String> nameCategoriesCrawled = new ArrayList<>();
-    List<Category> nameCat = tottusCrawler.buildCategories();
-    for (Category aNameCat : nameCat) {
-      nameCategoriesCrawled.add(aNameCat.getName());
-    }
-    assertEquals(nameCategoriesCrawled, nameCategoriesExpected);
-  }
-
+  
   @Test
   public void crawlingCategory() throws Exception {
     TottusCrawler tottusCrawler = new TottusCrawler();
