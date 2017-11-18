@@ -19,7 +19,15 @@ public class RipleyScraper implements Scraper {
 
   private String mainUrl;
 
-  private ArrayList<Product> getProductFromPage() throws IOException {
+  public String getMainUrl() {
+    return mainUrl;
+  }
+
+  public void setMainUrl(String mainUrl) {
+    this.mainUrl = mainUrl;
+  }
+
+  ArrayList<Product> getProductFromPage() throws IOException {
     ArrayList<ArrayList<String>> dataRaw = processPage();
     ArrayList<Product> products = new ArrayList<>();
     for (ArrayList<String> raw : dataRaw) {
@@ -28,7 +36,7 @@ public class RipleyScraper implements Scraper {
     return products;
   }
 
-  private Product getProductUtil(ArrayList<String> raw) {
+  Product getProductUtil(ArrayList<String> raw) {
     Product product = new Product();
     if (!raw.get(0).isEmpty()) {
       product.setName(raw.get(0));
@@ -54,22 +62,22 @@ public class RipleyScraper implements Scraper {
     return product;
   }
 
-  private ArrayList<ArrayList<String>> processPage() throws IOException {
+  ArrayList<ArrayList<String>> processPage() throws IOException {
     ArrayList<String> links = getAllRealLinks(mainUrl);
     ArrayList<ArrayList<String>> dataOfPage = new ArrayList<>();
     for (String link : links) {
-      dataOfPage.add(getInformationOfOneProduct(link));
+      Document page = getHtmlFromURL(link);
+      dataOfPage.add(getInformationOfOneProduct(page));
     }
     return dataOfPage;
   }
 
-  private ArrayList<String> getInformationOfOneProduct(String url) throws IOException {
-    Document page = getHtmlFromURL(url);
+  ArrayList<String> getInformationOfOneProduct(Document page) throws IOException {
     ArrayList<String> dataCollected = new ArrayList<>(); // Structure is name, price normal, price web, offerprice, SKU, Brand, Model;
     Elements productheader = page.select("[class^=product-header hidden-xs]");
     Elements productPrices = page.select("[class^=product-info]");
     Elements productDetails = page.select("[class^=table table-striped]").select("tbody")
-        .select("[data-reactid]");
+        .select("td");
     String name, sku, normalPrice, webPrice, offerPrice = "", brand, model;
     name = productheader.select("[itemprop=name]").text();
     sku = productheader.select("[class=sku]").text();
@@ -90,7 +98,7 @@ public class RipleyScraper implements Scraper {
       if (i >= 2) {
         break;
       }
-      String curr = detail.ownText();
+      String curr = detail.text();
       if (before.equals("Marca")) {
         brand = curr;
         ++i;
@@ -112,8 +120,8 @@ public class RipleyScraper implements Scraper {
 
   private String formatStringToDouble(String raw) {
     StringBuilder ans = new StringBuilder();
-    for (int i = 0; i < raw.length(); i++) {
-      if (digit(raw.charAt(i))) {
+    for (int i = 2; i < raw.length(); i++) {
+      if (digit(raw.charAt(i)) || raw.charAt(i) == '.') {
         ans.append(raw.charAt(i));
       }
     }
@@ -130,7 +138,7 @@ public class RipleyScraper implements Scraper {
     return Jsoup.connect(pageURL).userAgent("Mozilla/5.0").get();
   }
 
-  private ArrayList<String> getAllRealLinks(String url) throws IOException {
+  ArrayList<String> getAllRealLinks(String url) throws IOException {
     Document page;
     ArrayList<String> links = new ArrayList<>();
     for (int i = 1; i < 100; i++) {
@@ -145,7 +153,7 @@ public class RipleyScraper implements Scraper {
     return links;
   }
 
-  private ArrayList<String> getAllLinks(Document page) {
+  ArrayList<String> getAllLinks(Document page) {
     ArrayList<String> ans = new ArrayList<>();
     Elements container = page.select("[class^=catalog-container]")
         .select("[class^=catalog-product catalog-item]");
@@ -155,7 +163,7 @@ public class RipleyScraper implements Scraper {
     return ans;
   }
 
-  private Shop getShopObject() throws IOException {
+  Shop getShopObject() throws IOException {
     Shop shop = new Shop();
     shop.setName("Ripley Peru");
     shop.setUrl("http://simple.ripley.com.pe");
