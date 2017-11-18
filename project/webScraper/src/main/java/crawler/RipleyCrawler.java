@@ -10,8 +10,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RipleyCrawler extends Crawler {
+
+  private Logger logger = LoggerFactory.getLogger(this.getClass());
 
   public RipleyCrawler() {
     this.setUrl("http://simple.ripley.com.pe");
@@ -36,9 +40,15 @@ public class RipleyCrawler extends Crawler {
     try {
       page = getHtmlFromUrl(url);
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
       return rCategories;
     }
+    rCategories = buildCategories1(page);
+    return rCategories;
+  }
+
+  ArrayList<Category> buildCategories1(Document page) {
+    ArrayList<Category> rCategories = new ArrayList<>();
     Elements elements = page.getElementsByClass("main-categories")
         .select("[class^=main-category first-column]");
     for (Element element : elements) {
@@ -52,9 +62,10 @@ public class RipleyCrawler extends Crawler {
       rCategories.add(category);
     }
     return rCategories;
+
   }
 
-  private ArrayList<SubCategory> buildSubCategories(Element categoryEl, Category category) {
+  ArrayList<SubCategory> buildSubCategories(Element categoryEl, Category category) {
     ArrayList<SubCategory> rSubCategories = new ArrayList<>();
     Elements elements = categoryEl.select("[class^=child-categories second-column]")
         .select("[class=child-category]");
@@ -66,7 +77,7 @@ public class RipleyCrawler extends Crawler {
         if (name.equals("marcas")) {
           continue;
         }
-        //System.out.println("\t" + Name);
+        logger.debug("\t" + name);
         SubCategory subCategory = new SubCategory();
         subCategory.setName(name);
         subCategory.setUrl(realCategory.attr("abs:href"));
@@ -78,14 +89,14 @@ public class RipleyCrawler extends Crawler {
     return rSubCategories;
   }
 
-  private ArrayList<SubSubCategory> buildSubSubCategories(Element subCategoryEl,
+  ArrayList<SubSubCategory> buildSubSubCategories(Element subCategoryEl,
       SubCategory subCategory) {
     ArrayList<SubSubCategory> rSubSubCategories = new ArrayList<>();
     Elements elements = subCategoryEl.select("[href~=^/[\\-a-z]+/[\\-a-z]+/[\\-a-z]+$]");
     for (Element element : elements) {
       String name = element.text();
       name = name.toLowerCase();
-      //System.out.println("\t\t"+Name);
+      logger.debug("\t\t" + name);
       SubSubCategory subSubCategory = new SubSubCategory();
       subSubCategory.setName(name);
       subSubCategory.setUrl(element.attr("abs:href"));
