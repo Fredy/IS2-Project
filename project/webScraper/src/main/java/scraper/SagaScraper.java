@@ -18,14 +18,15 @@ public class SagaScraper implements Scraper {
 
   private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-  public Document getHtmlFromURL(String PageURL) throws IOException {
+
+  private Document getHtmlFromURL(String PageURL) throws IOException {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
   }
 
-  public List<Product> parse(Document document) throws IOException {
+  private List<Product> parse(String url) throws IOException {
 
     List<Product> productsUrls = new ArrayList<>();
-
+    Document document = getHtmlFromURL(url);
     Elements elements = document
         .select(
             ".site-wrapper #main > div#fbra_browseProductList .fb-filters .fb-pod-group > div.fb-pod-group__item .fb-pod__item > .fb-pod__header > a[href]");
@@ -107,7 +108,7 @@ public class SagaScraper implements Scraper {
     return productsUrls;
   }
 
-  public String getModel(String relUrlIn) throws IOException {
+  private String getModel(String relUrlIn) throws IOException {
     try {
       String stringModelP[] = relUrlIn.split("Modelo:");
       String stringModel[] = stringModelP[1].split(" ");
@@ -119,7 +120,7 @@ public class SagaScraper implements Scraper {
 
   }
 
-  public String getBrand(String relUrlIn) throws IOException {
+  private String getBrand(String relUrlIn) throws IOException {
     try {
       String stringBandP[] = relUrlIn.split("Marca:");
       String stringBand[] = stringBandP[1].split(" ");
@@ -130,29 +131,25 @@ public class SagaScraper implements Scraper {
     }
   }
 
-  public Double getPrice(Document docIn) throws IOException {
-    try {
-      Element content = docIn.body().getElementsByAttributeValue("type", "text/javascript").get(0);
-      String price = content.data();
-      String stringPrice[] = price.split("originalPrice");
-      String stringPriceP[] = stringPrice[1].split("," + "\"");
-      String stringP = stringPriceP[0];
-      stringP = stringP.substring(3, stringP.length() - 1);
-      stringP = stringP.replace(",", "");
-      //System.out.println("price  " + stringP);
-      logger.debug("PRICE{" + stringP + "}");
-      return Double.parseDouble(stringP);
-    } catch (ArrayIndexOutOfBoundsException excepcion) {
-      return null;
-    }
+  private Double getPrice(Document docIn) throws IOException {
+    Element content = docIn.body().getElementsByAttributeValue("type", "text/javascript").get(0);
+    String price = content.data();
+    String stringPrice[] = price.split("originalPrice");
+    String stringPriceP[] = stringPrice[1].split("," + "\"");
+    String stringP = stringPriceP[0];
+    stringP = stringP.substring(3, stringP.length() - 1);
+    stringP = stringP.replace(",", "");
+    //System.out.println("price  " + stringP);
+    logger.debug("PRICE{" + stringP + "}");
+
+    return Double.parseDouble(stringP);
   }
 
   @Override
   public List<Product> parseProducts(SubSubCategory subSubCategory) {
     try {
       String url = subSubCategory.getUrl();
-      Document document = getHtmlFromURL(url);
-      return this.parse(document);
+      return this.parse(url);
     } catch (IOException e) {
       logger.error(e.getMessage(), e);
 
