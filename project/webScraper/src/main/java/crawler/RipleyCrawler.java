@@ -43,6 +43,12 @@ public class RipleyCrawler extends Crawler {
       logger.error(e.getMessage(), e);
       return rCategories;
     }
+    rCategories = buildCategories1(page);
+    return rCategories;
+  }
+
+  ArrayList<Category> buildCategories1(Document page) {
+    ArrayList<Category> rCategories = new ArrayList<>();
     Elements elements = page.getElementsByClass("main-categories")
         .select("[class^=main-category first-column]");
     for (Element element : elements) {
@@ -56,6 +62,7 @@ public class RipleyCrawler extends Crawler {
       rCategories.add(category);
     }
     return rCategories;
+
   }
 
   ArrayList<SubCategory> buildSubCategories(Element categoryEl, Category category) {

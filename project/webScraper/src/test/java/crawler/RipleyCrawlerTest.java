@@ -5,15 +5,20 @@ import static org.junit.Assert.assertEquals;
 import domain.Category;
 import domain.SubCategory;
 import domain.SubSubCategory;
+import java.io.File;
 import java.util.ArrayList;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.junit.Test;
 
 public class RipleyCrawlerTest {
 
   @Test
-  public void buildCategories() throws Exception {
+  public void buildCategories1() throws Exception {
     RipleyCrawler ripleyCrawler = new RipleyCrawler();
-    ArrayList<Category> categories = (ArrayList<Category>) ripleyCrawler.getCategories();
+    File htmlFile = new File("src/test/resources/crawler/ripleyCrawler.html");
+    Document document = Jsoup.parse(htmlFile, "UTF-8", "http://simple.ripley.com");
+    ArrayList<Category> categories = (ArrayList<Category>) ripleyCrawler.buildCategories1(document);
     //First we are going to verify the categories
     assertEquals(categories.size(), 13);
     assertEquals(categories.get(0).getName(), "tv y video");
@@ -21,10 +26,10 @@ public class RipleyCrawlerTest {
     assertEquals(categories.get(2).getName(), "muebles");
     assertEquals(categories.get(3).getName(), "dormitorio");
     assertEquals(categories.get(4).getName(), "infantil");
-    assertEquals(categories.get(5).getName(), "entretenimiento");
-    assertEquals(categories.get(6).getName(), "calzado");
-    assertEquals(categories.get(7).getName(), "deporte");
-    assertEquals(categories.get(8).getName(), "belleza y accesorios");
+    assertEquals(categories.get(5).getName(), "belleza y accesorios");
+    assertEquals(categories.get(6).getName(), "entretenimiento");
+    assertEquals(categories.get(7).getName(), "calzado");
+    assertEquals(categories.get(8).getName(), "deporte");
     assertEquals(categories.get(9).getName(), "celulares");
     assertEquals(categories.get(10).getName(), "electrohogar");
     assertEquals(categories.get(11).getName(), "moda");
@@ -34,7 +39,10 @@ public class RipleyCrawlerTest {
   @Test
   public void buildSubCategories() throws Exception {
     RipleyCrawler ripleyCrawler = new RipleyCrawler();
-    Category category = ((ArrayList<Category>) ripleyCrawler.getCategories()).get(0);
+    File htmlFile = new File("src/test/resources/crawler/ripleyCrawler.html");
+    Document document = Jsoup.parse(htmlFile, "UTF-8", "http://simple.ripley.com");
+    ArrayList<Category> categories = (ArrayList<Category>) ripleyCrawler.buildCategories1(document);
+    Category category = categories.get(0);
     ArrayList<SubCategory> subCategories = (ArrayList<SubCategory>) category.getSubCategories();
     assertEquals(subCategories.size(), 5);
     assertEquals(subCategories.get(0).getName(), "televisores");
@@ -47,7 +55,10 @@ public class RipleyCrawlerTest {
   @Test
   public void buildSubSubCategories() throws Exception {
     RipleyCrawler ripleyCrawler = new RipleyCrawler();
-    Category category = ripleyCrawler.getCategories().get(0);
+    File htmlFile = new File("src/test/resources/crawler/ripleyCrawler.html");
+    Document document = Jsoup.parse(htmlFile, "UTF-8", "http://simple.ripley.com");
+    ArrayList<Category> categories = (ArrayList<Category>) ripleyCrawler.buildCategories1(document);
+    Category category = categories.get(0);
     SubCategory subCategory = category.getSubCategories().get(1);
     ArrayList<SubSubCategory> subSubCategories = (ArrayList<SubSubCategory>) subCategory
         .getSubSubCategories();
