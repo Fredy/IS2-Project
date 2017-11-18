@@ -43,6 +43,12 @@ public class RipleyCrawler extends Crawler {
       logger.error(e.getMessage(), e);
       return rCategories;
     }
+    rCategories = buildCategories1(page);
+    return rCategories;
+  }
+
+  ArrayList<Category> buildCategories1(Document page) {
+    ArrayList<Category> rCategories = new ArrayList<>();
     Elements elements = page.getElementsByClass("main-categories")
         .select("[class^=main-category first-column]");
     for (Element element : elements) {
@@ -56,9 +62,10 @@ public class RipleyCrawler extends Crawler {
       rCategories.add(category);
     }
     return rCategories;
+
   }
 
-  private ArrayList<SubCategory> buildSubCategories(Element categoryEl, Category category) {
+  ArrayList<SubCategory> buildSubCategories(Element categoryEl, Category category) {
     ArrayList<SubCategory> rSubCategories = new ArrayList<>();
     Elements elements = categoryEl.select("[class^=child-categories second-column]")
         .select("[class=child-category]");
@@ -82,7 +89,7 @@ public class RipleyCrawler extends Crawler {
     return rSubCategories;
   }
 
-  private ArrayList<SubSubCategory> buildSubSubCategories(Element subCategoryEl,
+  ArrayList<SubSubCategory> buildSubSubCategories(Element subCategoryEl,
       SubCategory subCategory) {
     ArrayList<SubSubCategory> rSubSubCategories = new ArrayList<>();
     Elements elements = subCategoryEl.select("[href~=^/[\\-a-z]+/[\\-a-z]+/[\\-a-z]+$]");
