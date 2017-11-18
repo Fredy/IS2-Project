@@ -41,62 +41,65 @@ public class SagaScraper implements Scraper {
       /*Price*/
       try {
         product.setNormalPrice(getPrice(documentIn));
-      } catch (IOException e) {
+      } catch (NullPointerException e) {
         logger.error(e.getMessage(), e);
         product.setNormalPrice(null);
       }
 
-      Element elementIn;
+      Element elementIn = null;
       try {
-
         elementIn = documentIn
             .select(
                 ".site-wrapper #main > .fb-module-wrapper .fb-accordion-tabs section.fb-accordion-tabs__content .fb-product-information__product-information-tab .fb-product-information-tab__copy ul")
             .get(0);
 
-      } catch (IndexOutOfBoundsException excepcion) {
-        return null;
-      }
-
        /*Brand*/
-      String relUrlIn = elementIn.text();
-      try {
-        product.setBrand(getBrand(relUrlIn));
-      } catch (IOException e) {
-        logger.error(e.getMessage(), e);
-        product.setBrand(null);
-      }
+        String relUrlIn = null;
+        try {
+          relUrlIn = elementIn.text();
+          product.setBrand(getBrand(relUrlIn));
+
+        } catch (NullPointerException e) {
+          logger.error(e.getMessage(), e);
+          product.setBrand(null);
+
+        }
 
       /*Model*/
-      try {
-        product.setModel(getModel(relUrlIn));
-      } catch (IOException e) {
-        logger.error(e.getMessage(), e);
-        product.setModel(null);
-      }
+        try {
+          product.setModel(getModel(relUrlIn));
+        } catch (IOException e) {
+          logger.error(e.getMessage(), e);
+          product.setModel(null);
+        }
 
        /*Sku*/
-      elementIn = documentIn
-          .select(
-              ".site-wrapper #main > #fbra_browseMainProduct .fb-product__form .fb-product-cta .fb-product-cta__container .fb-product-cta--desktop")
-          .get(0);
+        elementIn = documentIn
+            .select(
+                ".site-wrapper #main > #fbra_browseMainProduct .fb-product__form .fb-product-cta .fb-product-cta__container .fb-product-cta--desktop")
+            .get(0);
 
-      relUrlIn = elementIn.text();
-      String stringArray[] = relUrlIn.split(":");
-      String stringProd[] = stringArray[1].split(" ");
-      logger.debug("SKU{" + stringProd[0] + "}");
+        relUrlIn = elementIn.text();
+        String stringArray[] = relUrlIn.split(":");
+        String stringProd[] = stringArray[1].split(" ");
+        logger.debug("SKU{" + stringProd[0] + "}");
 
-      product.setSku(stringProd[0]);
+        product.setSku(stringProd[0]);
 
       /*Name*/
-      String name = "";
-      for (int j = 1; j < stringProd.length; j++) {
-        name += stringProd[j] + " ";
+        String name = "";
+        for (int j = 1; j < stringProd.length; j++) {
+          name += stringProd[j] + " ";
+        }
+
+        logger.debug("NAME{" + name + "}");
+
+        product.setName(name);
+      } catch (IndexOutOfBoundsException excepcion) {
+        product.setModel(null);
+        product.setName(null);
+
       }
-
-      logger.debug("NAME{" + name + "}");
-
-      product.setName(name);
       product.setWebPrice(null);
       product.setOfferPrice(null);
 
@@ -112,6 +115,7 @@ public class SagaScraper implements Scraper {
       String stringModelP[] = relUrlIn.split("Modelo:");
       String stringModel[] = stringModelP[1].split(" ");
       logger.debug("MODEL{" + stringModel[1] + "}");
+
       return stringModel[1];
     } catch (ArrayIndexOutOfBoundsException excepcion) {
       return null;
@@ -121,9 +125,11 @@ public class SagaScraper implements Scraper {
 
   public String getBrand(String relUrlIn) throws IOException {
     try {
+
       String stringBandP[] = relUrlIn.split("Marca:");
       String stringBand[] = stringBandP[1].split(" ");
       logger.debug("BRAND{" + stringBand[1] + "}");
+
       return stringBand[1];
     } catch (ArrayIndexOutOfBoundsException excepcion) {
       return null;
@@ -131,18 +137,24 @@ public class SagaScraper implements Scraper {
   }
 
   public Double getPrice(Document docIn) throws IOException {
+    String stringPriceP[] = new String[0];
+    String stringP;
     try {
-      Element content = docIn.body().getElementsByAttributeValue("type", "text/javascript").get(0);
+
+      Element content = docIn.body().getElementsByAttributeValue("type", "text/javascript")
+          .get(0);
       String price = content.data();
       String stringPrice[] = price.split("originalPrice");
-      String stringPriceP[] = stringPrice[1].split("," + "\"");
-      String stringP = stringPriceP[0];
+      stringPriceP = stringPrice[1].split("," + "\"");
+
+      stringP = stringPriceP[0];
       stringP = stringP.substring(3, stringP.length() - 1);
       stringP = stringP.replace(",", "");
-      //System.out.println("price  " + stringP);
       logger.debug("PRICE{" + stringP + "}");
       return Double.parseDouble(stringP);
-    } catch (ArrayIndexOutOfBoundsException excepcion) {
+
+    } catch (ArrayIndexOutOfBoundsException e) {
+      logger.error(e.getMessage(), e);
       return null;
     }
   }
