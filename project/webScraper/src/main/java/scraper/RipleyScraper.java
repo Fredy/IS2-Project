@@ -66,13 +66,13 @@ public class RipleyScraper implements Scraper {
     ArrayList<String> links = getAllRealLinks(mainUrl);
     ArrayList<ArrayList<String>> dataOfPage = new ArrayList<>();
     for (String link : links) {
-      dataOfPage.add(getInformationOfOneProduct(link));
+      Document page = getHtmlFromURL(link);
+      dataOfPage.add(getInformationOfOneProduct(page));
     }
     return dataOfPage;
   }
 
-  ArrayList<String> getInformationOfOneProduct(String url) throws IOException {
-    Document page = getHtmlFromURL(url);
+  ArrayList<String> getInformationOfOneProduct(Document page) throws IOException {
     ArrayList<String> dataCollected = new ArrayList<>(); // Structure is name, price normal, price web, offerprice, SKU, Brand, Model;
     Elements productheader = page.select("[class^=product-header hidden-xs]");
     Elements productPrices = page.select("[class^=product-info]");
@@ -153,7 +153,7 @@ public class RipleyScraper implements Scraper {
     return links;
   }
 
-  private ArrayList<String> getAllLinks(Document page) {
+  ArrayList<String> getAllLinks(Document page) {
     ArrayList<String> ans = new ArrayList<>();
     Elements container = page.select("[class^=catalog-container]")
         .select("[class^=catalog-product catalog-item]");
