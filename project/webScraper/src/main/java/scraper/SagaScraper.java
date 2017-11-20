@@ -18,15 +18,14 @@ public class SagaScraper implements Scraper {
 
   private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-
-  private Document getHtmlFromURL(String PageURL) throws IOException {
+  public Document getHtmlFromURL(String PageURL) throws IOException {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
   }
 
-  private List<Product> parse(String url) throws IOException {
+  public List<Product> parse(Document document) throws IOException {
 
     List<Product> productsUrls = new ArrayList<>();
-    Document document = getHtmlFromURL(url);
+
     Elements elements = document
         .select(
             ".site-wrapper #main > div#fbra_browseProductList .fb-filters .fb-pod-group > div.fb-pod-group__item .fb-pod__item > .fb-pod__header > a[href]");
@@ -111,7 +110,7 @@ public class SagaScraper implements Scraper {
     return productsUrls;
   }
 
-  private String getModel(String relUrlIn) throws IOException {
+  public String getModel(String relUrlIn) throws IOException {
     try {
       String stringModelP[] = relUrlIn.split("Modelo:");
       String stringModel[] = stringModelP[1].split(" ");
@@ -124,7 +123,7 @@ public class SagaScraper implements Scraper {
 
   }
 
-  private String getBrand(String relUrlIn) throws IOException {
+  public String getBrand(String relUrlIn) throws IOException {
     try {
 
       String stringBandP[] = relUrlIn.split("Marca:");
@@ -164,7 +163,8 @@ public class SagaScraper implements Scraper {
   public List<Product> parseProducts(SubSubCategory subSubCategory) {
     try {
       String url = subSubCategory.getUrl();
-      return this.parse(url);
+      Document document = getHtmlFromURL(url);
+      return this.parse(document);
     } catch (IOException e) {
       logger.error(e.getMessage(), e);
 
