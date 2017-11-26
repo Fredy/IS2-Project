@@ -25,18 +25,59 @@ public class SagaCrawler extends Crawler {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
   }
 
-  @Override
-  protected List<Category> buildCategories() {
-
-    List<Category> categoryUrls = new ArrayList<>();
+  public List<SubSubCategory> subSubCategory(Elements elssc) {
     String name_, url_;
+    List<SubSubCategory> subSubCategoryUrls = new ArrayList<>();
 
-    Document document = null;
-    try {
-      document = getHtmlFromURL(this.url);
-    } catch (IOException e) {
-      logger.error(e.getMessage(), e);
+    for (Element ssc : elssc) {
+      SubSubCategory subSubCategory = new SubSubCategory();
+      String cadena = "ver todo";
+      int resultado = ssc.text().toLowerCase().indexOf(cadena);
+
+      if (resultado == -1) {
+        name_ = ssc.text().toLowerCase().trim();
+        subSubCategory.setName(name_);
+        url_ = ssc.attr("abs:href");
+        subSubCategory.setUrl(url_);
+        logger.debug("SUBSUBCAT{" + name_ + "}=[" + url_);
+
+        subSubCategoryUrls.add(subSubCategory);
+      }
     }
+    return subSubCategoryUrls;
+
+  }
+
+
+  public List<SubCategory> subCategory(Elements elsc) {
+    List<SubCategory> subCategoryUrls = new ArrayList<>();
+
+    String name_, url_;
+    for (Element sc : elsc) {
+      List<SubSubCategory> subSubCategoryUrls;
+
+      SubCategory subCategory = new SubCategory();
+      name_ = sc.select("a.fb-masthead__child-links__item__link h4").text().toLowerCase()
+          .trim();
+      subCategory.setName(name_);
+      url_ = sc.select("a.fb-masthead__child-links__item__link ").attr("abs:href");
+      subCategory.setUrl(url_);
+      logger.debug("SUBCAT{" + name_ + "}=[" + url_);
+
+      Elements elssc = sc.select(".fb-masthead__grandchild-links li a");
+
+      subSubCategoryUrls = subSubCategory(elssc);
+
+      subCategory.setSubSubCategories(subSubCategoryUrls);
+      subCategoryUrls.add(subCategory);
+    }
+    return subCategoryUrls;
+  }
+
+
+  public List<Category> category(Document document) {
+    String name_, url_;
+    List<Category> categoryUrls = new ArrayList<>();
 
     Elements elements = document != null ? document
         .select(
@@ -47,7 +88,7 @@ public class SagaCrawler extends Crawler {
       for (int c = 2; c < elements.size(); c++) {
         Element element = elements.get(c);
 
-        List<SubCategory> subCategoryUrls = new ArrayList<>();
+        List<SubCategory> subCategoryUrls;
         Category category = new Category();
         name_ = element.select("h3").text().toLowerCase().trim();
 
@@ -59,40 +100,28 @@ public class SagaCrawler extends Crawler {
         Elements elsc = element.select(
             ".fb-masthead__child-wrapper > .fb-masthead__child-wrapper-content li.fb-masthead__child-links__item ");
 
-        for (Element sc : elsc) {
-          List<SubSubCategory> subSubCategoryUrls = new ArrayList<>();
+        subCategoryUrls = subCategory(elsc);
 
-          SubCategory subCategory = new SubCategory();
-          name_ = sc.select("a.fb-masthead__child-links__item__link h4").text().toLowerCase()
-              .trim();
-          subCategory.setName(name_);
-          url_ = sc.select("a.fb-masthead__child-links__item__link ").attr("abs:href");
-          subCategory.setUrl(url_);
-          logger.debug("SUBCAT{" + name_ + "}=[" + url_);
-
-          Elements elssc = sc.select(".fb-masthead__grandchild-links li a");
-
-          for (Element ssc : elssc) {
-            SubSubCategory subSubCategory = new SubSubCategory();
-            String cadena = "ver todo";
-            int resultado = ssc.text().toLowerCase().indexOf(cadena);
-
-            if (resultado == -1) {
-              name_ = ssc.text().toLowerCase().trim();
-              subSubCategory.setName(name_);
-              url_ = ssc.attr("abs:href");
-              subSubCategory.setUrl(url_);
-              logger.debug("SUBCAT{" + name_ + "}=[" + url_);
-              subSubCategoryUrls.add(subSubCategory);
-            }
-          }
-          subCategory.setSubSubCategories(subSubCategoryUrls);
-          subCategoryUrls.add(subCategory);
-        }
         category.setSubCategories(subCategoryUrls);
         categoryUrls.add(category);
       }
     }
+    return categoryUrls;
+
+  }
+
+  @Override
+  protected List<Category> buildCategories() {
+
+    List<Category> categoryUrls;
+
+    Document document = null;
+    try {
+      document = getHtmlFromURL(this.url);
+    } catch (IOException e) {
+      logger.error(e.getMessage(), e);
+    }
+    categoryUrls = category(document);
 
     return categoryUrls;
 
