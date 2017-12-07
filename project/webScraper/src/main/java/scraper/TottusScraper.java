@@ -193,6 +193,10 @@ public class TottusScraper implements Scraper {
     return res;
   }
 
+  private void getExtraFeatures(Document doc){
+    //Todo: access detail page of each product find
+  }
+
   @Override
   public List<Product> parseProducts(SubSubCategory subSubCategory) {
 
