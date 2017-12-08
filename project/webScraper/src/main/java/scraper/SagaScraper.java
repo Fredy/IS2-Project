@@ -18,11 +18,11 @@ public class SagaScraper implements Scraper {
 
   private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-  public Document getHtmlFromURL(String PageURL) throws IOException {
+  private Document getHtmlFromURL(String PageURL) throws IOException {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
   }
 
-  public Product getAttr(Document documentIn) throws IOException {
+  Product getAttr(Document documentIn) throws IOException {
     Product product = new Product();
 
       /*Price*/
@@ -33,7 +33,7 @@ public class SagaScraper implements Scraper {
       product.setNormalPrice(null);
     }
 
-    Element elementIn = null;
+    Element elementIn;
     try {
       elementIn = documentIn
           .select(
@@ -112,7 +112,7 @@ public class SagaScraper implements Scraper {
     return productsUrls;
   }
 
-  public String getModel(String relUrlIn) throws IOException {
+  String getModel(String relUrlIn) throws IOException {
     try {
       String stringModelP[] = relUrlIn.split("Modelo:");
       String stringModel[] = stringModelP[1].split(" ");
@@ -125,7 +125,7 @@ public class SagaScraper implements Scraper {
 
   }
 
-  public String getBrand(String relUrlIn) throws IOException {
+  String getBrand(String relUrlIn) throws IOException {
     try {
 
       String stringBandP[] = relUrlIn.split("Marca:");
@@ -138,8 +138,8 @@ public class SagaScraper implements Scraper {
     }
   }
 
-  public Double getPrice(Document docIn) throws IOException {
-    String stringPriceP[] = new String[0];
+  Double getPrice(Document docIn) throws IOException {
+    String stringPriceP[];
     String stringP;
     try {
 
