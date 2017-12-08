@@ -6,12 +6,12 @@ import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity
 @PrimaryKeyJoinColumn(referencedColumnName = "id")
-public class Laptop extends Feature {
+public class LaptopFeature extends Feature {
 
   private String color;
   private Long storageCapacity;
   private String cpuModel;
-  private Long displaySize;
+  private Float displaySize;
 
   public String getColor() {
     return color;
@@ -37,12 +37,11 @@ public class Laptop extends Feature {
     this.cpuModel = cpuModel;
   }
 
-  public Long getDisplaySize() {
+  public Float getDisplaySize() {
     return displaySize;
   }
 
-  public void setDisplaySize(Long displaySize) {
+  public void setDisplaySize(Float displaySize) {
     this.displaySize = displaySize;
   }
-
 }
