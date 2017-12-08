@@ -22,6 +22,75 @@ public class SagaScraper implements Scraper {
     return Jsoup.connect(PageURL).userAgent("Mozilla").get();
   }
 
+  public Product getAttr(Document documentIn) throws IOException {
+    Product product = new Product();
+
+      /*Price*/
+    try {
+      product.setNormalPrice(getPrice(documentIn));
+    } catch (NullPointerException e) {
+      logger.error(e.getMessage(), e);
+      product.setNormalPrice(null);
+    }
+
+    Element elementIn = null;
+    try {
+      elementIn = documentIn
+          .select(
+              ".site-wrapper #main > .fb-module-wrapper .fb-accordion-tabs section.fb-accordion-tabs__content .fb-product-information__product-information-tab .fb-product-information-tab__copy ul")
+          .get(0);
+
+       /*Brand*/
+      String relUrlIn = null;
+      try {
+        relUrlIn = elementIn.text();
+        product.setBrand(getBrand(relUrlIn));
+      } catch (NullPointerException e) {
+        logger.error(e.getMessage(), e);
+        product.setBrand(null);
+      }
+
+      /*Model*/
+      try {
+        product.setModel(getModel(relUrlIn));
+      } catch (IOException e) {
+        logger.error(e.getMessage(), e);
+        product.setModel(null);
+      }
+
+       /*Sku*/
+      elementIn = documentIn
+          .select(
+              ".site-wrapper #main > #fbra_browseMainProduct .fb-product__form .fb-product-cta .fb-product-cta__container .fb-product-cta--desktop")
+          .get(0);
+
+      relUrlIn = elementIn.text();
+      String stringArray[] = relUrlIn.split(":");
+      String stringProd[] = stringArray[1].split(" ");
+      logger.debug("SKU{" + stringProd[0] + "}");
+
+      product.setSku(stringProd[0]);
+
+      /*Name*/
+      String name = "";
+      for (int j = 1; j < stringProd.length; j++) {
+        name += stringProd[j] + " ";
+      }
+
+      logger.debug("NAME{" + name + "}");
+
+      product.setName(name);
+    } catch (IndexOutOfBoundsException excepcion) {
+      product.setModel(null);
+      product.setName(null);
+    }
+    product.setWebPrice(null);
+    product.setOfferPrice(null);
+
+      /*End*/
+    return product;
+  }
+
   public List<Product> parse(Document document) throws IOException {
 
     List<Product> productsUrls = new ArrayList<>();
@@ -31,80 +100,13 @@ public class SagaScraper implements Scraper {
             ".site-wrapper #main > div#fbra_browseProductList .fb-filters .fb-pod-group > div.fb-pod-group__item .fb-pod__item > .fb-pod__header > a[href]");
 
     for (Element element : elements) {
-      Product product = new Product();
+      Product product;
       String relUrl = element.attr("abs:href");
 
       /*Access the other page*/
        /*Begin*/
       Document documentIn = getHtmlFromURL(relUrl);
-
-      /*Price*/
-      try {
-        product.setNormalPrice(getPrice(documentIn));
-      } catch (NullPointerException e) {
-        logger.error(e.getMessage(), e);
-        product.setNormalPrice(null);
-      }
-
-      Element elementIn = null;
-      try {
-        elementIn = documentIn
-            .select(
-                ".site-wrapper #main > .fb-module-wrapper .fb-accordion-tabs section.fb-accordion-tabs__content .fb-product-information__product-information-tab .fb-product-information-tab__copy ul")
-            .get(0);
-
-       /*Brand*/
-        String relUrlIn = null;
-        try {
-          relUrlIn = elementIn.text();
-          product.setBrand(getBrand(relUrlIn));
-
-        } catch (NullPointerException e) {
-          logger.error(e.getMessage(), e);
-          product.setBrand(null);
-
-        }
-
-      /*Model*/
-        try {
-          product.setModel(getModel(relUrlIn));
-        } catch (IOException e) {
-          logger.error(e.getMessage(), e);
-          product.setModel(null);
-        }
-
-       /*Sku*/
-        elementIn = documentIn
-            .select(
-                ".site-wrapper #main > #fbra_browseMainProduct .fb-product__form .fb-product-cta .fb-product-cta__container .fb-product-cta--desktop")
-            .get(0);
-
-        relUrlIn = elementIn.text();
-        String stringArray[] = relUrlIn.split(":");
-        String stringProd[] = stringArray[1].split(" ");
-        logger.debug("SKU{" + stringProd[0] + "}");
-
-        product.setSku(stringProd[0]);
-
-      /*Name*/
-        String name = "";
-        for (int j = 1; j < stringProd.length; j++) {
-          name += stringProd[j] + " ";
-        }
-
-        logger.debug("NAME{" + name + "}");
-
-        product.setName(name);
-      } catch (IndexOutOfBoundsException excepcion) {
-        product.setModel(null);
-        product.setName(null);
-
-      }
-      product.setWebPrice(null);
-      product.setOfferPrice(null);
-
-      /*End*/
-
+      product = getAttr(documentIn);
       productsUrls.add(product);
     }
     return productsUrls;

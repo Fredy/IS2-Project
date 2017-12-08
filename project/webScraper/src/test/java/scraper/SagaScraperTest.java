@@ -16,14 +16,14 @@ import org.junit.Test;
 public class SagaScraperTest {
 
   @Test
-  public void parse() throws IOException {
+  public void getAttr() throws IOException {
 
     SagaScraper sagaScraper = new SagaScraper();
 
-    File htmlFile = new File("src/test/resources/scraper/sagaSubSubCategoryPage.html");
+    File htmlFile = new File("src/test/resources/scraper/sagaProductPage.html");
     Document document = Jsoup.parse(htmlFile, "UTF-8", "http://www.falabella.com.pe");
 
-    Product product = sagaScraper.parse(document).get(0);
+    Product product = sagaScraper.getAttr(document);
 
     assertTrue(
         product.getName().contentEquals("Smartphone Galaxy SM-G610MWDAPEO J7 Prime Dorado 16GB "));
