@@ -1,10 +1,14 @@
 package domain;
 
+import domain.features.Feature;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -21,6 +25,7 @@ public class Product {
   private String model;
   private String brand;
   private Date date;
+  private Feature ExtraFeatures;
 
   public Product() {
     date = new Date();
@@ -98,5 +103,15 @@ public class Product {
 
   public void setDate(Date date) {
     this.date = date;
+  }
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "extra_feature_id")
+  public Feature getExtraFeatures() {
+    return ExtraFeatures;
+  }
+
+  public void setExtraFeatures(Feature extraFeatures) {
+    ExtraFeatures = extraFeatures;
   }
 }
