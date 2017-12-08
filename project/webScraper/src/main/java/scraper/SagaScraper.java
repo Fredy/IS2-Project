@@ -25,13 +25,8 @@ public class SagaScraper implements Scraper {
   Product getAttr(Document documentIn) throws IOException {
     Product product = new Product();
 
-      /*Price*/
-    try {
-      product.setNormalPrice(getPrice(documentIn));
-    } catch (NullPointerException e) {
-      logger.error(e.getMessage(), e);
-      product.setNormalPrice(null);
-    }
+    /*Price*/
+    product.setNormalPrice(getPrice(documentIn));
 
     Element elementIn;
     try {
@@ -41,22 +36,11 @@ public class SagaScraper implements Scraper {
           .get(0);
 
        /*Brand*/
-      String relUrlIn = null;
-      try {
-        relUrlIn = elementIn.text();
-        product.setBrand(getBrand(relUrlIn));
-      } catch (NullPointerException e) {
-        logger.error(e.getMessage(), e);
-        product.setBrand(null);
-      }
+      String relUrlIn = elementIn.text();
+      product.setBrand(getBrand(relUrlIn));
 
       /*Model*/
-      try {
-        product.setModel(getModel(relUrlIn));
-      } catch (IOException e) {
-        logger.error(e.getMessage(), e);
-        product.setModel(null);
-      }
+      product.setModel(getModel(relUrlIn));
 
        /*Sku*/
       elementIn = documentIn
@@ -72,14 +56,13 @@ public class SagaScraper implements Scraper {
       product.setSku(stringProd[0]);
 
       /*Name*/
-      String name = "";
+      StringBuilder name = new StringBuilder();
       for (int j = 1; j < stringProd.length; j++) {
-        name += stringProd[j] + " ";
+        name.append(stringProd[j]).append(" ");
       }
 
       logger.debug("NAME{" + name + "}");
-
-      product.setName(name);
+      product.setName(name.toString());
     } catch (IndexOutOfBoundsException e) {
       product.setModel(null);
       product.setName(null);
@@ -94,21 +77,30 @@ public class SagaScraper implements Scraper {
 
   public List<Product> parse(Document document) throws IOException {
 
-    List<Product> productsUrls = new ArrayList<>();
+    List<String> productsUrls = getUrl(document);
+    List<Product> products = new ArrayList<>();
+    for (String string : productsUrls) {
+      Product product;
+
+      /*Access the other page*/
+       /*Begin*/
+      Document documentIn = getHtmlFromURL(string);
+      product = getAttr(documentIn);
+      products.add(product);
+    }
+    return products;
+  }
+
+  public List<String> getUrl(Document document) {
+    List<String> productsUrls = new ArrayList<>();
 
     Elements elements = document
         .select(
             ".site-wrapper #main > div#fbra_browseProductList .fb-filters .fb-pod-group > div.fb-pod-group__item .fb-pod__item > .fb-pod__header > a[href]");
 
     for (Element element : elements) {
-      Product product;
       String relUrl = element.attr("abs:href");
-
-      /*Access the other page*/
-       /*Begin*/
-      Document documentIn = getHtmlFromURL(relUrl);
-      product = getAttr(documentIn);
-      productsUrls.add(product);
+      productsUrls.add(relUrl);
     }
     return productsUrls;
   }
@@ -171,7 +163,6 @@ public class SagaScraper implements Scraper {
       return this.parse(document);
     } catch (IOException e) {
       logger.error(e.getMessage(), e);
-
     }
     return null;
   }
