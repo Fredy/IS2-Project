@@ -80,9 +80,10 @@ public class SagaScraper implements Scraper {
       logger.debug("NAME{" + name + "}");
 
       product.setName(name);
-    } catch (IndexOutOfBoundsException excepcion) {
+    } catch (IndexOutOfBoundsException e) {
       product.setModel(null);
       product.setName(null);
+      logger.error(e.getMessage(), e);
     }
     product.setWebPrice(null);
     product.setOfferPrice(null);
@@ -119,10 +120,10 @@ public class SagaScraper implements Scraper {
       logger.debug("MODEL{" + stringModel[1] + "}");
 
       return stringModel[1];
-    } catch (ArrayIndexOutOfBoundsException excepcion) {
+    } catch (ArrayIndexOutOfBoundsException e) {
+      logger.error(e.getMessage(), e);
       return null;
     }
-
   }
 
   String getBrand(String relUrlIn) throws IOException {
@@ -133,7 +134,8 @@ public class SagaScraper implements Scraper {
       logger.debug("BRAND{" + stringBand[1] + "}");
 
       return stringBand[1];
-    } catch (ArrayIndexOutOfBoundsException excepcion) {
+    } catch (ArrayIndexOutOfBoundsException e) {
+      logger.error(e.getMessage(), e);
       return null;
     }
   }

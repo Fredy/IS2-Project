@@ -27,6 +27,10 @@ public class SagaScraperTest {
     assertTrue(
         product.getName().contentEquals("Smartphone Galaxy SM-G610MWDAPEO J7 Prime Dorado 16GB "));
     assertTrue(product.getSku().contentEquals("15979362"));
+    assertTrue(product.getModel().contentEquals("SM-G610MWDAPEO"));
+    assertTrue(product.getBrand().contentEquals("Samsung"));
+    assertNotNull(product.getNormalPrice());
+
 
   }
 
