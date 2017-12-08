@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import domain.Product;
+import domain.Shop;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -31,6 +32,17 @@ public class SagaScraperTest {
     assertTrue(product.getModel().contentEquals("SM-G610MWDAPEO"));
     assertTrue(product.getBrand().contentEquals("Samsung"));
     assertNotNull(product.getNormalPrice());
+
+  }
+
+  @Test
+  public void getShop() {
+    SagaScraper sagaScraper = new SagaScraper();
+    Shop shop = sagaScraper.parseShop();
+    assertTrue(shop.getName().contentEquals("Saga Falabella Perú"));
+    assertTrue(shop.getUrl().contentEquals("http://www.falabella.com.pe"));
+    assertTrue(
+        shop.getAddress().contentEquals("Av. Paseo de la República 3220 - San Isidro - Lima"));
 
   }
 
