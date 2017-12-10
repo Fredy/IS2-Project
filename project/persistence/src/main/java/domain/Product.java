@@ -1,6 +1,8 @@
 package domain;
 
 import domain.features.Feature;
+import domain.productDistance.NGram;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -29,6 +31,33 @@ public class Product {
 
   public Product() {
     date = new Date();
+  }
+
+  /**
+   * Compare two Products using their atributes, This method calculate the distance between the same
+   * atributes in both Products.
+   *
+   * @param other Product to compare
+   * @return distance normalizated [ 0.0 - 1.0 ]
+   */
+  double compare(Product other) {
+    double distance = 0d;
+    ArrayList<String> ef = this.ExtraFeatures.getExtraFeatures();
+    ArrayList<String> efOther = other.ExtraFeatures.getExtraFeatures();
+
+    NGram ngram = new NGram();
+    distance += ngram.distance(this.getName(), other.getName());
+    distance += ngram.distance(this.getBrand(), other.getBrand());
+    distance += ngram.distance(this.getModel(), other.getModel());
+    distance += ngram.distance(this.getNormalPrice().toString(), other.getNormalPrice().toString());
+    distance += ngram.distance(this.getWebPrice().toString(), other.getWebPrice().toString());
+    distance += ngram.distance(this.getOfferPrice().toString(), other.getOfferPrice().toString());
+
+    for (int i = 0; i < ef.size(); ++i) {
+      distance = distance + ngram.distance(ef.get(i), efOther.get(i));
+    }
+
+    return distance / (6 + ef.size());
   }
 
   @Id

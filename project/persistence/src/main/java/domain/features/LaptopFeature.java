@@ -1,5 +1,6 @@
 package domain.features;
 
+import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 
@@ -12,6 +13,17 @@ public class LaptopFeature extends Feature {
   private Long storageCapacity;
   private String cpuModel;
   private Float displaySize;
+  private Integer ramCapacity;
+
+  public ArrayList<String> getExtraFeatures() {
+    ArrayList<String> feautures = new ArrayList<>();
+    feautures.add(this.getColor());
+    feautures.add(this.getStorageCapacity().toString());
+    feautures.add(this.getCpuModel());
+    feautures.add(this.getDisplaySize().toString());
+    feautures.add(this.getRamCapacity().toString());
+    return feautures;
+  }
 
   public String getColor() {
     return color;
@@ -43,5 +55,13 @@ public class LaptopFeature extends Feature {
 
   public void setDisplaySize(Float displaySize) {
     this.displaySize = displaySize;
+  }
+
+  public Integer getRamCapacity() {
+    return ramCapacity;
+  }
+
+  public void setRamCapacity(Integer ramCapacity) {
+    this.ramCapacity = ramCapacity;
   }
 }
