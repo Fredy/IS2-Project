@@ -28,7 +28,7 @@ public class RipleyScraperTest {
     assertEquals(product.getName(), "CLOUDBREAK CASACA HOODRAGLAN PARA HOMBRE");
     assertEquals(product.getNormalPrice(), 189, 0.0);
     assertEquals(product.getWebPrice(), 132.30, 0.0);
-    assertEquals(product.getOfferPrice(), null);
+    assertEquals(product.getOfferPrice(), new Double(0.0));
     assertEquals(product.getSku(), "2016182582218");
     assertEquals(product.getBrand(), "Cloudbreak");
     assertEquals(product.getModel(), "Hoodraglan");

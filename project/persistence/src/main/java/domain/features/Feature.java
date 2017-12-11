@@ -1,5 +1,6 @@
 package domain.features;
 
+import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,5 +23,7 @@ public abstract class Feature {
   public void setId(Long id) {
     this.id = id;
   }
+
+  public abstract ArrayList<String> moreFeatures();
 
 }

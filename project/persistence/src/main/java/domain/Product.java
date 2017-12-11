@@ -1,6 +1,8 @@
 package domain;
 
 import domain.features.Feature;
+import domain.productDistance.NGram;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -28,6 +30,13 @@ public class Product {
   private Feature ExtraFeatures;
 
   public Product() {
+    name = new String();
+    normalPrice = new Double(0d);
+    webPrice = new Double(0d);
+    offerPrice = new Double(0d);
+    sku = new String();
+    model = new String();
+    brand = new String();
     date = new Date();
   }
 
