@@ -3,6 +3,7 @@ package scraper;
 import domain.Product;
 import domain.Shop;
 import domain.SubSubCategory;
+import domain.features.LaptopFeature;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -193,9 +194,82 @@ public class TottusScraper implements Scraper {
     return res;
   }
 
-  private void getExtraFeatures(Document doc){
-    //Todo: access detail page of each product find
+  public ArrayList<String> getUrlLaptops() throws IOException {
+    Document document = getHtmlFromURL(
+        "http://www.tottus.com.pe/tottus/browse/Tecnolog%C3%ADa-C%C3%B3mputo-y-Celulares-Laptops/_/N-82nnyu");
+    ArrayList<String> productsUrls = new ArrayList<>();
+    Elements products = document.body()
+        .getElementsByClass("title");
+    for (Element element : products) {
+      String relUrl = element.getElementsByTag("a")
+          .attr("abs:href");
+      productsUrls.add(relUrl);
+      logger.debug(relUrl);
+    }
+    return productsUrls;
   }
+
+  List<LaptopFeature> getDataFromURL(ArrayList<String> productsUrls) throws IOException {
+    List<LaptopFeature> res = new ArrayList<>();
+    for (int i = 0; i < productsUrls.size(); i++) {
+      String color = "";
+      String storageCapacity = "";
+      Integer ram = 0;
+      String cpuModel = "";
+      String ramCapacity = "";
+      String displaySize = "";
+      Float DS = 13F;
+      Long SC = 1000L;
+      Document document = getHtmlFromURL(productsUrls.get(i));
+      Elements products = document.body()
+          .getElementsByClass("table table-condensed");
+      for (Element row : products.select("tr")) {
+        Elements tds = row.select("td");
+        LaptopFeature tmpFeature = new LaptopFeature();
+        if (tds.get(0).text().contentEquals("Color")) {
+          color = tds.get(1).text();
+          logger.debug("color: " + color);
+        }
+        if (tds.get(0).text().contentEquals("Disco Duro")) {
+          storageCapacity = tds.get(1).text();
+          //storageCapacity = storageCapacity.substring(0, storageCapacity.indexOf("TB"));
+          logger.debug("storageCapacity" + storageCapacity);
+        }
+        if (tds.get(0).text().contentEquals("Modelo")) {
+          cpuModel = tds.get(1).text();
+          logger.debug("cpuModel " + cpuModel);
+        }
+        if (tds.get(0).text().contentEquals("Memoria RAM")) {
+          ramCapacity = tds.get(1).text();
+          if (ramCapacity.contains(" G")) {
+            ramCapacity = ramCapacity.substring(0, ramCapacity.indexOf(" G"));
+          } else {
+            ramCapacity = ramCapacity.substring(0, ramCapacity.indexOf("GB"));
+
+          }
+
+          ramCapacity = ramCapacity.replace(" ", "");
+
+          //ram = Integer.parseInt(ramCapacity);
+          logger.debug(" ramCapacity " + ramCapacity);
+
+        }
+        if (tds.get(0).text().contentEquals("Tamaño de pantalla")) {
+          displaySize = tds.get(1).text();
+          logger.debug("displaySize " + displaySize);
+        }
+        tmpFeature.setColor(color);
+        tmpFeature.setCpuModel(cpuModel);
+        //tmpFeature.setRamCapacity(ram);
+        tmpFeature.setDisplaySize(DS);
+        tmpFeature.setStorageCapacity(SC);
+        res.add(tmpFeature);
+
+      }
+    }
+    return res;
+  }
+
 
   @Override
   public List<Product> parseProducts(SubSubCategory subSubCategory) {
@@ -207,6 +281,9 @@ public class TottusScraper implements Scraper {
       String res1 = this.urlToJsonArray(doc);
       List<String> res2 = this.oneToVector(res1);
       resList = this.vectorStringsToProducts(res2, doc);
+      System.out.println("extrafeatures");
+      ArrayList<String> a = getUrlLaptops();
+      getDataFromURL(a);
     } catch (IOException e) {
       logger.error(e.getMessage(), e);
     }
@@ -216,6 +293,7 @@ public class TottusScraper implements Scraper {
 
   @Override
   public Shop parseShop() {
+
     return this.getShopData();
   }
 
