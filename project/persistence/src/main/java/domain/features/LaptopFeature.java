@@ -10,14 +10,14 @@ import javax.persistence.PrimaryKeyJoinColumn;
 public class LaptopFeature extends Feature {
 
   private String color;
-  private Long storageCapacity;
+  private Integer storageCapacity;
   private String cpuModel;
   private Float displaySize;
   private Integer ramCapacity;
 
   public LaptopFeature() {
     color = new String();
-    storageCapacity = new Long(0l);
+    storageCapacity = new Integer(0);
     cpuModel = new String();
     displaySize = new Float(0f);
     ramCapacity = new Integer(0);
@@ -41,11 +41,11 @@ public class LaptopFeature extends Feature {
     this.color = color;
   }
 
-  public Long getStorageCapacity() {
+  public Integer getStorageCapacity() {
     return storageCapacity;
   }
 
-  public void setStorageCapacity(Long storageCapacity) {
+  public void setStorageCapacity(Integer storageCapacity) {
     this.storageCapacity = storageCapacity;
   }
 
