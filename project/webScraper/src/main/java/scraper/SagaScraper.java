@@ -3,6 +3,7 @@ package scraper;
 import domain.Product;
 import domain.Shop;
 import domain.SubSubCategory;
+import domain.features.LaptopFeature;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class SagaScraper implements Scraper {
   }
 
   Product getAttr(Document documentIn) throws IOException {
+
     Product product = new Product();
 
     /*Price*/
@@ -35,8 +37,11 @@ public class SagaScraper implements Scraper {
               ".site-wrapper #main > .fb-module-wrapper .fb-accordion-tabs section.fb-accordion-tabs__content .fb-product-information__product-information-tab .fb-product-information-tab__copy ul")
           .get(0);
 
-       /*Brand*/
       String relUrlIn = elementIn.text();
+      /*Extra Features*/
+      //extraFeaturesLaptop(relUrlIn);
+
+      /*Brand*/
       product.setBrand(getBrand(relUrlIn));
 
       /*Model*/
@@ -73,6 +78,31 @@ public class SagaScraper implements Scraper {
 
       /*End*/
     return product;
+  }
+
+  public LaptopFeature extraFeaturesLaptop(String relUrlIn) throws IOException {
+    LaptopFeature extraFeatures = new LaptopFeature();
+
+      /*Color*/
+    String color = getColor(relUrlIn);
+    extraFeatures.setColor(color);
+
+      /*String memoryRAM = getRAM(relUrlIn);
+      extraFeatures.setStorageCapacity(memoryRAM);
+      */
+
+      /*Storage Capacity*/
+    Long stCapacity = getStorageCap(relUrlIn);
+    extraFeatures.setStorageCapacity(stCapacity);
+
+      /*Display Capacity*/
+    Float displayCap = getDisplaySize(relUrlIn);
+    extraFeatures.setDisplaySize(displayCap);
+
+      /*CPU Model*/
+    String cpuModel = getCPUModel(relUrlIn);
+    extraFeatures.setCpuModel(cpuModel);
+    return extraFeatures;
   }
 
   public List<Product> parse(Document document) throws IOException {
@@ -131,6 +161,98 @@ public class SagaScraper implements Scraper {
       return null;
     }
   }
+
+  ////////////////Extra features//////////////////
+
+  String getColor(String relUrlIn) throws IOException {
+    try {
+
+      String stringBandP[] = relUrlIn.split("Color:");
+      String stringBand[] = stringBandP[1].split(" ");
+      logger.debug("COLOR{" + stringBand[1] + "}");
+
+      return stringBand[1];
+    } catch (ArrayIndexOutOfBoundsException e) {
+      logger.error(e.getMessage(), e);
+      return null;
+    }
+  }
+
+
+  String getRAM(String relUrlIn) throws IOException {
+    try {
+
+      String stringBandP[] = relUrlIn.split("Memoria RAM:");
+      String stringBand[] = stringBandP[1].split(" ");
+      logger.debug("Memoria RAM:{" + stringBand[1] + "}");
+
+      return stringBand[1];
+    } catch (ArrayIndexOutOfBoundsException e) {
+      logger.error(e.getMessage(), e);
+      return null;
+    }
+  }
+
+
+  String getCPUModel(String relUrlIn) throws IOException {
+    try {
+
+      String stringBandP[] = relUrlIn.split("Procesador:");
+      String stringBand[] = stringBandP[1].split(" ");
+      logger
+          .debug("Procesador:{" + stringBand[1] + " " + stringBand[2] + " " + stringBand[3] + "}");
+
+      return stringBand[1] + " " + stringBand[2] + " " + stringBand[3];
+    } catch (ArrayIndexOutOfBoundsException e) {
+      logger.error(e.getMessage(), e);
+      return null;
+    }
+  }
+
+  Long getStorageCap(String relUrlIn) throws IOException {
+    try {
+
+      String stringBandP[] = relUrlIn.split("Disco duro:");
+      String stringBand[] = stringBandP[1].split(" ");
+
+      int intIndex = stringBand[1].indexOf("TB");
+      if (intIndex < 0) {
+        stringBand[1] = stringBand[1].replace("GB", "");
+      } else {
+        stringBand[1] = stringBand[1].replace("TB", "000");
+      }
+
+      if (stringBand[2].contains("TB")) {
+        stringBand[1] += "000";
+      }
+
+      logger.debug("Disco duro:{" + stringBand[1] + "}");
+
+      return Long.parseLong(stringBand[1]);
+    } catch (ArrayIndexOutOfBoundsException e) {
+      logger.error(e.getMessage(), e);
+      return null;
+    }
+  }
+
+  Float getDisplaySize(String relUrlIn) throws IOException {
+    try {
+
+      String stringBandP[] = relUrlIn.split("Tamaño de pantalla:");
+      String stringBand[] = stringBandP[1].split(" ");
+      String s = stringBand[1];
+      s = s.replace("pulgadas", "");
+      s = s.replace(",", ".");
+      logger.debug("Tamaño de pantalla:{" + s + "}");
+
+      return Float.parseFloat(s);
+    } catch (ArrayIndexOutOfBoundsException e) {
+      logger.error(e.getMessage(), e);
+      return null;
+    }
+  }
+
+  /////////////////////////////////////
 
   Double getPrice(Document docIn) throws IOException {
     String stringPriceP[];
