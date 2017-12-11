@@ -15,7 +15,15 @@ public class LaptopFeature extends Feature {
   private Float displaySize;
   private Integer ramCapacity;
 
-  public ArrayList<String> getExtraFeatures() {
+  public LaptopFeature() {
+    color = new String();
+    storageCapacity = new Long(0l);
+    cpuModel = new String();
+    displaySize = new Float(0f);
+    ramCapacity = new Integer(0);
+  }
+
+  public ArrayList<String> moreFeatures() {
     ArrayList<String> feautures = new ArrayList<>();
     feautures.add(this.getColor());
     feautures.add(this.getStorageCapacity().toString());

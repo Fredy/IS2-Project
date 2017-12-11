@@ -24,6 +24,6 @@ public abstract class Feature {
     this.id = id;
   }
 
-  public abstract ArrayList<String> getExtraFeatures();
+  public abstract ArrayList<String> moreFeatures();
 
 }

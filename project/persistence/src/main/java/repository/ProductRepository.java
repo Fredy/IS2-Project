@@ -10,6 +10,9 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ProductRepository extends CrudRepository<Product, Long> {
 
+  @Query("SELECT p FROM Product p")
+  Collection<Product> getAllProducts();
+
   /**
    * @return All Products with name {@code brandName}
    */
